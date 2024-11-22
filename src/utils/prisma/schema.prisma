@@ -1,0 +1,219 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // or any database you are using
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String  @id @default(uuid()) @db.Uuid
+  name        String
+  image       String?
+  email       String  @unique
+  role        Role
+  verified    Boolean @default(false)
+  password    String
+  phoneNumber String  @unique @map("phone_number")
+
+  notification  Notification[]
+  otp           OTP[]
+  passwordReset PasswordReset[]
+  transaction   Transaction[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Notification {
+  id      String  @id @default(uuid()) @db.Uuid
+  title   String
+  message String
+  isRead  Boolean @default(false) @map("is_read")
+
+  userId String @map("user_id") @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("notification")
+}
+
+model OTP {
+  id        String    @id @default(uuid()) @db.Uuid
+  otp       String
+  used      Boolean   @default(false)
+  expiredAt DateTime? @map("expired_at")
+
+  userId String @map("user_id") @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("otp")
+}
+
+model PasswordReset {
+  id        String    @id @default(uuid()) @db.Uuid
+  token     String
+  used      Boolean   @default(false)
+  expiredAt DateTime? @map("expired_at")
+
+  userId String @map("user_id") @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("password_reset")
+}
+
+model Transaction {
+  id              String @id @default(uuid()) @db.Uuid
+  transactionCode String @map("transaction_code")
+  amount          Int
+  status          String
+
+  userId            String  @map("user_id") @db.Uuid
+  departureFlightId String  @map("departure_flight_id") @db.Uuid
+  returnFlightId    String? @map("return_flight_id") @db.Uuid
+  passengerId       String? @map("passenger_id") @db.Uuid
+
+  user            User        @relation(fields: [userId], references: [id])
+  departureFlight Flight      @relation("DepartureFlight", fields: [departureFlightId], references: [id])
+  returnFlight    Flight?     @relation("ReturnFlight", fields: [returnFlightId], references: [id])
+  payment         Payment?
+  Passenger       Passenger[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("transaction")
+}
+
+model Passenger {
+  id              String  @id @default(uuid()) @db.Uuid
+  transactionId   String  @map("transaction_id") @db.Uuid
+  title           String
+  firstName       String  @map("first_name")
+  familyName      String  @map("family_name")
+  birthday        String
+  nationality     String
+  nikPaspor       String  @map("nik_paspor")
+  nikKtp          String  @map("nik_ktp")
+  departureSeatId String  @unique @map("departure_seat_id") @db.Uuid
+  returnSeatId    String? @unique @map("return_seat_id") @db.Uuid
+
+  expiredAt DateTime @map("expired_at")
+
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  departureSeat Seat        @relation("DepartureSeat", fields: [departureSeatId], references: [id])
+  returnSeat    Seat?       @relation("ReturnSeat", fields: [returnSeatId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("passenger")
+}
+
+model Flight {
+  id                   String        @id @default(uuid()) @db.Uuid
+  airlineId            String        @map("airline_id") @db.Uuid
+  airportIdFrom        String        @map("airport_id_from") @db.Uuid
+  airportIdTo          String        @map("airport_id_to") @db.Uuid
+  aeroplaneId          String        @map("aeroplane_id") @db.Uuid
+  departureDate        DateTime      @map("departure_date")
+  departureTime        DateTime      @map("departure_time")
+  arrivalDate          DateTime      @map("arrival_date")
+  arrivalTime          DateTime      @map("arrival_time")
+  duration             String
+  price                Int
+  class                String
+  description          String?
+  createdAt            DateTime      @default(now()) @map("created_at")
+  updatedAt            DateTime      @updatedAt @map("updated_at")
+  aeroplane            Aeroplane     @relation(fields: [aeroplaneId], references: [id])
+  airline              Airline       @relation(fields: [airlineId], references: [id])
+  airportFrom          Airport       @relation("AirportFrom", fields: [airportIdFrom], references: [id])
+  airportTo            Airport       @relation("AirportTo", fields: [airportIdTo], references: [id])
+  departureTransaction Transaction[] @relation("DepartureFlight")
+  returnTransaction    Transaction[] @relation("ReturnFlight")
+  seat                 Seat[]
+
+  @@map("flight")
+}
+
+model Airline {
+  id        String   @id @default(uuid()) @db.Uuid
+  code      String
+  name      String
+  image     String?
+  flight    Flight[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("airline")
+}
+
+model Airport {
+  id         String   @id @default(uuid()) @db.Uuid
+  code       String
+  name       String
+  location   String
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  flightFrom Flight[] @relation("AirportFrom")
+  flightTo   Flight[] @relation("AirportTo")
+
+  @@map("airport")
+}
+
+model Payment {
+  id              String      @id @default(uuid()) @db.Uuid
+  transactionId   String      @unique @map("transaction_id") @db.Uuid
+  status          String
+  snapToken       String      @map("snap_token")
+  snapRedirectUrl String      @map("snap_redirect_url")
+  paymentMethod   String      @map("payment_method")
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+  transaction     Transaction @relation(fields: [transactionId], references: [id])
+
+  @@map("payment")
+}
+
+model Aeroplane {
+  id      String   @id @default(uuid()) @db.Uuid
+  code    String
+  type    String
+  maxSeat Int      @map("max_seat")
+  seats   Seat[]
+  flight  Flight[]
+
+  @@map("aeroplane")
+}
+
+model Seat {
+  id                 String     @id @default(uuid()) @db.Uuid
+  aeroplaneId        String     @map("aeroplane_id") @db.Uuid
+  flightId           String     @map("flight_id") @db.Uuid
+  isBooked           Boolean    @map("is_booked")
+  passengerDeparture Passenger? @relation("DepartureSeat")
+  passengerReturn    Passenger? @relation("ReturnSeat")
+  number             Int
+  row                Int
+  aeroplane          Aeroplane  @relation(fields: [aeroplaneId], references: [id])
+  flight             Flight     @relation(fields: [flightId], references: [id])
+
+  @@map("seat")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
