@@ -1,6 +1,18 @@
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('ADMIN', 'USER');
 
+-- CreateEnum
+CREATE TYPE "TransactionStatus" AS ENUM ('UNPAID', 'COMPLETED', 'CANCELLED');
+
+-- CreateEnum
+CREATE TYPE "PaymentMethod" AS ENUM ('BANK_TRANSFER', 'CREDIT_CARD', 'DEBIT_CARD', 'GOPAY', 'OVO', 'DANA', 'LINK_AJA', 'SHOPEE_PAY', 'QRIS', 'CASH');
+
+-- CreateEnum
+CREATE TYPE "PaymentStatus" AS ENUM ('UNPAID', 'PENDING', 'SUCCESS', 'CANCELLED');
+
+-- CreateEnum
+CREATE TYPE "Class" AS ENUM ('ECONOMY', 'PREMIUM_ECONOMY', 'BUSINESS', 'FIRST_CLASS');
+
 -- CreateTable
 CREATE TABLE "users" (
     "id" UUID NOT NULL,
@@ -11,8 +23,8 @@ CREATE TABLE "users" (
     "verified" BOOLEAN NOT NULL DEFAULT false,
     "password" TEXT NOT NULL,
     "phone_number" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -24,8 +36,8 @@ CREATE TABLE "notification" (
     "message" TEXT NOT NULL,
     "is_read" BOOLEAN NOT NULL DEFAULT false,
     "user_id" UUID NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "notification_pkey" PRIMARY KEY ("id")
 );
@@ -35,10 +47,10 @@ CREATE TABLE "otp" (
     "id" UUID NOT NULL,
     "otp" TEXT NOT NULL,
     "used" BOOLEAN NOT NULL DEFAULT false,
-    "expired_at" TIMESTAMP(3),
+    "expired_at" TIMESTAMPTZ NOT NULL,
     "user_id" UUID NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "otp_pkey" PRIMARY KEY ("id")
 );
@@ -48,10 +60,10 @@ CREATE TABLE "password_reset" (
     "id" UUID NOT NULL,
     "token" TEXT NOT NULL,
     "used" BOOLEAN NOT NULL DEFAULT false,
-    "expired_at" TIMESTAMP(3),
+    "expired_at" TIMESTAMPTZ NOT NULL,
     "user_id" UUID NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "password_reset_pkey" PRIMARY KEY ("id")
 );
@@ -61,13 +73,13 @@ CREATE TABLE "transaction" (
     "id" UUID NOT NULL,
     "transaction_code" TEXT NOT NULL,
     "amount" INTEGER NOT NULL,
-    "status" TEXT NOT NULL,
+    "status" "TransactionStatus" NOT NULL,
     "user_id" UUID NOT NULL,
     "departure_flight_id" UUID NOT NULL,
     "return_flight_id" UUID,
     "passenger_id" UUID,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "transaction_pkey" PRIMARY KEY ("id")
 );
@@ -83,11 +95,11 @@ CREATE TABLE "passenger" (
     "nationality" TEXT NOT NULL,
     "nik_paspor" TEXT NOT NULL,
     "nik_ktp" TEXT NOT NULL,
+    "expired_at" TIMESTAMP(3) NOT NULL,
     "departure_seat_id" UUID NOT NULL,
     "return_seat_id" UUID,
-    "expired_at" TIMESTAMP(3) NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "passenger_pkey" PRIMARY KEY ("id")
 );
@@ -95,20 +107,20 @@ CREATE TABLE "passenger" (
 -- CreateTable
 CREATE TABLE "flight" (
     "id" UUID NOT NULL,
-    "airline_id" UUID NOT NULL,
-    "airport_id_from" UUID NOT NULL,
-    "airport_id_to" UUID NOT NULL,
-    "aeroplane_id" UUID NOT NULL,
     "departure_date" TIMESTAMP(3) NOT NULL,
     "departure_time" TIMESTAMP(3) NOT NULL,
     "arrival_date" TIMESTAMP(3) NOT NULL,
     "arrival_time" TIMESTAMP(3) NOT NULL,
     "duration" TEXT NOT NULL,
     "price" INTEGER NOT NULL,
-    "class" TEXT NOT NULL,
+    "class" "Class" NOT NULL,
     "description" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "airline_id" UUID NOT NULL,
+    "airport_id_from" UUID NOT NULL,
+    "airport_id_to" UUID NOT NULL,
+    "aeroplane_id" UUID NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "flight_pkey" PRIMARY KEY ("id")
 );
@@ -119,8 +131,8 @@ CREATE TABLE "airline" (
     "code" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "image" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "airline_pkey" PRIMARY KEY ("id")
 );
@@ -131,8 +143,8 @@ CREATE TABLE "airport" (
     "code" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "location" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "airport_pkey" PRIMARY KEY ("id")
 );
@@ -140,13 +152,14 @@ CREATE TABLE "airport" (
 -- CreateTable
 CREATE TABLE "payment" (
     "id" UUID NOT NULL,
-    "transaction_id" UUID NOT NULL,
-    "status" TEXT NOT NULL,
+    "status" "PaymentStatus" NOT NULL,
+    "method" "PaymentMethod" NOT NULL,
     "snap_token" TEXT NOT NULL,
     "snap_redirect_url" TEXT NOT NULL,
     "payment_method" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "transaction_id" UUID NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "payment_pkey" PRIMARY KEY ("id")
 );
@@ -157,6 +170,8 @@ CREATE TABLE "aeroplane" (
     "code" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "max_seat" INTEGER NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "aeroplane_pkey" PRIMARY KEY ("id")
 );
@@ -164,11 +179,13 @@ CREATE TABLE "aeroplane" (
 -- CreateTable
 CREATE TABLE "seat" (
     "id" UUID NOT NULL,
-    "aeroplane_id" UUID NOT NULL,
-    "flight_id" UUID NOT NULL,
     "is_booked" BOOLEAN NOT NULL,
     "number" INTEGER NOT NULL,
     "row" INTEGER NOT NULL,
+    "aeroplane_id" UUID NOT NULL,
+    "flight_id" UUID NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "seat_pkey" PRIMARY KEY ("id")
 );
