@@ -1,0 +1,23 @@
+{
+  "name": "be_km7_airjourney_final-project",
+  "version": "1.0.0",
+  "description": "Final project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AziSudarya1/BE_KM7_AirJourney_Final-Project.git"
+  },
+  "author": "Joy, Gilang, Adib, Azi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AziSudarya1/BE_KM7_AirJourney_Final-Project/issues"
+  },
+  "homepage": "https://github.com/AziSudarya1/BE_KM7_AirJourney_Final-Project#readme",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
