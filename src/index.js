@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import express from 'express';
 import { createServer } from 'http';
 import { loadEnv } from './utils/env.js';
@@ -7,7 +8,7 @@ import errorHandler from './middlewares/error.js';
 
 function main() {
   loadEnv();
-  
+
   const app = express();
   const server = createServer(app);
 
@@ -18,9 +19,10 @@ function main() {
   errorHandler(app);
 
   server.listen(process.env.HOST_PORT, () => {
-    console.log(`Server is running on port http://localhost:${process.env.HOST_PORT}`);
+    console.log(
+      `Server is running on port http://localhost:${process.env.HOST_PORT}`
+    );
   });
 }
-
 
 main();

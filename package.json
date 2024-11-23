@@ -17,11 +17,15 @@
     "db:create": "dotenv -e .env.local -- cross-env-shell \"echo CREATE DATABASE $DATABASE_TO_CREATE\" | dotenv -e .env.local -- prisma db execute --stdin",
     "db:deploy": "dotenv -e .env.local -- prisma migrate deploy",
     "db:migrate": "dotenv -e .env.local -- prisma migrate dev",
-    "db:migrate:create-only": "dotenv -e .env.local -- prisma migrate dev --create-only"
+    "db:migrate:create-only": "dotenv -e .env.local -- prisma migrate dev --create-only",
+    "prepare": "husky"
   },
   "prisma": {
     "schema": "src/utils/prisma/schema.prisma",
     "seed": "node ./src/utils/prisma/seed.js"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   },
   "repository": {
     "type": "git",
@@ -47,6 +51,8 @@
     "@eslint/js": "^9.15.0",
     "dotenv-cli": "^7.4.4",
     "eslint": "^9.15.0",
-    "globals": "^15.12.0"
+    "globals": "^15.12.0",
+    "husky": "^9.1.7",
+    "prettier": "3.3.3"
   }
 }
