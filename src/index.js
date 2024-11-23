@@ -11,6 +11,7 @@ function main() {
 
   const app = express();
   const server = createServer(app);
+  const port = process.env.PORT || process.env.HOST_PORT;
 
   loaders(app, server);
 
@@ -18,9 +19,9 @@ function main() {
 
   errorHandler(app);
 
-  server.listen(process.env.HOST_PORT, () => {
+  server.listen(port, () => {
     console.log(
-      `Server is running on port http://localhost:${process.env.HOST_PORT}`
+      `Server is running on port http://localhost:${port} in ${process.env.NODE_ENV} mode`
     );
   });
 }
