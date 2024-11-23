@@ -14,12 +14,7 @@ function notFound(req, _res, next) {
   next(notFoundError);
 }
 
-function errorHandler(
-  err,
-  _req,
-  res,
-  _next
-) {
+function errorHandler(err, _req, res, _next) {
   if (err instanceof HttpError) {
     res.status(err.statusCode).json({ message: err.message });
     return;
