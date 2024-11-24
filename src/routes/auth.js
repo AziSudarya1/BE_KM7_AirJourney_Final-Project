@@ -1,5 +1,10 @@
-import * as indexController from '../controllers/index.js';
+import { Router } from "express";
+import * as userController from "../controllers/user.js";
 
 export default (app) => {
-  app.get('/', indexController.ping);
+  const router = Router();
+
+  app.use("/auth", router);
+  
+  router.post("/register", userController.createUser);
 };
