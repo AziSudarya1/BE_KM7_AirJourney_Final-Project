@@ -8,7 +8,17 @@ import nodemailer from 'nodemailer';
 export const sendOtp = async (user) => {
   const otp = generateOtp();
   const expiredAt = new Date(Date.now() + 1 * 60 * 1000);
+  const activeOtp = await otpRepository.findActiveOtp(user.id);
+
   await otpRepository.createOtp(user.id, otp, expiredAt);
+
+  if (activeOtp) {
+    throw new HttpError('An active OTP already exists', 400);
+  }
+
+  if (user.verified) {
+    throw new HttpError('User is already verified', 400);
+  }
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
