@@ -215,7 +215,7 @@ model Aeroplane {
 
 model Seat {
   id       String  @id @default(uuid()) @db.Uuid
-  isBooked Boolean @map("is_booked")
+  status   SeatStatus
   number   Int
   row      Int
 
@@ -269,4 +269,10 @@ enum Class {
   PREMIUM_ECONOMY
   BUSINESS
   FIRST_CLASS
+}
+
+enum SeatStatus {
+  AVAILABLE
+  BOOKED
+  PENDING
 }
