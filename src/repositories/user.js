@@ -1,25 +1,22 @@
-import { prisma } from "../utils/db.js";
+import { prisma } from '../utils/db.js';
 
 export const findUserByEmail = async (email) => {
   return await prisma.user.findUnique({
     where: {
-      email,
-    },
+      email
+    }
   });
 };
 
 export const createUser = async (data) => {
   return prisma.user.create({
-    data,
+    data
   });
 };
 
-export const saveOtp = async (userId, otpCode, expiredAt) => {
-  return prisma.otp.create({
-    data: {
-      otp: otpCode,
-      expiredAt,
-      userId,
-    },
+export const updateUserVerification = async (userId) => {
+  return await prisma.user.update({
+    where: { id: userId },
+    data: { verified: true }
   });
 };
