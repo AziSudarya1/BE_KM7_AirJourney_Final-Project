@@ -1,16 +1,17 @@
 import * as userService from '../services/user.js';
 import * as otpService from '../services/otp.js';
+import { HttpError } from '../utils/error.js';
 
 export const createUser = async (req, res, next) => {
   try {
     const { name, email, phoneNumber, password, role } = req.body;
 
     if (!name || !email || !phoneNumber || !password) {
-      return res.status(400).json({ message: 'All fields are required' });
+      throw new HttpError('All fields are required', 400);
     }
 
     if (role && !['ADMIN', 'USER'].includes(role)) {
-      return res.status(400).json({ message: 'Invalid role specified' });
+      throw new HttpError('Invalid role specified', 400);
     }
 
     const user = await userService.createUser(

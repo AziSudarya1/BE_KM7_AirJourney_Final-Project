@@ -1,10 +1,11 @@
 import { verifyToken } from '../utils/jwt.js';
+import { HttpError } from '../utils/error.js';
 
 export const authenticate = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'Unauthorized' });
+    throw new HttpError('Unauthorized', 401);
   }
 
   const token = authHeader.split(' ')[1];
@@ -14,6 +15,6 @@ export const authenticate = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
-    return res.status(401).json({ message: 'Invalid or expired token' });
+    throw new HttpError('invalid or expired token', 401);
   }
 };
