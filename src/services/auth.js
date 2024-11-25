@@ -1,3 +1,4 @@
+import { Role } from '@prisma/client';
 import * as userRepository from '../repositories/user.js';
 import { HttpError } from '../utils/error.js';
 import { generateToken } from '../utils/jwt.js';
@@ -25,5 +26,11 @@ export const login = async (email, password) => {
     email: user.email
   });
 
-  return { token };
+  return {
+    token,
+    user: {
+      name: user.name,
+      role: user.role
+    }
+  };
 };
