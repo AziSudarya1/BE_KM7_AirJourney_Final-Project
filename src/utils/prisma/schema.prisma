@@ -44,9 +44,9 @@ model Notification {
 }
 
 model OTP {
-  id        String    @id @default(uuid()) @db.Uuid
+  id        String   @id @default(uuid()) @db.Uuid
   otp       String
-  used      Boolean   @default(false)
+  used      Boolean  @default(false)
   expiredAt DateTime @map("expired_at") @db.Timestamptz()
 
   userId String @map("user_id") @db.Uuid
@@ -59,9 +59,9 @@ model OTP {
 }
 
 model PasswordReset {
-  id        String    @id @default(uuid()) @db.Uuid
-  token     String
-  used      Boolean   @default(false)
+  id        String   @id @default(uuid()) @db.Uuid
+  token     String   @db.Uuid
+  used      Boolean  @default(false)
   expiredAt DateTime @map("expired_at") @db.Timestamptz()
 
   userId String @map("user_id") @db.Uuid
@@ -198,12 +198,11 @@ model Payment {
 }
 
 model Aeroplane {
-  id      String @id @default(uuid()) @db.Uuid
-  code    String
-  type    String
-  maxRow Int    @map("max_row")
+  id        String @id @default(uuid()) @db.Uuid
+  code      String
+  type      String
+  maxRow    Int    @map("max_row")
   maxColumn Int    @map("max_column")
-
   seats  Seat[]
   flight Flight[]
 
@@ -214,10 +213,10 @@ model Aeroplane {
 }
 
 model Seat {
-  id       String  @id @default(uuid()) @db.Uuid
-  status   SeatStatus
-  number   Int
-  row      Int
+  id     String     @id @default(uuid()) @db.Uuid
+  status SeatStatus
+  number Int
+  row    Int
 
   aeroplaneId String @map("aeroplane_id") @db.Uuid
   flightId    String @map("flight_id") @db.Uuid
