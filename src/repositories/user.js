@@ -25,8 +25,9 @@ export async function createUser(data) {
   });
 }
 
-export async function verifyUser(userId) {
-  return await prisma.user.update({
+export async function updateUserVerification(userId, tx) {
+  const db = tx ?? prisma;
+  return await db.user.update({
     where: { id: userId },
     data: { verified: true }
   });

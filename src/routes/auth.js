@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import * as userController from '../controllers/user.js';
 import * as authController from '../controllers/auth.js';
+import * as otpController from '../controllers/otp.js';
 import * as userValidationMiddleware from '../middlewares/validasi/user.js';
 
 export default (app) => {
@@ -13,6 +14,10 @@ export default (app) => {
     userValidationMiddleware.createUserValidation,
     userController.createUser
   );
+
+  router.post('/otp', otpController.sendOtp);
+
+  router.post('/otp/verify', otpController.verifyOtp);
 
   router.post('/login', authController.login);
 };

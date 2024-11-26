@@ -1,7 +1,7 @@
 import { prisma } from '../utils/db.js';
 
 export const createUserNotification = async (userId, payload, tx) => {
-  return prisma.notification.create({
+  return tx.notification.create({
     data: {
       ...payload,
       userId
