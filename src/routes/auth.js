@@ -31,4 +31,9 @@ export default (app) => {
     authValidationMiddleware.resetPasswordRequestValidation, 
     authController.sendResetPasswordEmail
   );
+
+  router.post(
+    '/reset-password/validate/:token',
+    authController.validateResetPasswordToken
+  )
 };
