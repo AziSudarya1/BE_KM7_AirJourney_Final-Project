@@ -20,7 +20,10 @@ export async function createUser(name, email, phoneNumber, password) {
     throw new HttpError('All fields are required', 400);
   }
 
-  const hashedPassword = await bcrypt.hash(password, appEnv.BCRYPT_SALT);
+  const hashedPassword = await bcrypt.hash(
+    password,
+    Number(appEnv.BCRYPT_SALT)
+  );
 
   return await userRepository.createUser({
     name,

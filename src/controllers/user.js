@@ -6,7 +6,7 @@ export async function createUser(req, res) {
 
   const user = await userService.createUser(name, email, phoneNumber, password);
 
-  await otpService.sendOtp(user);
+  await otpService.sendOtp(user.email);
 
   res.status(201).json({
     message: 'User created successfully',
