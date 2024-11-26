@@ -15,6 +15,7 @@ jobs:
     env:
       DIRECT_URL: '${{ secrets.DIRECT_URL }}'
       DATABASE_URL: '${{ secrets.DATABASE_URL }}'
+      DATABASE_TO_CREATE: ${{ github.ref_name == 'release' && format('pr_{0}', github.event.number) }}
 
     steps:
       - name: Checkout repo
