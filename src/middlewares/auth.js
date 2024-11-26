@@ -1,7 +1,7 @@
 import { verifyToken } from '../utils/jwt.js';
 import { HttpError } from '../utils/error.js';
 
-export const authenticate = (req, res, next) => {
+export async function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -17,4 +17,4 @@ export const authenticate = (req, res, next) => {
   } catch (error) {
     throw new HttpError('invalid or expired token', 401);
   }
-};
+}

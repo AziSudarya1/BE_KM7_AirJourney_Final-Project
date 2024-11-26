@@ -1,6 +1,4 @@
 import * as otpService from '../services/otp.js';
-import * as userRepository from '../repositories/user.js';
-import { HttpError } from '../utils/error.js';
 
 export async function sendOtp(req, res) {
   const { email } = req.body;

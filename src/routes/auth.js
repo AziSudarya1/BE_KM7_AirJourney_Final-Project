@@ -3,6 +3,7 @@ import * as userController from '../controllers/user.js';
 import * as authController from '../controllers/auth.js';
 import * as otpController from '../controllers/otp.js';
 import * as userValidationMiddleware from '../middlewares/validasi/user.js';
+import * as authValidationMiddleware from '../middlewares/validasi/auth.js';
 
 export default (app) => {
   const router = Router();
@@ -19,5 +20,9 @@ export default (app) => {
 
   router.post('/otp/verify', otpController.verifyOtp);
 
-  router.post('/login', authController.login);
+  router.post(
+    '/login',
+    authValidationMiddleware.loginValidation,
+    authController.login
+  );
 };

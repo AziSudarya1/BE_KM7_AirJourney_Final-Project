@@ -3,7 +3,7 @@ import { HttpError } from '../utils/error.js';
 import { generateToken } from '../utils/jwt.js';
 import bcrypt from 'bcrypt';
 
-export const login = async (email, password) => {
+export async function login(email, password) {
   const user = await userRepository.findUserByEmail(email);
 
   if (!user) {
@@ -26,10 +26,8 @@ export const login = async (email, password) => {
   });
 
   return {
-    token,
-    user: {
-      name: user.name,
-      role: user.role
-    }
+    name: user.name,
+    role: user.role,
+    token: token
   };
-};
+}
