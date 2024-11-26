@@ -1,0 +1,40 @@
+name: 🔥 Migrate database
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  migration:
+    if: github.actor != 'renovator[bot]'
+
+    name: 🔑 Migrate database
+    runs-on: ubuntu-latest
+
+    env:
+      DIRECT_URL: '${{ secrets.DIRECT_URL }}'
+      DATABASE_URL: '${{ secrets.DATABASE_URL }}'
+      DATABASE_TO_CREATE: ${{ github.ref_name == 'release' && format('pr_{0}', github.event.number) }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Download deps
+        run: npm ci
+
+      - name: Create database
+        run: npm run db:create
+        continue-on-error: true
+
+      - name: Set environment variables for newly created database
+        run: |
+          echo "DIRECT_URL=${{ secrets.DATABASE_URL }}" >> "$GITHUB_ENV"
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> "$GITHUB_ENV"
+
+      - name: Migrate database
+        run: npm run db:deploy
+
+      - name: Seed database
+        run: npm run db:seed

@@ -7,6 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --max-warnings 0 .",
+    "format": "prettier --write .",
+    "format-check": "prettier --check .",
     "dev": "cross-env NODE_ENV=development nodemon ./src/index.js",
     "start": "cross-env NODE_ENV=production node ./src/index.js",
     "db:drop": "dotenv -e .env.local -- cross-env-shell \"echo DROP DATABASE IF EXISTS $DATABASE_TO_DROP\" | dotenv -e .env.local -- prisma db execute --stdin",
