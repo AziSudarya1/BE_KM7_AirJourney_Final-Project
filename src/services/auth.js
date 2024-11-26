@@ -1,6 +1,6 @@
 import * as userRepository from '../repositories/user.js';
 import { HttpError } from '../utils/error.js';
-import { generateToken } from '../utils/jwt.js';
+import { generateToken, verifyToken } from '../utils/jwt.js';
 import bcrypt from 'bcrypt';
 
 export async function login(email, password) {
@@ -10,14 +10,14 @@ export async function login(email, password) {
     throw new HttpError('User not found', 404);
   }
 
-  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!user.verified) {
+    throw new HttpError('User is not verified', 401);
+  }
+
+  const isPasswordValid = await isPasswordMatch(password, user.password);
 
   if (!isPasswordValid) {
     throw new HttpError('Invalid password', 401);
-  }
-
-  if (!user.verified) {
-    throw new HttpError('User is not verified', 401);
   }
 
   const token = generateToken({
@@ -30,4 +30,30 @@ export async function login(email, password) {
     role: user.role,
     token: token
   };
+}
+
+export async function verifyTokenAndUser(token) {
+  try {
+    const { id } = verifyToken(token);
+
+    const user = await userService.getUserWithRole(id);
+
+    if (!user) {
+      throw new HttpError('User not found', 401);
+    }
+
+    return user;
+  } catch (err) {
+    if (err instanceof jwt.JsonWebTokenError) {
+      throw new HttpError('Invalid token', 401);
+    }
+
+    throw err;
+  }
+}
+
+export async function isPasswordMatch(password, hashedPassword) {
+  const isMatch = await bcrypt.compare(password, hashedPassword);
+
+  return isMatch;
 }

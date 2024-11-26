@@ -1,4 +1,5 @@
 import * as userRepository from '../repositories/user.js';
+import { appEnv } from '../utils/env.js';
 import { HttpError } from '../utils/error.js';
 import bcrypt from 'bcrypt';
 
@@ -19,7 +20,7 @@ export async function createUser(name, email, phoneNumber, password) {
     throw new HttpError('All fields are required', 400);
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, appEnv.BCRYPT_SALT);
 
   return await userRepository.createUser({
     name,

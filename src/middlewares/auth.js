@@ -1,18 +1,24 @@
-import { verifyToken } from '../utils/jwt.js';
+import { verifyTokenAndUser } from '../services/auth.js';
 import { HttpError } from '../utils/error.js';
 
-export async function authenticate(req, res, next) {
-  const authHeader = req.headers.authorization;
+export async function isAuthorized(req, res, next) {
+  const authorization = req.get('authorization');
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    throw new HttpError('Unauthorized', 401);
+  if (!authorization) {
+    throw new HttpError('Missing authorization header', 401);
   }
 
-  const token = authHeader.split(' ')[1];
+  const [type, token] = authorization.split(' ');
+
+  if (type.toLocaleLowerCase() !== 'bearer') {
+    throw new HttpError('Invalid authorization token', 401);
+  }
 
   try {
-    const decoded = verifyToken(token);
-    req.user = decoded;
+    const user = await verifyTokenAndUser(token);
+
+    res.locals.user = user;
+
     next();
   } catch (error) {
     throw new HttpError('invalid or expired token', 401);

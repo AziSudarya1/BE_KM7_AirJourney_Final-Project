@@ -18,12 +18,15 @@ export async function sendOtp(email) {
   }
 
   const activeOtp = await otpRepository.findActiveOtp(user.id);
+
   if (activeOtp) {
     throw new HttpError('An active OTP already exists', 400);
   }
 
   const otp = generateOtp();
+
   const expiredAt = new Date(Date.now() + 1 * 60 * 1000);
+
   await otpRepository.createOtp(user.id, otp, expiredAt);
 
   await sendEmail(
@@ -49,7 +52,9 @@ export async function verifyOtp(email, otp) {
 
   await prisma.$transaction(async (tx) => {
     await otpRepository.markOtpAsUsed(validOtp.id, tx);
+
     await userRepository.updateUserVerification(user.id, tx);
+
     await userNotificationService.createUserNotification(
       user.id,
       { title: 'Notifikasi', message: 'Selamat datang di Terbangin!' },
