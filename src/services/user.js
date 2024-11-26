@@ -16,10 +16,6 @@ export async function createUser(name, email, phoneNumber, password) {
     throw new HttpError('Phone number already exists', 409);
   }
 
-  if (!name || !email || !phoneNumber || !password) {
-    throw new HttpError('All fields are required', 400);
-  }
-
   const hashedPassword = await bcrypt.hash(
     password,
     Number(appEnv.BCRYPT_SALT)
