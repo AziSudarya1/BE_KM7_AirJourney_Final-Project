@@ -32,7 +32,7 @@ export default (app) => {
     authController.sendResetPasswordEmail
   );
 
-  router.post(
+  router.get(
     '/reset-password/validate/:token',
     authController.validateResetPasswordToken
   )
