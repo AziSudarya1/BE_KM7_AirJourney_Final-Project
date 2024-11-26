@@ -26,7 +26,9 @@ export const findActiveOtp = async (userId) => {
     where: {
       userId,
       used: false,
-      expiredAt: { gt: new Date() }
+      expiredAt: {
+        gt: new Date()
+      }
     }
   });
 };

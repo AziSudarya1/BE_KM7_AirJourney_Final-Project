@@ -13,6 +13,9 @@ CREATE TYPE "PaymentStatus" AS ENUM ('UNPAID', 'PENDING', 'SUCCESS', 'CANCELLED'
 -- CreateEnum
 CREATE TYPE "Class" AS ENUM ('ECONOMY', 'PREMIUM_ECONOMY', 'BUSINESS', 'FIRST_CLASS');
 
+-- CreateEnum
+CREATE TYPE "SeatStatus" AS ENUM ('AVAILABLE', 'BOOKED', 'PENDING');
+
 -- CreateTable
 CREATE TABLE "users" (
     "id" UUID NOT NULL,
@@ -58,7 +61,7 @@ CREATE TABLE "otp" (
 -- CreateTable
 CREATE TABLE "password_reset" (
     "id" UUID NOT NULL,
-    "token" TEXT NOT NULL,
+    "token" UUID NOT NULL,
     "used" BOOLEAN NOT NULL DEFAULT false,
     "expired_at" TIMESTAMPTZ NOT NULL,
     "user_id" UUID NOT NULL,
@@ -169,7 +172,8 @@ CREATE TABLE "aeroplane" (
     "id" UUID NOT NULL,
     "code" TEXT NOT NULL,
     "type" TEXT NOT NULL,
-    "max_seat" INTEGER NOT NULL,
+    "max_row" INTEGER NOT NULL,
+    "max_column" INTEGER NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ NOT NULL,
 
@@ -179,7 +183,7 @@ CREATE TABLE "aeroplane" (
 -- CreateTable
 CREATE TABLE "seat" (
     "id" UUID NOT NULL,
-    "is_booked" BOOLEAN NOT NULL,
+    "status" "SeatStatus" NOT NULL,
     "number" INTEGER NOT NULL,
     "row" INTEGER NOT NULL,
     "aeroplane_id" UUID NOT NULL,

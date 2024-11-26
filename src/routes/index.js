@@ -6,7 +6,7 @@ import otp from './otp.js';
 export default (app) => {
   const router = Router();
 
-  app.use('/api/v1', router);
+  app.use('/', router);
 
   auth(router);
   otp(router);

@@ -1,19 +1,17 @@
 import nodemailer from 'nodemailer';
-import { loadEnv } from '../env.js';
-
-loadEnv();
+import { appEnv } from '../env.js';
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_ADDRESS,
-    pass: process.env.EMAIL_PASSWORD
+    user: appEnv.EMAIL_ADDRESS,
+    pass: appEnv.EMAIL_PASSWORD
   }
 });
 
 export const sendEmail = async (to, subject, html) => {
   await transporter.sendMail({
-    from: process.env.EMAIL_ADDRESS,
+    from: appEnv.EMAIL_ADDRESS,
     to,
     subject,
     html

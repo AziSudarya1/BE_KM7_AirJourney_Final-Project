@@ -2,17 +2,21 @@ import * as userRepository from '../repositories/user.js';
 import { HttpError } from '../utils/error.js';
 import bcrypt from 'bcrypt';
 
-export const createUser = async (
-  name,
-  email,
-  phoneNumber,
-  password,
-  role = 'USER'
-) => {
+export async function createUser(name, email, phoneNumber, password) {
   const existingUser = await userRepository.findUserByEmail(email);
+  const existingPhoneNumber =
+    await userRepository.findUserByPhoneNumber(phoneNumber);
 
   if (existingUser) {
     throw new HttpError('Email already exists', 409);
+  }
+
+  if (existingPhoneNumber) {
+    throw new HttpError('Phone number already exists', 409);
+  }
+
+  if (!name || !email || !phoneNumber || !password) {
+    throw new HttpError('All fields are required', 400);
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -21,7 +25,6 @@ export const createUser = async (
     name,
     email,
     phoneNumber,
-    password: hashedPassword,
-    role
+    password: hashedPassword
   });
-};
+}

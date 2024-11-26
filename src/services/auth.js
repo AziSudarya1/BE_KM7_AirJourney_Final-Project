@@ -1,4 +1,3 @@
-import { Role } from '@prisma/client';
 import * as userRepository from '../repositories/user.js';
 import { HttpError } from '../utils/error.js';
 import { generateToken } from '../utils/jwt.js';

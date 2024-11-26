@@ -1,7 +1,7 @@
 import * as otpRepository from '../repositories/otp.js';
 import * as userRepository from '../repositories/user.js';
 import { sendEmail } from '../utils/email/mail.js';
-import { generateOtp } from '../utils/otp/generateOtp.js';
+import { generateOtp } from '../utils/helper.js';
 import { HttpError } from '../utils/error.js';
 
 export const sendOtp = async (user) => {
