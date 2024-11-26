@@ -25,4 +25,10 @@ export default (app) => {
     authValidationMiddleware.loginValidation,
     authController.login
   );
+
+  router.post(
+    '/reset-password/request',
+    authValidationMiddleware.resetPasswordRequestValidation, 
+    authController.sendResetPasswordEmail
+  );
 };
