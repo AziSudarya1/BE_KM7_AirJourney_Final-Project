@@ -22,3 +22,14 @@ export async function loginValidation(req, res, next) {
     return res.status(400).json({ message: errorMessages });
   }
 }
+
+export async function resetPasswordRequestValidation(req, res, next) {
+  try {
+    await resetSchema.validateAsync(req.body, { abortEarly: false });
+
+    next();
+  } catch (error) {
+    const errorMessages = generateJoiError(error);
+    return res.status(400).json({ message: errorMessages });
+  }
+}
