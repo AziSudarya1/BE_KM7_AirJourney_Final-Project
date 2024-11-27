@@ -28,18 +28,18 @@ export default (app) => {
 
   router.post(
     '/reset-password/request',
-    authValidationMiddleware.resetPasswordRequestValidation, 
+    authValidationMiddleware.resetPasswordRequestValidation,
     authController.sendResetPasswordEmail
   );
 
   router.get(
     '/reset-password/validate/:token',
     authController.validateResetPasswordToken
-  )
+  );
 
   router.post(
     '/reset-password',
-    authValidationMiddleware.resetPasswordValidation, 
+    authValidationMiddleware.resetPasswordValidation,
     authController.resetPassword
-  )
+  );
 };
