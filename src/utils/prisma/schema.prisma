@@ -18,7 +18,7 @@ model User {
   phoneNumber String  @unique @map("phone_number")
 
   notification  Notification[]
-  otp           OTP[]
+  otp           Otp[]
   passwordReset PasswordReset[]
   transaction   Transaction[]
 
@@ -43,7 +43,7 @@ model Notification {
   @@map("notification")
 }
 
-model OTP {
+model Otp {
   id        String   @id @default(uuid()) @db.Uuid
   otp       String
   used      Boolean  @default(false)
