@@ -6,12 +6,6 @@ const loginSchema = Joi.object({
   password: Joi.string().required()
 });
 
-const resetSchema = Joi.object({
-  email: Joi.string().email(),
-  phone_number: Joi.string().pattern(/^\d+$/),
-  password: Joi.string().required()
-}).xor('email', 'phone_number');
-
 export async function loginValidation(req, res, next) {
   try {
     await loginSchema.validateAsync(req.body, { abortEarly: false });
@@ -23,9 +17,15 @@ export async function loginValidation(req, res, next) {
   }
 }
 
+const resetPasswordRequestValidationSchema = Joi.object({
+  email: Joi.string().email().required()
+});
+
 export async function resetPasswordRequestValidation(req, res, next) {
   try {
-    await resetSchema.validateAsync(req.body, { abortEarly: false });
+    await resetPasswordRequestValidationSchema.validateAsync(req.body, {
+      abortEarly: false
+    });
 
     next();
   } catch (error) {
