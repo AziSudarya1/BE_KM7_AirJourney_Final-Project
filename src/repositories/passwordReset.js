@@ -14,3 +14,17 @@ export async function getActiveTokenWithUser(token) {
     }
   });
 }
+
+export async function createPasswordResetTokenByUserId(
+  userId,
+  token,
+  expiration
+) {
+  return prisma.passwordReset.create({
+    data: {
+      token,
+      userId,
+      expiredAt: expiration
+    }
+  });
+}
