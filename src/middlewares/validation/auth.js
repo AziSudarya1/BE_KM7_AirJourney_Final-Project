@@ -6,6 +6,15 @@ const loginSchema = Joi.object({
   password: Joi.string().required()
 });
 
+const resetPasswordRequestSchema = Joi.object({
+  email: Joi.string().email().required()
+});
+
+const resetPasswordSchema = Joi.object({
+  token: Joi.string().required(),
+  newPassword: Joi.string().min(8).required()
+});
+
 export async function loginValidation(req, res, next) {
   try {
     await loginSchema.validateAsync(req.body, { abortEarly: false });
@@ -17,13 +26,9 @@ export async function loginValidation(req, res, next) {
   }
 }
 
-const resetPasswordRequestValidationSchema = Joi.object({
-  email: Joi.string().email().required()
-});
-
 export async function resetPasswordRequestValidation(req, res, next) {
   try {
-    await resetPasswordRequestValidationSchema.validateAsync(req.body, {
+    await resetPasswordRequestSchema.validateAsync(req.body, {
       abortEarly: false
     });
 
@@ -34,16 +39,9 @@ export async function resetPasswordRequestValidation(req, res, next) {
   }
 }
 
-const resetPasswordValidationSchema = Joi.object({
-  token: Joi.string().required(),
-  newPassword: Joi.string.min(6).required
-});
-
 export async function resetPasswordValidation(req, res, next) {
   try {
-    await resetPasswordValidationSchema.validateAsync(req.body, {
-      abortEarly: false
-    });
+    await resetPasswordSchema.validateAsync(req.body, { abortEarly: false });
 
     next();
   } catch (error) {
