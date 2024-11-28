@@ -1,4 +1,3 @@
-import * as authService from '../services/auth.js';
 import * as passwordResetService from '../services/passwordReset.js';
 
 export async function sendResetPasswordEmail(req, res) {

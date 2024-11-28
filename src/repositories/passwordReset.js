@@ -28,3 +28,15 @@ export async function createPasswordResetTokenByUserId(
     }
   });
 }
+
+export function getActiveTokenByUserId(userId) {
+  return prisma.passwordReset.findFirst({
+    where: {
+      userId,
+      used: false,
+      expiredAt: {
+        gt: new Date()
+      }
+    }
+  });
+}
