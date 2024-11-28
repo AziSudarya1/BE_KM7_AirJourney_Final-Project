@@ -1,7 +1,7 @@
+import ejs from 'ejs';
 import nodemailer from 'nodemailer';
+import path from 'path';
 import { appEnv } from '../env.js';
-const ejs = require('ejs');
-const path = require('path');
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
