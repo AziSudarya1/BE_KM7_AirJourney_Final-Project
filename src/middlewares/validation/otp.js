@@ -13,7 +13,6 @@ const verifyOtpSchema = Joi.object({
 export async function sendOtpValidation(req, res, next) {
   try {
     await sendOtp.validateAsync(req.body, { abortEarly: false });
-
     next();
   } catch (error) {
     const errorMessages = generateJoiError(error);
@@ -24,7 +23,6 @@ export async function sendOtpValidation(req, res, next) {
 export async function verifyOtpValidation(req, res, next) {
   try {
     await verifyOtpSchema.validateAsync(req.body, { abortEarly: false });
-
     next();
   } catch (error) {
     const errorMessages = generateJoiError(error);
