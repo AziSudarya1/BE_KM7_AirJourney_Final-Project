@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id          String  @id @default(uuid()) @db.Uuid
+  id          String  @id @default(uuid(7)) @db.Uuid
   name        String
   image       String?
   email       String  @unique
@@ -29,7 +29,7 @@ model User {
 }
 
 model Notification {
-  id      String  @id @default(uuid()) @db.Uuid
+  id      String  @id @default(uuid(7)) @db.Uuid
   title   String
   message String
   isRead  Boolean @default(false) @map("is_read")
@@ -44,7 +44,7 @@ model Notification {
 }
 
 model Otp {
-  id        String   @id @default(uuid()) @db.Uuid
+  id        String   @id @default(uuid(7)) @db.Uuid
   otp       String
   used      Boolean  @default(false)
   expiredAt DateTime @map("expired_at") @db.Timestamptz()
@@ -59,7 +59,7 @@ model Otp {
 }
 
 model PasswordReset {
-  id        String   @id @default(uuid()) @db.Uuid
+  id        String   @id @default(uuid(7)) @db.Uuid
   token     String   @db.Uuid
   used      Boolean  @default(false)
   expiredAt DateTime @map("expired_at") @db.Timestamptz()
@@ -74,7 +74,7 @@ model PasswordReset {
 }
 
 model Transaction {
-  id              String            @id @default(uuid()) @db.Uuid
+  id              String            @id @default(uuid(7)) @db.Uuid
   transactionCode String            @map("transaction_code")
   amount          Int
   status          TransactionStatus
@@ -97,7 +97,7 @@ model Transaction {
 }
 
 model Passenger {
-  id            String   @id @default(uuid()) @db.Uuid
+  id            String   @id @default(uuid(7)) @db.Uuid
   transactionId String   @map("transaction_id") @db.Uuid
   title         String
   firstName     String   @map("first_name")
@@ -122,7 +122,7 @@ model Passenger {
 }
 
 model Flight {
-  id            String   @id @default(uuid()) @db.Uuid
+  id            String   @id @default(uuid(7)) @db.Uuid
   departureDate DateTime @map("departure_date")
   departureTime DateTime @map("departure_time")
   arrivalDate   DateTime @map("arrival_date")
@@ -152,7 +152,7 @@ model Flight {
 }
 
 model Airline {
-  id    String  @id @default(uuid()) @db.Uuid
+  id    String  @id @default(uuid(7)) @db.Uuid
   code  String
   name  String
   image String?
@@ -166,7 +166,7 @@ model Airline {
 }
 
 model Airport {
-  id       String @id @default(uuid()) @db.Uuid
+  id       String @id @default(uuid(7)) @db.Uuid
   code     String
   name     String
   location String
@@ -181,7 +181,7 @@ model Airport {
 }
 
 model Payment {
-  id              String        @id @default(uuid()) @db.Uuid
+  id              String        @id @default(uuid(7)) @db.Uuid
   status          PaymentStatus
   method          PaymentMethod
   snapToken       String        @map("snap_token")
@@ -198,7 +198,7 @@ model Payment {
 }
 
 model Aeroplane {
-  id        String @id @default(uuid()) @db.Uuid
+  id        String @id @default(uuid(7)) @db.Uuid
   code      String
   type      String
   maxRow    Int    @map("max_row")
@@ -213,7 +213,7 @@ model Aeroplane {
 }
 
 model Seat {
-  id     String     @id @default(uuid()) @db.Uuid
+  id     String     @id @default(uuid(7)) @db.Uuid
   status SeatStatus
   number Int
   row    Int
