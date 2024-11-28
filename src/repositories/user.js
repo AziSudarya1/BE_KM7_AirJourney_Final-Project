@@ -42,3 +42,11 @@ export async function updateResetPasswordToken(userId, token, expiration) {
     }
   });
 }
+
+export async function findUserByResetToken(token) {
+  return await prisma.user.findFirst({
+    where: {
+      resetPasswordToken: token
+    }
+  });
+}
