@@ -13,7 +13,7 @@ export const corsOptions = {
     if (!origin || ALLOWED_ORIGINS.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new HttpError(403, 'Not allowed by CORS'));
+      callback(new HttpError('Not allowed by CORS', 403));
     }
   },
   credentials: true
