@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import root from './root.js';
 import auth from './auth.js';
+import docs from './docs.js';
 
 export default (app) => {
   const router = Router();
@@ -9,4 +10,5 @@ export default (app) => {
 
   auth(router);
   root(router);
+  docs(router);
 };

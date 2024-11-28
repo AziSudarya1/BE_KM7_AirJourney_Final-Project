@@ -5,6 +5,7 @@ import * as otpController from '../controllers/otp.js';
 import * as passwordResetController from '../controllers/passwordReset.js';
 import * as userValidationMiddleware from '../middlewares/validation/user.js';
 import * as authValidationMiddleware from '../middlewares/validation/auth.js';
+import * as otpValidationMiddleware from '../middlewares/validation/otp.js';
 import * as passwordResetValidationMiddleware from '../middlewares/validation/passwordReset.js';
 
 export default (app) => {
@@ -18,9 +19,17 @@ export default (app) => {
     userController.createUser
   );
 
-  router.post('/otp', otpController.sendOtp);
+  router.post(
+    '/otp',
+    otpValidationMiddleware.sendOtpValidation,
+    otpController.sendOtp
+  );
 
-  router.post('/otp/verify', otpController.verifyOtp);
+  router.post(
+    '/otp/verify',
+    otpValidationMiddleware.verifyOtpValidation,
+    otpController.verifyOtp
+  );
 
   router.post(
     '/login',
