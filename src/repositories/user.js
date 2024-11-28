@@ -32,3 +32,13 @@ export async function updateUserVerification(userId, tx) {
     data: { verified: true }
   });
 }
+
+export async function updateResetPasswordToken(userId, token, expiration) {
+  return await prisma.user.update({
+    where: { id: userId },
+    data: {
+      resetPasswordToken: token,
+      resetPasswordExpires: expiration
+    }
+  });
+}
