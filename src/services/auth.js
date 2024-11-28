@@ -2,6 +2,8 @@ import * as userRepository from '../repositories/user.js';
 import { HttpError } from '../utils/error.js';
 import { generateToken, verifyToken } from '../utils/jwt.js';
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
+import { sendEmail } from '../utils/email.js';
 
 export async function login(email, password) {
   const user = await userRepository.findUserByEmail(email);
@@ -56,4 +58,34 @@ export async function isPasswordMatch(password, hashedPassword) {
   const isMatch = await bcrypt.compare(password, hashedPassword);
 
   return isMatch;
+}
+
+const RESET_PASSWORD_EXPIRATION_TIME = 3600;
+
+export async function sendResetPasswordEmail(email) {
+  const user = await userRepository.findUserByEmail(email);
+
+  if (!user) {
+    throw new HttpError('User not found', 404);
+  }
+
+  const token = crypto.randomBytes(32).toString('hex');
+  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+  const expiration =
+    Math.floor(Date.now() / 1000) + RESET_PASSWORD_EXPIRATION_TIME;
+
+  await userRepository.updateResetPasswordToken(
+    user.id,
+    hashedToken,
+    expiration
+  );
+
+  const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+
+  await sendEmail(
+    user.email,
+    'Reset Password',
+    `Click the link to reset your password: ${resetLink}`
+  );
 }
