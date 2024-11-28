@@ -1,4 +1,5 @@
 import * as userRepository from '../repositories/user.js';
+import * as passwordResetRepository from '../repositories/passwordReset.js';
 import { HttpError } from '../utils/error.js';
 import { generateToken, verifyToken } from '../utils/jwt.js';
 import { sendEmail } from '../utils/email/mail.js';
@@ -69,17 +70,12 @@ export async function sendResetPasswordEmail(email) {
     throw new HttpError('User not found', 404);
   }
 
-  const token = crypto.randomBytes(32).toString('hex');
-  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+  const token = crypto.randomUUID();
 
   const expiration =
     Math.floor(Date.now() / 1000) + RESET_PASSWORD_EXPIRATION_TIME;
 
-  await userRepository.updateResetPasswordToken(
-    user.id,
-    hashedToken,
-    expiration
-  );
+  await userRepository.updateResetPasswordToken(user.id, token, expiration);
 
   const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
 
@@ -91,23 +87,19 @@ export async function sendResetPasswordEmail(email) {
 }
 
 export async function validateResetPasswordToken(token) {
-  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+  const data = await passwordResetRepository.getActiveTokenWithUser(token);
 
-  const user = await userRepository.findUserByResetToken(hashedToken);
-
-  if (!user || user.resetPasswordExpires < Math.floor(Date.now() / 1000)) {
+  if (!data) {
     throw new HttpError('Invalid or expired reset password token', 400);
   }
 
-  return user;
+  return data;
 }
 
 export async function resetPassword(token, newPassword) {
-  const user = await validateResetPasswordToken(token);
+  const data = await validateResetPasswordToken(token);
 
   const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-  await userRepository.updateUserPassword(user.id, hashedPassword);
-
-  await userRepository.clearResetPasswordToken(user.id);
+  await userRepository.updateUserPassword(data.user.id, hashedPassword);
 }
