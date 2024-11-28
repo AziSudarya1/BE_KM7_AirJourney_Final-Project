@@ -10,10 +10,11 @@ if (!ALLOWED_ORIGINS.length) {
 
 export const corsOptions = {
   origin: (origin, callback) => {
-    const isOriginAllowed = origin && ALLOWED_ORIGINS.includes(origin);
-
-    if (isOriginAllowed) callback(null, true);
-    else callback(new HttpError(403, { message: 'Forbidden by CORS' }));
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new HttpError(403, 'Not allowed by CORS'));
+    }
   },
   credentials: true
 };
