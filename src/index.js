@@ -21,6 +21,8 @@ function main() {
     console.log(
       `Server is running on port http://localhost:${port} in ${process.env.NODE_ENV} mode`
     );
+
+    console.log(`API Docs: http://localhost:${port}/docs`);
   });
 }
 
