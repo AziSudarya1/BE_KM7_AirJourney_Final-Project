@@ -169,8 +169,7 @@ model Airport {
   id       String @id @default(uuid(7)) @db.Uuid
   code     String
   name     String
-  country  String
-  city     String
+  location String
 
   flightFrom Flight[] @relation("AirportFrom")
   flightTo   Flight[] @relation("AirportTo")
