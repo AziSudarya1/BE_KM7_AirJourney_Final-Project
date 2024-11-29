@@ -1,6 +1,6 @@
 import { prisma } from '../utils/db.js';
 
-export async function getActiveTokenWithUser(token) {
+export function getActiveTokenWithUser(token) {
   return prisma.passwordReset.findFirst({
     where: {
       token,
@@ -15,11 +15,7 @@ export async function getActiveTokenWithUser(token) {
   });
 }
 
-export async function createPasswordResetTokenByUserId(
-  userId,
-  token,
-  expiration
-) {
+export function createPasswordResetTokenByUserId(userId, token, expiration) {
   return prisma.passwordReset.create({
     data: {
       token,

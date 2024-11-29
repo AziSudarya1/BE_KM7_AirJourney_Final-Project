@@ -2,6 +2,7 @@ import * as userRepository from '../repositories/user.js';
 import { HttpError } from '../utils/error.js';
 import { generateToken, verifyToken } from '../utils/jwt.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 export async function login(email, password) {
   const user = await userRepository.findUserByEmail(email);
@@ -36,7 +37,7 @@ export async function verifyTokenAndUser(token) {
   try {
     const { id } = verifyToken(token);
 
-    const user = await userService.getUserWithRole(id);
+    const user = await userRepository.getUserWithId(id);
 
     if (!user) {
       throw new HttpError('User not found', 401);
