@@ -25,6 +25,14 @@ export async function createUser(data) {
   });
 }
 
+export function getUserWithId(userId) {
+  return prisma.user.findUnique({
+    where: {
+      id: userId
+    }
+  });
+}
+
 export async function updateUserVerification(userId, tx) {
   const db = tx ?? prisma;
   return await db.user.update({
