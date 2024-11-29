@@ -1,22 +1,22 @@
 import { prisma } from '../utils/db.js';
 
-export async function findUserByEmail(email) {
-  return await prisma.user.findUnique({
+export function findUserByEmail(email) {
+  return prisma.user.findUnique({
     where: {
       email
     }
   });
 }
 
-export async function findUserByPhoneNumber(phoneNumber) {
-  return await prisma.user.findUnique({
+export function findUserByPhoneNumber(phoneNumber) {
+  return prisma.user.findUnique({
     where: {
       phoneNumber
     }
   });
 }
 
-export async function createUser(data) {
+export function createUser(data) {
   return prisma.user.create({
     data: {
       ...data,
@@ -33,9 +33,9 @@ export function getUserWithId(userId) {
   });
 }
 
-export async function updateUserVerification(userId, tx) {
+export function updateUserVerification(userId, tx) {
   const db = tx ?? prisma;
-  return await db.user.update({
+  return db.user.update({
     where: { id: userId },
     data: { verified: true }
   });
