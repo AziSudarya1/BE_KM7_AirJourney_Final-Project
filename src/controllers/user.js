@@ -19,11 +19,3 @@ export async function createUser(req, res) {
     }
   });
 }
-
-export async function getCurrentUser(req, res) {
-  const user = res.locals.user;
-  res.status(200).json({
-    message: 'User found successfully',
-    data: user
-  });
-}

@@ -1,6 +1,6 @@
 import { prisma } from '../utils/db.js';
 
-export function createOtp(userId, otp, expiredAt) {
+export async function createOtp(userId, otp, expiredAt) {
   return prisma.otp.create({
     data: {
       userId,
@@ -10,8 +10,8 @@ export function createOtp(userId, otp, expiredAt) {
   });
 }
 
-export function findValidOtp(userId, otp) {
-  return prisma.otp.findFirst({
+export async function findValidOtp(userId, otp) {
+  return await prisma.otp.findFirst({
     where: {
       userId,
       otp,
@@ -21,8 +21,8 @@ export function findValidOtp(userId, otp) {
   });
 }
 
-export function findActiveOtp(userId) {
-  return prisma.otp.findFirst({
+export async function findActiveOtp(userId) {
+  return await prisma.otp.findFirst({
     where: {
       userId,
       used: false,
@@ -33,8 +33,8 @@ export function findActiveOtp(userId) {
   });
 }
 
-export function markOtpAsUsed(otpId, tx) {
-  return tx.otp.update({
+export async function markOtpAsUsed(otpId, tx) {
+  return await tx.otp.update({
     where: {
       id: otpId
     },
