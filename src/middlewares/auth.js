@@ -24,3 +24,13 @@ export async function isAuthorized(req, res, next) {
     throw new HttpError('invalid or expired token', 401);
   }
 }
+
+export async function isAdmin(req, res, next) {
+  const user = res.locals.user;
+
+  if (user.role !== 'ADMIN') {
+    throw new HttpError('Unauthorized', 403);
+  }
+
+  next();
+}
