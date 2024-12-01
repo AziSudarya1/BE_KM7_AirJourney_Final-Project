@@ -153,8 +153,8 @@ model Flight {
 
 model Airline {
   id    String  @id @default(uuid(7)) @db.Uuid
-  code  String
-  name  String
+  code  String  @unique
+  name  String  @unique
   image String?
 
   flight Flight[]
@@ -166,10 +166,12 @@ model Airline {
 }
 
 model Airport {
-  id       String @id @default(uuid(7)) @db.Uuid
-  code     String
-  name     String
-  location String
+  id        String    @id @default(uuid(7)) @db.Uuid
+  code      String    @unique
+  name      String    @unique
+  continent Continent
+  city      String
+  country   String
 
   flightFrom Flight[] @relation("AirportFrom")
   flightTo   Flight[] @relation("AirportTo")
@@ -198,13 +200,14 @@ model Payment {
 }
 
 model Aeroplane {
-  id        String @id @default(uuid(7)) @db.Uuid
-  code      String
+  id        String   @id @default(uuid(7)) @db.Uuid
+  code      String   @unique
+  name      String   @unique
   type      String
-  maxRow    Int    @map("max_row")
-  maxColumn Int    @map("max_column")
-  seats  Seat[]
-  flight Flight[]
+  maxRow    Int      @map("max_row")
+  maxColumn Int      @map("max_column")
+  seats     Seat[]
+  flight    Flight[]
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
@@ -274,4 +277,14 @@ enum SeatStatus {
   AVAILABLE
   BOOKED
   PENDING
+}
+
+enum Continent {
+  ASIA
+  EUROPE
+  AFRICA
+  NORTH_AMERICA
+  SOUTH_AMERICA
+  AUSTRALIA
+  ANTARCTICA
 }

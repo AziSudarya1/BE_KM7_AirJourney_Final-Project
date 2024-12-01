@@ -16,6 +16,10 @@ jobs:
       DIRECT_URL: '${{ secrets.DIRECT_URL }}'
       DATABASE_URL: '${{ secrets.DATABASE_URL }}'
       DATABASE_TO_CREATE: ${{ github.ref_name == 'release' && format('pr_{0}', github.event.number) }}
+      EMAIL_ADDRESS_ADMIN: '${{ secrets.EMAIL_ADDRESS_ADMIN }}'
+      EMAIL_ADDRESS_USER: '${{ secrets.EMAIL_ADDRESS_USER }}'
+      PASSWORD_ADMIN: '${{ secrets.PASSWORD_ADMIN }}'
+      PASSWORD_USER: '${{ secrets.PASSWORD_USER }}'
 
     steps:
       - name: Checkout repo
@@ -27,11 +31,6 @@ jobs:
       - name: Create database
         run: npm run db:create
         continue-on-error: true
-
-      - name: Set environment variables for newly created database
-        run: |
-          echo "DIRECT_URL=${{ secrets.DATABASE_URL }}" >> "$GITHUB_ENV"
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> "$GITHUB_ENV"
 
       - name: Migrate database
         run: npm run db:deploy
