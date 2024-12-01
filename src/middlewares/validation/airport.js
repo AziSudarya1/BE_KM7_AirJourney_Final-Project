@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { generateJoiError } from '../../utils/helper.js';
 
-const ALLOWED_CONTINENTS = [
+export const ALLOWED_CONTINENTS = [
   'ASIA',
   'EUROPE',
   'AFRICA',

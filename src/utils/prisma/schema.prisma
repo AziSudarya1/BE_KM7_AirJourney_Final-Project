@@ -153,8 +153,8 @@ model Flight {
 
 model Airline {
   id    String  @id @default(uuid(7)) @db.Uuid
-  code  String
-  name  String
+  code  String  @unique
+  name  String  @unique
   image String?
 
   flight Flight[]
@@ -201,7 +201,8 @@ model Payment {
 
 model Aeroplane {
   id        String   @id @default(uuid(7)) @db.Uuid
-  code      String
+  code      String   @unique
+  name      String   @unique
   type      String
   maxRow    Int      @map("max_row")
   maxColumn Int      @map("max_column")
