@@ -8,7 +8,7 @@ import * as aeroplaneValidation from '../middlewares/validation/aerolane.js';
 export default (app) => {
   const router = Router();
 
-  app.use('/aeroplane', router);
+  app.use('/aeroplanes', router);
 
   router.post(
     '/',
