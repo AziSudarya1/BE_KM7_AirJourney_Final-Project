@@ -124,10 +124,10 @@ model Passenger {
 model Flight {
   id            String   @id @default(uuid(7)) @db.Uuid
   departureDate DateTime @map("departure_date")
-  departureTime DateTime @map("departure_time")
+  departureTime String @map("departure_time")
   arrivalDate   DateTime @map("arrival_date")
-  arrivalTime   DateTime @map("arrival_time")
-  duration      String
+  arrivalTime   String @map("arrival_time")
+  duration      Int
   price         Int
   class         Class
   description   String?
@@ -218,7 +218,7 @@ model Aeroplane {
 model Seat {
   id     String     @id @default(uuid(7)) @db.Uuid
   status SeatStatus
-  number Int
+  column Int
   row    Int
 
   aeroplaneId String @map("aeroplane_id") @db.Uuid
