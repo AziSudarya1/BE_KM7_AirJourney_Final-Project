@@ -17,8 +17,7 @@ const updateUserSchema = Joi.object({
   phoneNumber: Joi.string()
     .pattern(/^\+62[0-9]+$/)
     .min(11)
-    .required()
-});
+}).min(1);
 
 export async function createUserValidation(req, res, next) {
   try {

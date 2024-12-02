@@ -9,7 +9,7 @@ export async function checkAirportCodeAndNameExist(req, res, next) {
   if (airport) {
     throw new HttpError(
       'Airport with the same name and code already exists',
-      400
+      409
     );
   }
 
