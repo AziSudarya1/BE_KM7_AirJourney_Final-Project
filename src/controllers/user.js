@@ -27,3 +27,18 @@ export async function getCurrentUser(req, res) {
     data: user
   });
 }
+
+export async function updateUserById(req, res) {
+  const userId = res.locals.user.id;
+  const { name, phoneNumber, email } = req.body;
+
+  const user = await userService.updateUserById(userId, {
+    name,
+    phoneNumber,
+    email
+  });
+  res.status(200).json({
+    message: 'Update user successfully',
+    data: user
+  });
+}

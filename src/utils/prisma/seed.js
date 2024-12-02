@@ -10,14 +10,16 @@ async function seedUsers() {
       email: appEnv.EMAIL_ADDRESS_ADMIN,
       password: await bcrypt.hash(appEnv.PASSWORD_ADMIN, 10),
       role: 'ADMIN',
-      phoneNumber: '1234567890'
+      phoneNumber: '1234567890',
+      verified: true
     },
     {
       name: 'User',
       email: appEnv.EMAIL_ADDRESS_USER,
       password: await bcrypt.hash(appEnv.PASSWORD_USER, 10),
       role: 'USER',
-      phoneNumber: '1234567891'
+      phoneNumber: '1234567891',
+      verified: true
     }
   ];
 

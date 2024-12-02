@@ -3,6 +3,7 @@ import root from './root.js';
 import auth from './auth.js';
 import user from './user.js';
 import docs from './docs.js';
+import airports from './airports.js';
 import aeroplane from './aeroplane.js';
 
 export default (app) => {
@@ -15,4 +16,5 @@ export default (app) => {
   root(router);
   docs(router);
   aeroplane(router);
+  airports(router);
 };
