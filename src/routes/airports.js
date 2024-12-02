@@ -8,7 +8,7 @@ import * as airportController from '../controllers/airport.js';
 export default (app) => {
   const router = Router();
 
-  app.use('/airport', router);
+  app.use('/airports', router);
 
   router.post(
     '/',
@@ -22,6 +22,7 @@ export default (app) => {
   router.get(
     '/:id',
     commonValidationMiddleware.validateIdParams,
+    airportMiddleware.checkAirportIdExist,
     airportController.getAirportById
   );
 
