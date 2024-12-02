@@ -2,9 +2,9 @@ import Joi from 'joi';
 import { generateJoiError } from '../../utils/helper.js';
 
 const createAirlineSchema = Joi.object({
+  code: Joi.string().required(),
   name: Joi.string().required(),
-  country: Joi.string().required(),
-  fleetSize: Joi.number().required()
+  image: Joi.string().uri()
 });
 
 export async function createAirlineValidation(req, res, next) {
@@ -18,9 +18,9 @@ export async function createAirlineValidation(req, res, next) {
 }
 
 const updateAirlineSchema = Joi.object({
+  code: Joi.string(),
   name: Joi.string(),
-  country: Joi.string(),
-  fleetSize: Joi.number()
+  image: Joi.string().uri()
 }).min(1);
 
 export async function updateAirlineValidation(req, res, next) {
