@@ -1,4 +1,4 @@
-import { prisma } from '../utils/db';
+import { prisma } from '../utils/db.js';
 
 export function createAirport(payload) {
   return prisma.airport.create({

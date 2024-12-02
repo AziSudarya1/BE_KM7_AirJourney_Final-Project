@@ -28,3 +28,13 @@ export async function createUser(name, email, phoneNumber, password) {
     password: hashedPassword
   });
 }
+
+export async function updateUserById(userId, data) {
+  const user = await userRepository.getUserWithId(userId);
+
+  if (!user) {
+    throw new HttpError('User not found', 404);
+  }
+
+  return await userRepository.updateUserById(userId, data);
+}

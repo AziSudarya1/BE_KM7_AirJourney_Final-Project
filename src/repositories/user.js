@@ -67,3 +67,16 @@ export async function updateUserPassword(userId, password) {
     }
   });
 }
+
+export function updateUserById(userId, data) {
+  return prisma.user.update({
+    where: {
+      id: userId
+    },
+    data: {
+      name: data.name,
+      phoneNumber: data.phoneNumber,
+      email: data.email
+    }
+  });
+}
