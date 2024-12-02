@@ -21,11 +21,11 @@ export async function createAeroplaneValidation(req, res, next) {
 }
 
 const updateAeroplaneSchema = Joi.object({
-  name: Joi.string().required(),
-  code: Joi.string().required(),
-  type: Joi.string().required(),
-  maxRow: Joi.number().required(),
-  maxColumn: Joi.number().required()
+  name: Joi.string(),
+  code: Joi.string(),
+  type: Joi.string(),
+  maxRow: Joi.number(),
+  maxColumn: Joi.number()
 }).min(1);
 
 export async function updateAeroplaneValidation(req, res, next) {

@@ -1,6 +1,4 @@
-import * as aeroplaneRepository from '../repositories/aeroplane.js';
-import { HttpError } from '../utils/error.js';
-import { randomUUID } from 'crypto';
+import * as aeroplaneRepository from '../repositories/aeroplanes.js';
 
 export async function createAeroplane(payload) {
   const aeroplaneData = await aeroplaneRepository.createAeroplane(payload);

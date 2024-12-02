@@ -1,4 +1,4 @@
-import * as aeroplaneServices from '../services/aeroplane.js';
+import * as aeroplaneServices from '../services/aeroplanes.js';
 import { HttpError } from '../utils/error.js';
 
 export async function checkAeroplaneNameAndCodeExist(req, res, next) {
@@ -12,7 +12,7 @@ export async function checkAeroplaneNameAndCodeExist(req, res, next) {
   if (aeroplane) {
     throw new HttpError(
       'Aeroplane with the same name and code already exist!',
-      400
+      409
     );
   }
 

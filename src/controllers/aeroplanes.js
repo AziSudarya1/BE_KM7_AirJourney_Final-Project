@@ -1,4 +1,4 @@
-import * as aeroplaneServices from '../services/aeroplane.js';
+import * as aeroplaneServices from '../services/aeroplanes.js';
 
 export async function createAeroplane(req, res) {
   const aeroplaneData = await aeroplaneServices.createAeroplane(req.body);
@@ -14,7 +14,7 @@ export async function getAeroplaneById(req, res) {
 
   const aeroplaneData = await aeroplaneServices.getAeroplaneById(id);
 
-  res.status(201).json({
+  res.status(200).json({
     message: 'Aeroplane retrieved by id successfully',
     data: aeroplaneData
   });
@@ -28,7 +28,7 @@ export async function updateAeroplane(req, res) {
     req.body
   );
 
-  res.status(201).json({
+  res.status(200).json({
     message: 'Aeroplae updated succesfully',
     data: aeroplaneData
   });
@@ -42,7 +42,7 @@ export async function deleteAeroplane(req, res) {
     req.body
   );
 
-  res.status(201).json({
+  res.status(200).json({
     message: 'Aeroplae deleted succesfully',
     data: aeroplaneData
   });

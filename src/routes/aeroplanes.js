@@ -1,14 +1,14 @@
 import { Router } from 'express';
 import * as authMiddleware from '../middlewares/auth.js';
 import * as commonValidationMiddleware from '../middlewares/validation/common.js';
-import * as aeroplaneController from '../controllers/aeroplane.js';
-import * as aeroplaneMiddleware from '../middlewares/aeroplane.js';
-import * as aeroplaneValidation from '../middlewares/validation/aerolane.js';
+import * as aeroplaneController from '../controllers/aeroplanes.js';
+import * as aeroplaneMiddleware from '../middlewares/aeroplanes.js';
+import * as aeroplaneValidation from '../middlewares/validation/aeroplanes.js';
 
 export default (app) => {
   const router = Router();
 
-  app.use('/aeroplane', router);
+  app.use('/aeroplanes', router);
 
   router.post(
     '/',
@@ -21,6 +21,7 @@ export default (app) => {
 
   router.get(
     '/:id',
+    commonValidationMiddleware.validateIdParams,
     aeroplaneMiddleware.checkAeroplaneById,
     aeroplaneController.getAeroplaneById
   );
