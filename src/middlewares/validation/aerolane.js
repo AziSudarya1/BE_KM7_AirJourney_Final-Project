@@ -2,6 +2,7 @@ import Joi from 'joi';
 import { generateJoiError } from '../../utils/helper.js';
 
 const createAeroplaneSchema = Joi.object({
+  name: Joi.string().required(),
   code: Joi.string().required(),
   type: Joi.string().required(),
   maxRow: Joi.number().required(),
@@ -20,6 +21,7 @@ export async function createAeroplaneValidation(req, res, next) {
 }
 
 const updateAeroplaneSchema = Joi.object({
+  name: Joi.string().required(),
   code: Joi.string().required(),
   type: Joi.string().required(),
   maxRow: Joi.number().required(),

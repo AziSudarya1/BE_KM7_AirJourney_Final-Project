@@ -14,6 +14,15 @@ export async function getAeroplaneById(id) {
   return aeroplaneData;
 }
 
+export async function getAeroplaneByNameAndCode(name, code) {
+  const aeroplaneData = await aeroplaneRepository.getAeroplaneByNameAndCode(
+    name,
+    code
+  );
+
+  return aeroplaneData;
+}
+
 export async function updateAeroplaneById(id, payload) {
   const aeroplaneData = await aeroplaneRepository.updateAeroplane(id, payload);
 
