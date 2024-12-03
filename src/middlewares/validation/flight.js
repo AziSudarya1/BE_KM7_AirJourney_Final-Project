@@ -13,10 +13,10 @@ const createFlightSchema = Joi.object({
     .valid(...ALLOWED_CLASS)
     .required(),
   description: Joi.string(),
-  airlineId: Joi.number().required(),
-  airportIdFrom: Joi.number().required(),
-  airportIdTo: Joi.number().required(),
-  aeroplaneId: Joi.number().required()
+  airlineId: Joi.string().uuid().required(),
+  airportIdFrom: Joi.string().uuid().required(),
+  airportIdTo: Joi.string().uuid().required(),
+  aeroplaneId: Joi.string().uuid().required()
 });
 
 export async function createFlightValidation(req, res, next) {
