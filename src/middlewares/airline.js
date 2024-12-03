@@ -13,7 +13,7 @@ export async function checkAirlineNameExist(req, _res, next) {
   next();
 }
 
-export async function checkAirlineById(req, _res, next) {
+export async function checkAirlineById(req, res, next) {
   const { id } = req.params;
 
   const airline = await airlineServices.getAirlineById(id);
@@ -21,6 +21,8 @@ export async function checkAirlineById(req, _res, next) {
   if (!airline) {
     throw new HttpError('Airline data not found!', 404);
   }
+
+  res.locals.airline = airline;
 
   next();
 }

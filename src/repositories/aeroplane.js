@@ -23,7 +23,7 @@ export function getAeroplaneById(id) {
 export function getAeroplaneByNameOrCode(name, code) {
   return prisma.aeroplane.findFirst({
     where: {
-      OR: [{ name: name }, { code: code }]
+      OR: [{ name }, { code }]
     }
   });
 }
