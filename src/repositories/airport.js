@@ -20,11 +20,10 @@ export function getAirportById(id) {
   });
 }
 
-export function getAirportByNameAndCode(name, code) {
+export function getAirportByNameOrCode(name, code) {
   return prisma.airport.findUnique({
     where: {
-      name,
-      code
+      OR: [{ name }, { code }]
     }
   });
 }

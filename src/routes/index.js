@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import root from './root.js';
 import auth from './auth.js';
-import user from './user.js';
+import users from './users.js';
 import docs from './docs.js';
+import aeroplanes from './aeroplanes.js';
 import airports from './airports.js';
 
 export default (app) => {
@@ -11,8 +12,9 @@ export default (app) => {
   app.use('/', router);
 
   auth(router);
-  user(router);
+  users(router);
   root(router);
   docs(router);
+  aeroplanes(router);
   airports(router);
 };
