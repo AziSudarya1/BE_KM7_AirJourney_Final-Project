@@ -44,10 +44,10 @@ export async function getAirlineById(req, res) {
 export async function deleteAirline(req, res) {
   const { id } = req.params;
 
-  const airlineData = await airlineServices.deleteAirlineById(id);
+  await airlineServices.deleteAirlineById(id);
 
   res.status(200).json({
-    message: 'Airline deleted successfully',
-    data: airlineData
+    message: 'Airline deleted successfully'
   });
 }
+
