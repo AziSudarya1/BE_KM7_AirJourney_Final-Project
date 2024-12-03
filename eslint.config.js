@@ -10,7 +10,15 @@ export default [
       'no-console': 'warn',
       'comma-dangle': ['error', 'never'],
       'no-unused-expressions': 'error',
-      'no-constant-binary-expression': 'error'
+      'no-constant-binary-expression': 'error',
+      'no-unused-vars': [
+        'warn',
+        {
+          args: 'all',
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_'
+        }
+      ]
     }
   }
 ];

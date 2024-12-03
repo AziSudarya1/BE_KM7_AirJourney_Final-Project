@@ -14,18 +14,14 @@ export async function isAuthorized(req, res, next) {
     throw new HttpError('Invalid authorization token', 401);
   }
 
-  try {
-    const user = await verifyTokenAndUser(token);
+  const user = await verifyTokenAndUser(token);
 
-    res.locals.user = user;
+  res.locals.user = user;
 
-    next();
-  } catch (error) {
-    throw new HttpError('invalid or expired token', 401);
-  }
+  next();
 }
 
-export async function isAdmin(req, res, next) {
+export async function isAdmin(_req, res, next) {
   const user = res.locals.user;
 
   if (user.role !== 'ADMIN') {

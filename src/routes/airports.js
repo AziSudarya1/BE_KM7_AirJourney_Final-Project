@@ -15,7 +15,7 @@ export default (app) => {
     authMiddleware.isAuthorized,
     authMiddleware.isAdmin,
     airportValidationMiddleware.createAirportValidation,
-    airportMiddleware.checkAirportCodeAndNameExist,
+    airportMiddleware.checkAirportCodeOrNameExist,
     airportController.createAirport
   );
 
@@ -33,7 +33,7 @@ export default (app) => {
     commonValidationMiddleware.validateIdParams,
     airportValidationMiddleware.updateAirportValidation,
     airportMiddleware.checkAirportIdExist,
-    airportMiddleware.checkAirportCodeAndNameExist,
+    airportMiddleware.checkAirportCodeOrNameExist,
     airportController.updateAirport
   );
 
