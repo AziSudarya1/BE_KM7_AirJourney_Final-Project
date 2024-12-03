@@ -15,7 +15,7 @@ export default (app) => {
     authMiddleware.isAuthorized,
     authMiddleware.isAdmin,
     aeroplaneValidation.createAeroplaneValidation,
-    aeroplaneMiddleware.checkAeroplaneNameAndCodeExist,
+    aeroplaneMiddleware.checkAeroplaneNameOrCodeExist,
     aeroplaneController.createAeroplane
   );
 
@@ -33,7 +33,7 @@ export default (app) => {
     commonValidationMiddleware.validateIdParams,
     aeroplaneValidation.updateAeroplaneValidation,
     aeroplaneMiddleware.checkAeroplaneById,
-    aeroplaneMiddleware.checkAeroplaneNameAndCodeExist,
+    aeroplaneMiddleware.checkAeroplaneNameOrCodeExist,
     aeroplaneController.updateAeroplane
   );
 

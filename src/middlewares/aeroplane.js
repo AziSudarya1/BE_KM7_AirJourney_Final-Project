@@ -1,25 +1,31 @@
 import * as aeroplaneServices from '../services/aeroplane.js';
 import { HttpError } from '../utils/error.js';
 
-export async function checkAeroplaneNameAndCodeExist(req, _res, next) {
+export async function checkAeroplaneNameOrCodeExist(req, res, next) {
   const { name, code } = req.body;
+  const currentAeroplane = res.locals.aeroplane;
 
-  const aeroplane = await aeroplaneServices.getAeroplaneByNameAndCode(
-    name,
-    code
-  );
+  const skipUniqueCheck =
+    currentAeroplane?.name === name && currentAeroplane?.code === code;
 
-  if (aeroplane) {
-    throw new HttpError(
-      'Aeroplane with the same name and code already exist!',
-      409
+  if (!skipUniqueCheck) {
+    const aeroplane = await aeroplaneServices.getAeroplaneByNameOrCode(
+      name,
+      code
     );
+
+    if (aeroplane) {
+      throw new HttpError(
+        'Aeroplane with the same name and code already exist!',
+        409
+      );
+    }
   }
 
   next();
 }
 
-export async function checkAeroplaneById(req, _res, next) {
+export async function checkAeroplaneById(req, res, next) {
   const { id } = req.params;
 
   const aeroplane = await aeroplaneServices.getAeroplaneById(id);
@@ -27,6 +33,8 @@ export async function checkAeroplaneById(req, _res, next) {
   if (!aeroplane) {
     throw new HttpError('Aeroplane data not Found!', 404);
   }
+
+  res.locals.aeroplane = aeroplane;
 
   next();
 }

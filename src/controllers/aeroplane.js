@@ -5,7 +5,7 @@ export async function createAeroplane(req, res) {
 
   res.status(201).json({
     message: 'aeroplane created succesfully',
-    aeroplaneData
+    data: aeroplaneData
   });
 }
 
@@ -29,7 +29,7 @@ export async function updateAeroplane(req, res) {
   );
 
   res.status(200).json({
-    message: 'Aeroplae updated succesfully',
+    message: 'Aeroplane updated succesfully',
     data: aeroplaneData
   });
 }
@@ -37,13 +37,9 @@ export async function updateAeroplane(req, res) {
 export async function deleteAeroplane(req, res) {
   const { id } = req.params;
 
-  const aeroplaneData = await aeroplaneServices.deleteAeroplaneById(
-    id,
-    req.body
-  );
+  await aeroplaneServices.deleteAeroplaneById(id, req.body);
 
   res.status(200).json({
-    message: 'Aeroplae deleted succesfully',
-    data: aeroplaneData
+    message: 'Aeroplane deleted succesfully'
   });
 }

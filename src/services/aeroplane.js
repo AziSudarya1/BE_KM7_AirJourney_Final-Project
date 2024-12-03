@@ -12,8 +12,8 @@ export async function getAeroplaneById(id) {
   return aeroplaneData;
 }
 
-export async function getAeroplaneByNameAndCode(name, code) {
-  const aeroplaneData = await aeroplaneRepository.getAeroplaneByNameAndCode(
+export async function getAeroplaneByNameOrCode(name, code) {
+  const aeroplaneData = await aeroplaneRepository.getAeroplaneByNameOrCode(
     name,
     code
   );

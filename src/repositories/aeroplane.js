@@ -20,11 +20,10 @@ export function getAeroplaneById(id) {
   });
 }
 
-export function getAeroplaneByNameAndCode(name, code) {
-  return prisma.aeroplane.findUnique({
+export function getAeroplaneByNameOrCode(name, code) {
+  return prisma.aeroplane.findFirst({
     where: {
-      name,
-      code
+      OR: [{ name: name }, { code: code }]
     }
   });
 }
