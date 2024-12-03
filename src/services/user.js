@@ -36,5 +36,14 @@ export async function updateUserById(userId, data) {
     throw new HttpError('User not found', 404);
   }
 
+  if (user.phoneNumber !== data.phoneNumber) {
+    const existingPhoneNumber = await userRepository.findUserByPhoneNumber(
+      data.phoneNumber
+    );
+    if (existingPhoneNumber) {
+      throw new HttpError('Phone number already exists', 409);
+    }
+  }
+
   return await userRepository.updateUserById(userId, data);
 }

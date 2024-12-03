@@ -12,8 +12,8 @@ export default (app) => {
 
   router.put(
     '/me',
-    userValidationMiddleware.updateUserValidation,
     authMiddleware.isAuthorized,
+    userValidationMiddleware.updateUserValidation,
     userController.updateUserById
   );
 };
