@@ -17,9 +17,9 @@ export async function createUser(name, email, phoneNumber, password) {
 }
 
 export async function updateUserById(user, data) {
-  const dataUser = await userRepository.updateUserById(user.id, data);
+  const userData = await userRepository.updateUserById(user.id, data);
 
-  return dataUser;
+  return userData;
 }
 
 export async function getUserByEmailOrPhoneNumber(email, phoneNumber) {
