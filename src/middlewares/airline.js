@@ -1,13 +1,22 @@
 import * as airlineServices from '../services/airline.js';
 import { HttpError } from '../utils/error.js';
 
-export async function checkAirlineNameExist(req, _res, next) {
-  const { name } = req.body;
+export async function checkAirlineCodeOrNameExist(req, res, next) {
+  const { name, code } = req.body;
+  const currentAirline = res.locals.airport;
 
-  const airline = await airlineServices.getAirlineByName(name);
+  const skipUniqueCheck =
+    currentAirline?.name === name && currentAirline?.code === code;
 
-  if (airline) {
-    throw new HttpError('Airline with the same name already exists!', 400);
+  if (!skipUniqueCheck) {
+    const airline = await airlineServices.getAirlineByNameOrCode(name, code);
+
+    if (airline) {
+      throw new HttpError(
+        'Airline with the same name and code already exists',
+        409
+      );
+    }
   }
 
   next();
@@ -23,18 +32,6 @@ export async function checkAirlineById(req, res, next) {
   }
 
   res.locals.airline = airline;
-
-  next();
-}
-
-export async function checkAirlineCodeExist(req, _res, next) {
-  const { code } = req.body;
-
-  const airline = await airlineServices.getAirlineByName(code);
-
-  if (airline) {
-    throw new HttpError('Airline with the same code already exists!', 400);
-  }
 
   next();
 }

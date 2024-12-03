@@ -50,4 +50,3 @@ export async function deleteAirline(req, res) {
     message: 'Airline deleted successfully'
   });
 }
-
