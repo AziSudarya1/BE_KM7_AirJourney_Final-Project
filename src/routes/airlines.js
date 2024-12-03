@@ -14,7 +14,7 @@ export default (app) => {
     authMiddleware.isAuthorized,
     authMiddleware.isAdmin,
     airlineValidation.createAirlineValidation,
-    airlineMiddleware.checkAirlineNameExist,
+    airlineMiddleware.checkAirlineCodeOrNameExist,
     airlineController.createAirline
   );
 
