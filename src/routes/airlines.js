@@ -7,7 +7,7 @@ import * as airlineValidation from '../middlewares/validation/airline.js';
 
 export default (app) => {
   const router = Router();
-  app.use('/airline', router);
+  app.use('/airlines', router);
 
   router.post(
     '/',
