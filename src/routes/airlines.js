@@ -21,7 +21,8 @@ export default (app) => {
   router.get(
     '/:id',
     airlineMiddleware.checkAirlineById,
-    airlineController.getAirlineById
+    airlineController.getAirlineById,
+    commonValidationMiddleware.validateIdParams
   );
 
   router.put(
