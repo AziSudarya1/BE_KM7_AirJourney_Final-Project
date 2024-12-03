@@ -75,8 +75,7 @@ export function updateUserById(userId, data) {
     },
     data: {
       name: data.name,
-      phoneNumber: data.phoneNumber,
-      email: data.email
+      phoneNumber: data.phoneNumber
     }
   });
 }
