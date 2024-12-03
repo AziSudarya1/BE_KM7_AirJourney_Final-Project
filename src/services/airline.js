@@ -8,8 +8,8 @@ export async function getAirlineById(id) {
   return await airlineRepository.getAirlineById(id);
 }
 
-export async function getAirlineByName(name) {
-  return await airlineRepository.getAirlineByName(name);
+export async function getAirlineByNameOrCode(name, code) {
+  return await airlineRepository.getAirlineByNameOrCode(name, code);
 }
 
 export async function updateAirlineById(id, payload) {
