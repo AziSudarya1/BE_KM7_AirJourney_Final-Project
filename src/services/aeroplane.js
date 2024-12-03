@@ -1,4 +1,4 @@
-import * as aeroplaneRepository from '../repositories/aeroplanes.js';
+import * as aeroplaneRepository from '../repositories/aeroplane.js';
 
 export async function createAeroplane(payload) {
   const aeroplaneData = await aeroplaneRepository.createAeroplane(payload);

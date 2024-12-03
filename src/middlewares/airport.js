@@ -1,7 +1,7 @@
 import { HttpError } from '../utils/error.js';
 import * as airportService from '../services/airport.js';
 
-export async function checkAirportCodeAndNameExist(req, res, next) {
+export async function checkAirportCodeAndNameExist(req, _res, next) {
   const { name, code } = req.body;
 
   const airport = await airportService.getAirportByNameAndCode(name, code);
@@ -16,7 +16,7 @@ export async function checkAirportCodeAndNameExist(req, res, next) {
   next();
 }
 
-export async function checkAirportIdExist(req, res, next) {
+export async function checkAirportIdExist(req, _res, next) {
   const { id } = req.params;
 
   const airport = await airportService.getAirportById(id);

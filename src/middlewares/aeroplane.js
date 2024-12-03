@@ -1,7 +1,7 @@
-import * as aeroplaneServices from '../services/aeroplanes.js';
+import * as aeroplaneServices from '../services/aeroplane.js';
 import { HttpError } from '../utils/error.js';
 
-export async function checkAeroplaneNameAndCodeExist(req, res, next) {
+export async function checkAeroplaneNameAndCodeExist(req, _res, next) {
   const { name, code } = req.body;
 
   const aeroplane = await aeroplaneServices.getAeroplaneByNameAndCode(
@@ -19,7 +19,7 @@ export async function checkAeroplaneNameAndCodeExist(req, res, next) {
   next();
 }
 
-export async function checkAeroplaneById(req, res, next) {
+export async function checkAeroplaneById(req, _res, next) {
   const { id } = req.params;
 
   const aeroplane = await aeroplaneServices.getAeroplaneById(id);

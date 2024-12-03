@@ -1,4 +1,4 @@
-import * as aeroplaneServices from '../services/aeroplanes.js';
+import * as aeroplaneServices from '../services/aeroplane.js';
 
 export async function createAeroplane(req, res) {
   const aeroplaneData = await aeroplaneServices.createAeroplane(req.body);
