@@ -29,15 +29,16 @@ export async function getCurrentUser(_req, res) {
 }
 
 export async function updateUserById(req, res) {
-  const userId = res.locals.user.id;
+  const user = res.locals.user;
   const { name, phoneNumber } = req.body;
 
-  const user = await userService.updateUserById(userId, {
+  const userData = await userService.updateUserById(user, {
     name,
     phoneNumber
   });
+
   res.status(200).json({
     message: 'Update user successfully',
-    data: user
+    data: userData
   });
 }
