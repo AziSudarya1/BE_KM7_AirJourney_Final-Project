@@ -185,7 +185,7 @@ model Airport {
 model Payment {
   id              String        @id @default(uuid(7)) @db.Uuid
   status          PaymentStatus
-  method          PaymentMethod
+  method          PaymentMethod?
   snapToken       String        @map("snap_token")
   snapRedirectUrl String        @map("snap_redirect_url")
   paymentMethod   String        @map("payment_method")
