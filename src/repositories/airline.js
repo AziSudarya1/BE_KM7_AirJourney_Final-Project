@@ -30,10 +30,10 @@ export function getAirlineById(id) {
   });
 }
 
-export function getAirlineByName(name) {
-  return prisma.airline.findUnique({
+export function getAirlineByNameOrCode(name, code) {
+  return prisma.airline.findFirst({
     where: {
-      name
+      OR: [{ name }, { code }]
     }
   });
 }
