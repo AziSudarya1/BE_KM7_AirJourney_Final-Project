@@ -73,7 +73,7 @@ export function updateUserById(userId, data) {
 }
 
 export function getUserByEmailOrPhoneNumber(email, phoneNumber) {
-  return prisma.aeroplane.findFirst({
+  return prisma.user.findFirst({
     where: {
       OR: [{ email }, { phoneNumber }]
     }
