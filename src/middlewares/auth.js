@@ -25,7 +25,7 @@ export async function isAuthorized(req, res, next) {
   }
 }
 
-export async function isAdmin(req, res, next) {
+export async function isAdmin(_req, res, next) {
   const user = res.locals.user;
 
   if (user.role !== 'ADMIN') {
