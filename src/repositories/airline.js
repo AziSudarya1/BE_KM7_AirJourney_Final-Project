@@ -10,17 +10,14 @@ export function createAirline(payload) {
   });
 }
 
+
 export function updateAirline(id, payload) {
   return prisma.airline.update({
-    where: {
-      id
-    },
-    data: {
-      ...payload,
-      updatedAt: new Date()
-    }
+    where: { id },
+    data: { ...payload }
   });
 }
+
 
 export function getAirlineById(id) {
   return prisma.airline.findUnique({
