@@ -1,23 +1,31 @@
 import * as airlineRepository from '../repositories/airline.js';
 
 export async function createAirline(payload) {
-    const data = await airlineRepository.createAirline(payload);
-    
-    return data;
+  const data = await airlineRepository.createAirline(payload);
+
+  return data;
 }
 
 export async function getAirlineById(id) {
-  return await airlineRepository.getAirlineById(id);
+  const data = await airlineRepository.getAirlineById(id);
+
+  return data;
 }
 
 export async function getAirlineByNameOrCode(name, code) {
-  return await airlineRepository.getAirlineByNameOrCode(name, code);
+  const data = await airlineRepository.getAirlineByNameOrCode(name, code);
+
+  return data;
 }
 
 export async function updateAirlineById(id, payload) {
-  return await airlineRepository.updateAirline(id, payload);
+  const data = await airlineRepository.updateAirline(id, payload);
+
+  return data;
 }
 
 export async function deleteAirlineById(id) {
-  return await airlineRepository.deleteAirline(id);
+  const data = await airlineRepository.deleteAirline(id);
+
+  return data;
 }
