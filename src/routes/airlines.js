@@ -20,6 +20,8 @@ export default (app) => {
 
   router.get(
     '/:id',
+    authMiddleware.isAuthorized,
+    authMiddleware.isAdmin,
     commonValidationMiddleware.validateIdParams,
     airlineMiddleware.checkAirlineById,
     airlineController.getAirlineById
@@ -37,9 +39,9 @@ export default (app) => {
 
   router.delete(
     '/:id',
-    commonValidationMiddleware.validateIdParams,
     authMiddleware.isAuthorized,
     authMiddleware.isAdmin,
+    commonValidationMiddleware.validateIdParams,
     airlineMiddleware.checkAirlineById,
     airlineController.deleteAirline
   );
