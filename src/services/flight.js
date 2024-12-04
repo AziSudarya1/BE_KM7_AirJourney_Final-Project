@@ -1,5 +1,7 @@
 import { HttpError } from '../utils/error.js';
 import * as airportService from '../services/airport.js';
+import * as airlineService from '../services/airline.js';
+import * as flightRepository from '../repositories/flight.js';
 import { generateSeats } from '../scripts/generateSeats.js';
 
 export async function validateCreateFlightIdAndGetAeroplane(
@@ -41,4 +43,17 @@ export async function createFlightAndSeat(payload, aeroplane) {
   });
 
   return flight;
+}
+
+export async function getAllFlight(filter) {
+  const { cursorId, ...restFilter } = filter;
+  const data = await flightRepository.getAllFlight(cursorId, restFilter);
+
+  return data;
+}
+
+export async function getDetailFlightById(id) {
+  const data = await flightRepository.getDetailFlightById(id);
+
+  return data;
 }

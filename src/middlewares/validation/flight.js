@@ -17,7 +17,8 @@ const createFlightSchema = Joi.object({
   airlineId: Joi.string().uuid().required(),
   airportIdFrom: Joi.string().uuid().required(),
   airportIdTo: Joi.string().uuid().required(),
-  aeroplaneId: Joi.string().uuid().required()
+  aeroplaneId: Joi.string().uuid().required(),
+  duration: Joi.number().required()
 });
 
 export async function createFlightValidation(req, res, next) {
@@ -36,6 +37,41 @@ export async function createFlightValidation(req, res, next) {
     if (invalidDate) {
       throw new HttpError('Departure date must be before arrival date', 400);
     }
+
+    next();
+  } catch (err) {
+    if (err.isJoi) {
+      const errMessage = generateJoiError(err);
+      return res.status(400).json({ message: errMessage });
+    }
+    next(err);
+  }
+}
+
+const queryParamSchema = Joi.object({
+  cursorId: Joi.string().uuid(),
+  class: Joi.string().valid(...ALLOWED_CLASS),
+  departureDate: Joi.date(),
+  arrivalDate: Joi.date(),
+  airportIdFrom: Joi.string().uuid(),
+  airportIdTo: Joi.string().uuid()
+});
+
+export async function validateFilterAndCursorIdParams(req, res, next) {
+  try {
+    await queryParamSchema.validateAsync(req.query, { abortEarly: false });
+
+    const filter = { ...req.query };
+
+    if (req.query.departureDate) {
+      filter.departureDate = new Date(req.query.departureDate);
+    }
+
+    if (req.query.arrivalDate) {
+      filter.arrivalDate = new Date(req.query.arrivalDate);
+    }
+
+    res.locals.filter = filter;
 
     next();
   } catch (err) {
