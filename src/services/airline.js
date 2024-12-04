@@ -1,7 +1,9 @@
 import * as airlineRepository from '../repositories/airline.js';
 
 export async function createAirline(payload) {
-  return await airlineRepository.createAirline(payload);
+    const data = await airlineRepository.createAirline(payload);
+    
+    return data;
 }
 
 export async function getAirlineById(id) {
