@@ -27,9 +27,9 @@ export default (app) => {
 
   router.put(
     '/:id',
-    commonValidationMiddleware.validateIdParams,
     authMiddleware.isAuthorized,
     authMiddleware.isAdmin,
+    commonValidationMiddleware.validateIdParams,
     airlineValidation.updateAirlineValidation,
     airlineMiddleware.checkAirlineById,
     airlineController.updateAirline
