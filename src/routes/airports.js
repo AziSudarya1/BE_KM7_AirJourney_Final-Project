@@ -20,6 +20,13 @@ export default (app) => {
   );
 
   router.get(
+    '/',
+    authMiddleware.isAuthorized,
+    authMiddleware.isAdmin,
+    airportController.getAllAirports
+  );
+
+  router.get(
     '/:id',
     commonValidationMiddleware.validateIdParams,
     airportMiddleware.checkAirportIdExist,

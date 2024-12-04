@@ -37,3 +37,9 @@ export async function deleteAirport(req, res) {
     message: 'Airport deleted successfully'
   });
 }
+
+export async function getAllAirports(_req, res) {
+  const data = await airportService.getAllAirports();
+
+  res.status(200).json({ data });
+}

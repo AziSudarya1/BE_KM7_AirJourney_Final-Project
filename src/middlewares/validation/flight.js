@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { generateJoiError } from '../../utils/helper.js';
+import { HttpError } from '../../utils/error.js';
 
 const ALLOWED_CLASS = ['ECONOMY', 'PREMIUM_ECONOMY', 'BUSINESS', 'FIRST_CLASS'];
 
@@ -23,9 +24,25 @@ export async function createFlightValidation(req, res, next) {
   try {
     await createFlightSchema.validateAsync(req.body, { abortEarly: false });
 
+    const expiredDate = new Date(req.body.departureDate) < new Date();
+
+    if (expiredDate) {
+      throw new HttpError('Departure date must be in the future', 400);
+    }
+
+    const invalidDate =
+      new Date(req.body.departureDate) > new Date(req.body.arrivalDate);
+
+    if (invalidDate) {
+      throw new HttpError('Departure date must be before arrival date', 400);
+    }
+
     next();
   } catch (err) {
-    const errMessage = generateJoiError(err);
-    return res.status(400).json({ message: errMessage });
+    if (err.isJoi) {
+      const errMessage = generateJoiError(err);
+      return res.status(400).json({ message: errMessage });
+    }
+    next(err);
   }
 }
