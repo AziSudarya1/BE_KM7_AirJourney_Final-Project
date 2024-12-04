@@ -3,7 +3,7 @@ import { HttpError } from '../utils/error.js';
 
 export async function checkAirlineCodeOrNameExist(req, res, next) {
   const { name, code } = req.body;
-  const currentAirline = res.locals.airport;
+  const currentAirline = res.locals.airline;
 
   const skipUniqueCheck =
     currentAirline?.name === name && currentAirline?.code === code;
