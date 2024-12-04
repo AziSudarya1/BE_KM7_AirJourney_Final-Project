@@ -30,17 +30,8 @@ export function getAeroplaneByNameOrCode(name, code) {
 
 export function updateAeroplane(id, payload) {
   return prisma.aeroplane.update({
-    where: {
-      id: id
-    },
-    data: {
-      name: payload.name,
-      code: payload.code,
-      type: payload.type,
-      maxRow: payload.maxRow,
-      maxColumn: payload.maxColumn,
-      updatedAt: new Date()
-    }
+    where: { id },
+    data: { ...payload }
   });
 }
 
