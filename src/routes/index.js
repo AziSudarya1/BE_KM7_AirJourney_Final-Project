@@ -5,7 +5,7 @@ import users from './users.js';
 import docs from './docs.js';
 import aeroplanes from './aeroplanes.js';
 import airports from './airports.js';
-import airline from './airlines.js';
+import airlines from './airlines.js';
 
 export default (app) => {
   const router = Router();
@@ -18,5 +18,5 @@ export default (app) => {
   docs(router);
   aeroplanes(router);
   airports(router);
-  airline(router);
+  airlines(router);
 };
