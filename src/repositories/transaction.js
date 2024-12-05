@@ -1,33 +1,29 @@
 import { prisma } from '../utils/db.js';
 
-export function createTransaction(data, userId, seatData, passengerData) {
+export function createTransaction(payload, userId) {
   return prisma.transaction.create({
     data: {
-      transactionCode: data.transactionCode,
-      amount: data.amount,
+      transactionCode: payload.transactionCode,
+      amount: payload.amount,
       status: 'UNPAID',
-      userId,
-      departureFlightId: data.departureFlightId,
-      returnFlightId: data.returnFlightId || null,
+      userId: userId,
+      departureFlightId: payload.departureFlightId,
+      returnFlightId: payload.returnFlightId || null,
       Passenger: {
-        create: passengerData.map((passenger) => ({
-          title: passenger.title,
-          firstName: passenger.firstName,
-          familyName: passenger.familyName,
-          birthday: passenger.birthday,
-          nationality: passenger.nationality,
-          nikPaspor: passenger.nikPaspor,
-          nikKtp: passenger.nikKtp,
-          expiredAt: passenger.expiredAt,
-          departureSeatId:
-            passenger.type !== 'INFANT'
-              ? seatData[passenger.type].departureSeatId
-              : null,
-          returnSeatId:
-            passenger.type !== 'INFANT'
-              ? seatData[passenger.type].returnSeatId
-              : null
-        }))
+        createMany: {
+          data: payload.passengers.map((passenger, index) => ({
+            title: passenger.title,
+            firstName: passenger.firstName,
+            familyName: passenger.familyName,
+            birthday: passenger.birthday,
+            nationality: passenger.nationality,
+            nikPaspor: passenger.nikPaspor,
+            nikKtp: passenger.nikKtp,
+            expiredAt: passenger.expiredAt,
+            departureSeatId: payload.seats[index]?.departureSeatId || null,
+            returnSeatId: payload.seats[index]?.returnSeatId || null
+          }))
+        }
       }
     },
     include: {
