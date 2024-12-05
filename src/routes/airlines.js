@@ -1,23 +1,50 @@
 import { Router } from 'express';
-import * as airlineService from '../services/airline.js';
+import * as authMiddleware from '../middlewares/auth.js';
+import * as commonValidationMiddleware from '../middlewares/validation/common.js';
+import * as airlineController from '../controllers/airline.js';
+import * as airlineMiddleware from '../middlewares/airline.js';
+import * as airlineValidation from '../middlewares/validation/airline.js';
 
 export default (app) => {
   const router = Router();
-
   app.use('/airlines', router);
 
-  router.get('/', async (_req, res) => {
-    const data = await airlineService.getAllAirlines();
+  router.post(
+    '/',
+    authMiddleware.isAuthorized,
+    authMiddleware.isAdmin,
+    airlineValidation.createAirlineValidation,
+    airlineMiddleware.checkAirlineCodeOrNameExist,
+    airlineController.createAirline
+  );
 
-    return res.json(data);
-  });
+  router.get('/', airlineController.getAllAirlines);
 
-  router.get('/:id', async (req, res) => {
-    const { id } = req.params;
-    const data = await app.services.airline.getAirlineById(id);
+  router.get(
+    '/:id',
+    authMiddleware.isAuthorized,
+    authMiddleware.isAdmin,
+    commonValidationMiddleware.validateIdParams,
+    airlineMiddleware.checkAirlineById,
+    airlineController.getAirlineById
+  );
 
-    return res.json(data);
-  });
+  router.put(
+    '/:id',
+    authMiddleware.isAuthorized,
+    authMiddleware.isAdmin,
+    commonValidationMiddleware.validateIdParams,
+    airlineValidation.updateAirlineValidation,
+    airlineMiddleware.checkAirlineById,
+    airlineController.updateAirline
+  );
 
-  return router;
+  router.delete(
+    '/:id',
+    authMiddleware.isAuthorized,
+    authMiddleware.isAdmin,
+    commonValidationMiddleware.validateIdParams,
+    airlineMiddleware.checkAirlineById,
+    airlineController.deleteAirline
+  );
 };
