@@ -32,7 +32,7 @@ export async function updateUserById(req, res) {
   const user = res.locals.user;
   const { name, phoneNumber } = req.body;
 
-  const userData = await userService.updateUserById(user, {
+  const userData = await userService.updateUserById(user.id, {
     name,
     phoneNumber
   });
