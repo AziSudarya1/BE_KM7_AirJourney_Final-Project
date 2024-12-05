@@ -1,26 +1,18 @@
 import { prisma } from '../utils/db.js';
 
-export function findUserByEmail(email) {
-  return prisma.user.findUnique({
-    where: {
-      email
-    }
-  });
-}
-
-export function findUserByPhoneNumber(phoneNumber) {
-  return prisma.user.findUnique({
-    where: {
-      phoneNumber
-    }
-  });
-}
-
 export function createUser(data) {
   return prisma.user.create({
     data: {
       ...data,
       role: 'USER'
+    }
+  });
+}
+
+export function findUserByEmail(email) {
+  return prisma.user.findUnique({
+    where: {
+      email
     }
   });
 }
@@ -75,8 +67,15 @@ export function updateUserById(userId, data) {
     },
     data: {
       name: data.name,
-      phoneNumber: data.phoneNumber,
-      email: data.email
+      phoneNumber: data.phoneNumber
+    }
+  });
+}
+
+export function getUserByEmailOrPhoneNumber(email, phoneNumber) {
+  return prisma.user.findFirst({
+    where: {
+      OR: [{ email }, { phoneNumber }]
     }
   });
 }

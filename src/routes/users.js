@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import * as userController from '../controllers/user.js';
 import * as authMiddleware from '../middlewares/auth.js';
+import * as userMiddleware from '../middlewares/user.js';
 import * as userValidationMiddleware from '../middlewares/validation/user.js';
 
 export default (app) => {
@@ -12,8 +13,9 @@ export default (app) => {
 
   router.put(
     '/me',
-    userValidationMiddleware.updateUserValidation,
     authMiddleware.isAuthorized,
+    userValidationMiddleware.updateUserValidation,
+    userMiddleware.checkUserEmailorPhoneNumberExist,
     userController.updateUserById
   );
 };
