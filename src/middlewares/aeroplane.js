@@ -38,3 +38,17 @@ export async function checkAeroplaneById(req, res, next) {
 
   next();
 }
+
+export async function getAeroplaneViaBody(req, res, next) {
+  const { aeroplaneId } = req.body;
+
+  const aeroplane = await aeroplaneServices.getAeroplaneById(aeroplaneId);
+
+  if (!aeroplane) {
+    throw new HttpError('Aeroplane data not Found!', 404);
+  }
+
+  res.locals.aeroplane = aeroplane;
+
+  next();
+}

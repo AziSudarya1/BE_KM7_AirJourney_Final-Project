@@ -7,7 +7,7 @@ export async function createTransaction(
   data,
   passengerData,
   seatData,
-  transactionCode
+  _transactionCode
 ) {
   const generateTransactionCode = crypto.randomUUID();
 

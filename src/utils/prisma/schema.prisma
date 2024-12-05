@@ -125,9 +125,9 @@ model Passenger {
 model Flight {
   id            String   @id @default(uuid(7)) @db.Uuid
   departureDate DateTime @map("departure_date")
-  departureTime String @map("departure_time")
+  departureTime String   @map("departure_time")
   arrivalDate   DateTime @map("arrival_date")
-  arrivalTime   String @map("arrival_time")
+  arrivalTime   String   @map("arrival_time")
   duration      Int
   price         Int
   class         Class

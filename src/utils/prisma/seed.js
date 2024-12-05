@@ -2,6 +2,7 @@
 import { prisma } from '../db.js';
 import bcrypt from 'bcrypt';
 import { appEnv } from '../env.js';
+import { generateSeats } from '../../scripts/generateSeats.js';
 
 async function seedUsers() {
   const users = [
@@ -240,24 +241,6 @@ async function seedFlights() {
   await prisma.flight.createMany({
     data: flights
   });
-}
-
-function generateSeats(maxRow, maxColumn, aeroplaneId, flightId) {
-  const seats = [];
-
-  for (let i = 0; i < maxRow; i++) {
-    for (let j = 0; j < maxColumn; j++) {
-      seats.push({
-        row: i + 1,
-        column: j + 1,
-        status: 'AVAILABLE',
-        aeroplaneId,
-        flightId
-      });
-    }
-  }
-
-  return seats;
 }
 
 async function seedSeats() {

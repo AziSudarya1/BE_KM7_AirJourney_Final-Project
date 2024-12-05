@@ -1,22 +1,15 @@
 import { HttpError } from '../utils/error.js';
-import * as airportService from '../services/airport.js';
+import * as flightService from '../services/flight.js';
 
-export async function validateAirportId(req, _res, next) {
-  const { airportIdFrom, airportIdTo } = req.body;
+export async function checkFlightIdExist(req, res, next) {
+  const { id } = req.params;
+  const flight = await flightService.getDetailFlightById(id);
 
-  if (airportIdFrom === airportIdTo) {
-    throw new HttpError(
-      'Departure and arrival airport cannot be the same',
-      400
-    );
+  if (!flight) {
+    throw new HttpError('Flight not found', 404);
   }
 
-  const airportFrom = await airportService.getAirportById(airportIdFrom);
-  const airportTo = await airportService.getAirportById(airportIdTo);
-
-  if (!airportFrom || !airportTo) {
-    throw new HttpError('Airport not found', 404);
-  }
+  res.locals.flight = flight;
 
   next();
 }

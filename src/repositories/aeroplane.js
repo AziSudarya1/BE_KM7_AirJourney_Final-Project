@@ -51,3 +51,7 @@ export function deleteAeroplane(id) {
     }
   });
 }
+
+export function getAllAeroplanes() {
+  return prisma.aeroplane.findMany();
+}
