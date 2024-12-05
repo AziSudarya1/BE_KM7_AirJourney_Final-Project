@@ -1,9 +1,9 @@
 import { HttpError } from '../utils/error.js';
 import * as airportService from '../services/airport.js';
 
-export async function checkAirportCodeOrNameExist(req, _res, next) {
+export async function checkAirportCodeOrNameExist(req, res, next) {
   const { name, code } = req.body;
-  const currentAirport = req.locals.airport;
+  const currentAirport = res.locals.airport;
 
   const skipUniqueCheck =
     currentAirport?.name === name && currentAirport?.code === code;
