@@ -30,6 +30,15 @@ export async function updateAirline(req, res) {
   });
 }
 
+export async function getAllAirlines(_req, res) {
+  const airlinesData = await airlineServices.getAllAirlines();
+
+  res.status(200).json({
+    message: 'Airlines retrieved successfully',
+    data: airlinesData
+  });
+}
+
 export async function getAirlineById(req, res) {
   const { id } = req.params;
 

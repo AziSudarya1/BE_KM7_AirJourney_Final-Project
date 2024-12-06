@@ -40,3 +40,7 @@ export function deleteAirline(id) {
     }
   });
 }
+
+export function getAllAirlines() {
+  return prisma.airline.findMany();
+}

@@ -32,3 +32,9 @@ export async function deleteAeroplaneById(id) {
 
   return aeroplaneData;
 }
+
+export async function getAllAeroplanes() {
+  const aeroplaneData = await aeroplaneRepository.getAllAeroplanes();
+
+  return aeroplaneData;
+}

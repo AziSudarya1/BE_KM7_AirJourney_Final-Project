@@ -18,6 +18,8 @@ export default (app) => {
     airlineController.createAirline
   );
 
+  router.get('/', airlineController.getAllAirlines);
+
   router.get(
     '/:id',
     authMiddleware.isAuthorized,
