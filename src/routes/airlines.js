@@ -34,6 +34,7 @@ export default (app) => {
     commonValidationMiddleware.validateIdParams,
     airlineValidation.updateAirlineValidation,
     airlineMiddleware.checkAirlineById,
+    airlineMiddleware.checkAirlineCodeOrNameExist,
     airlineController.updateAirline
   );
 

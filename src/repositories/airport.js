@@ -20,10 +20,18 @@ export function getAirportById(id) {
   });
 }
 
-export function getAirportByNameOrCode(name, code) {
+export function getAirportByName(name) {
   return prisma.airport.findUnique({
     where: {
-      OR: [{ name }, { code }]
+      name
+    }
+  });
+}
+
+export function getAirportByCode(code) {
+  return prisma.airport.findUnique({
+    where: {
+      code
     }
   });
 }
@@ -33,13 +41,7 @@ export function updateAirport(id, payload) {
     where: {
       id
     },
-    data: {
-      code: payload.code,
-      name: payload.name,
-      continent: payload.continent,
-      city: payload.city,
-      country: payload.country
-    }
+    data: { ...payload }
   });
 }
 

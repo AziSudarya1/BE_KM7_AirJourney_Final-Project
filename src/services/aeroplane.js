@@ -12,11 +12,14 @@ export async function getAeroplaneById(id) {
   return aeroplaneData;
 }
 
-export async function getAeroplaneByNameOrCode(name, code) {
-  const aeroplaneData = await aeroplaneRepository.getAeroplaneByNameOrCode(
-    name,
-    code
-  );
+export async function getAeroplaneByName(name) {
+  const aeroplaneData = await aeroplaneRepository.getAeroplaneByName(name);
+
+  return aeroplaneData;
+}
+
+export async function getAeroplaneByCode(code) {
+  const aeroplaneData = await aeroplaneRepository.getAeroplaneByCode(code);
 
   return aeroplaneData;
 }

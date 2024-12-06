@@ -12,8 +12,14 @@ export async function getAirlineById(id) {
   return data;
 }
 
-export async function getAirlineByNameOrCode(name, code) {
-  const data = await airlineRepository.getAirlineByNameOrCode(name, code);
+export async function getAirlineByName(name) {
+  const data = await airlineRepository.getAirlineByName(name);
+
+  return data;
+}
+
+export async function getAirlineByCode(code) {
+  const data = await airlineRepository.getAirlineByCode(code);
 
   return data;
 }

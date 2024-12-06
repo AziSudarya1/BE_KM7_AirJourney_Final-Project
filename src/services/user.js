@@ -22,11 +22,14 @@ export async function updateUserById(userId, data) {
   return userData;
 }
 
-export async function getUserByEmailOrPhoneNumber(email, phoneNumber) {
-  const userData = await userRepository.getUserByEmailOrPhoneNumber(
-    email,
-    phoneNumber
-  );
+export async function getUserByEmail(email) {
+  const userData = await userRepository.getUserByEmail(email);
+
+  return userData;
+}
+
+export async function getUserByPhoneNumber(phoneNumber) {
+  const userData = await userRepository.getUserByPhoneNumber(phoneNumber);
 
   return userData;
 }
