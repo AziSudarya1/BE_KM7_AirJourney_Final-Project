@@ -32,4 +32,6 @@ export default (app) => {
     flightValidationMiddleware.validateFilterAndCursorIdParams,
     flightController.getAllFlights
   );
+
+  router.get('/favorites', authMiddleware.isAuthorized);
 };

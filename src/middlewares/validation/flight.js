@@ -48,11 +48,14 @@ export async function createFlightValidation(req, res, next) {
   }
 }
 
+const startOfToday = new Date();
+startOfToday.setHours(0, 0, 0, 0);
+
 const queryParamSchema = Joi.object({
   cursorId: Joi.string().uuid(),
   class: Joi.string().valid(...ALLOWED_CLASS),
-  departureDate: Joi.date(),
-  arrivalDate: Joi.date(),
+  departureDate: Joi.date().min(startOfToday),
+  arrivalDate: Joi.date().min(startOfToday),
   airportIdFrom: Joi.string().uuid(),
   airportIdTo: Joi.string().uuid()
 });
