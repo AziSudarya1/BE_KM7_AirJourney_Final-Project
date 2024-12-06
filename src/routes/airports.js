@@ -19,12 +19,7 @@ export default (app) => {
     airportController.createAirport
   );
 
-  router.get(
-    '/',
-    authMiddleware.isAuthorized,
-    authMiddleware.isAdmin,
-    airportController.getAllAirports
-  );
+  router.get('/', airportController.getAllAirports);
 
   router.get(
     '/:id',

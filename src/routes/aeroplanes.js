@@ -19,12 +19,7 @@ export default (app) => {
     aeroplaneController.createAeroplane
   );
 
-  router.get(
-    '/',
-    authMiddleware.isAuthorized,
-    authMiddleware.isAdmin,
-    aeroplaneController.getAllAeroplanes
-  );
+  router.get('/', aeroplaneController.getAllAeroplanes);
 
   router.get(
     '/:id',
