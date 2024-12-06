@@ -9,8 +9,8 @@ export async function createNotification(req, res) {
   });
 }
 
-export async function getAllNotification(req, res) {
-  const { userId } = req.params;
+export async function getAllNotification(_req, res) {
+  const { userId } = res.locals.user;
 
   const data = await notificationServices.getAllNotification(userId);
 
@@ -18,15 +18,16 @@ export async function getAllNotification(req, res) {
 }
 
 export async function updateNotification(req, res) {
-  const { id, userId } = req.params;
+  const { id } = req.params;
+  const { userId } = res.locals.user;
 
   await notificationServices.updateNotification(id, userId);
 
   res.status(200).json({ message: 'Notification has been read!' });
 }
 
-export async function updateAllNotification(req, res) {
-  const { userId } = req.params;
+export async function updateAllNotification(_req, res) {
+  const { userId } = res.locals.user;
 
   await notificationServices.updateAllNotification(userId);
 
@@ -34,7 +35,8 @@ export async function updateAllNotification(req, res) {
 }
 
 export async function deleteNotification(req, res) {
-  const { id, userId } = req.params;
+  const { id } = req.params;
+  const { userId } = res.locals.user;
 
   await notificationServices.deleteNotification(id, userId);
 

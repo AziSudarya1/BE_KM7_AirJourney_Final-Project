@@ -1,10 +1,14 @@
 import { HttpError } from '../utils/error.js';
 import * as notificationServices from '../services/notification.js';
 
-export async function checkNotificationIdExist(req, res, next) {
-  const { id } = req.params;
+export async function checkNotificationIdExist(_req, res, next) {
+  const { userId } = res.locals.user;
 
-  const notification = await notificationServices.checkNotificationId(id);
+  const notification = await notificationServices.getAllNotification(userId);
+
+  if (!notification || notification.length === 0) {
+    throw new HttpError('No notifications found for this user!', 404);
+  }
 
   if (!notification) {
     throw new HttpError('Notification id not found!', 404);
@@ -15,16 +19,26 @@ export async function checkNotificationIdExist(req, res, next) {
   next();
 }
 
-export async function checkUserIdExist(req, res, next) {
-  const { userId } = req.params;
+export async function checkUserAccesToNotification(_req, res, next) {
+  const user = res.locals.user;
 
-  const user = await notificationServices.checkUserId(userId);
-
-  if (!userId) {
-    throw new HttpError('User id not found!', 404);
+  if (!user) {
+    throw new HttpError('Unauthorized!', 403);
   }
 
-  res.locals.user = user;
+  const notification = res.locals.notification;
+
+  if (!notification) {
+    throw new HttpError('Notification not found in request context!', 500);
+  }
+
+  const userNotifications = notification.filter(
+    (notification) => notification.userId === user.id
+  );
+
+  if (userNotifications.length === 0) {
+    throw new HttpError('Unauthorized access to these notifications', 403);
+  }
 
   next();
 }
