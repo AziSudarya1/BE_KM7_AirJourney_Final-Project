@@ -8,6 +8,7 @@ import airports from './airports.js';
 import airlines from './airlines.js';
 import notifications from './notifications.js';
 
+
 export default (app) => {
   const router = Router();
 
