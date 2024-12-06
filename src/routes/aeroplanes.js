@@ -19,6 +19,8 @@ export default (app) => {
     aeroplaneController.createAeroplane
   );
 
+  router.get('/', aeroplaneController.getAllAeroplanes);
+
   router.get(
     '/',
     authMiddleware.isAuthorized,

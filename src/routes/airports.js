@@ -19,6 +19,8 @@ export default (app) => {
     airportController.createAirport
   );
 
+  router.get('/', airportController.getAllAirports);
+
   router.get(
     '/',
     authMiddleware.isAuthorized,

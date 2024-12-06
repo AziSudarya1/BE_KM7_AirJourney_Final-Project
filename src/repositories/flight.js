@@ -27,9 +27,20 @@ export function createFlightAndSeat(payload) {
 
 export function getAllFlight(cursorId, filter) {
   const query = {
+    where: {
+      departureDate: {
+        gte: new Date()
+      }
+    },
     take: 3,
     orderBy: {
       departureDate: 'asc'
+    },
+    include: {
+      airportFrom: true,
+      airportTo: true,
+      airline: true,
+      aeroplane: true
     }
   };
 

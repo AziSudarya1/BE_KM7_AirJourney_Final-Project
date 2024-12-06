@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import { generateJoiError } from '../../utils/helper.js';
 import { HttpError } from '../../utils/error.js';
+import { ALLOWED_CONTINENTS } from './airport.js';
 
 const ALLOWED_CLASS = ['ECONOMY', 'PREMIUM_ECONOMY', 'BUSINESS', 'FIRST_CLASS'];
 
@@ -48,27 +49,48 @@ export async function createFlightValidation(req, res, next) {
   }
 }
 
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
 const queryParamSchema = Joi.object({
   cursorId: Joi.string().uuid(),
   class: Joi.string().valid(...ALLOWED_CLASS),
-  departureDate: Joi.date(),
-  arrivalDate: Joi.date(),
+  departureDate: Joi.date().min(today),
+  arrivalDate: Joi.date().min(today),
   airportIdFrom: Joi.string().uuid(),
-  airportIdTo: Joi.string().uuid()
+  airportIdTo: Joi.string().uuid(),
+  continent: Joi.string().valid(...ALLOWED_CONTINENTS)
 });
+
+const generateDateFilter = (date) => {
+  const initialHour = new Date(date);
+  initialHour.setHours(0, 0, 0, 0);
+
+  const finishHour = new Date(date);
+  finishHour.setHours(23, 59, 59, 999);
+
+  return {
+    gte: initialHour,
+    lte: finishHour
+  };
+};
 
 export async function validateFilterAndCursorIdParams(req, res, next) {
   try {
     await queryParamSchema.validateAsync(req.query, { abortEarly: false });
 
-    const filter = { ...req.query };
+    const { departureDate, arrivalDate, continent, ...filter } = req.query;
 
-    if (req.query.departureDate) {
-      filter.departureDate = new Date(req.query.departureDate);
+    if (departureDate) {
+      filter.departureDate = generateDateFilter(departureDate);
     }
 
-    if (req.query.arrivalDate) {
-      filter.arrivalDate = new Date(req.query.arrivalDate);
+    if (arrivalDate) {
+      filter.arrivalDate = generateDateFilter(arrivalDate);
+    }
+
+    if (continent) {
+      filter.airportTo = { continent: continent };
     }
 
     res.locals.filter = filter;

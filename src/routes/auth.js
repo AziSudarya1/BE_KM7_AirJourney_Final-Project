@@ -3,6 +3,7 @@ import * as userController from '../controllers/user.js';
 import * as authController from '../controllers/auth.js';
 import * as otpController from '../controllers/otp.js';
 import * as passwordResetController from '../controllers/passwordReset.js';
+import * as userMiddleware from '../middlewares/user.js';
 import * as userValidationMiddleware from '../middlewares/validation/user.js';
 import * as authValidationMiddleware from '../middlewares/validation/auth.js';
 import * as otpValidationMiddleware from '../middlewares/validation/otp.js';
@@ -16,6 +17,7 @@ export default (app) => {
   router.post(
     '/register',
     userValidationMiddleware.createUserValidation,
+    userMiddleware.checkUserEmailorPhoneNumberExist,
     userController.createUser
   );
 
