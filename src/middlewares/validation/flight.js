@@ -57,6 +57,19 @@ const queryParamSchema = Joi.object({
   airportIdTo: Joi.string().uuid()
 });
 
+const generateDateFilter = (date) => {
+  const initialHour = new Date(date);
+  initialHour.setHours(0, 0, 0, 0);
+
+  const finishHour = new Date(date);
+  finishHour.setHours(23, 59, 59, 999);
+
+  return {
+    gte: initialHour,
+    lte: finishHour
+  };
+};
+
 export async function validateFilterAndCursorIdParams(req, res, next) {
   try {
     await queryParamSchema.validateAsync(req.query, { abortEarly: false });
@@ -64,11 +77,11 @@ export async function validateFilterAndCursorIdParams(req, res, next) {
     const filter = { ...req.query };
 
     if (req.query.departureDate) {
-      filter.departureDate = new Date(req.query.departureDate);
+      filter.departureDate = generateDateFilter(req.query.departureDate);
     }
 
     if (req.query.arrivalDate) {
-      filter.arrivalDate = new Date(req.query.arrivalDate);
+      filter.arrivalDate = generateDateFilter(req.query.arrivalDate);
     }
 
     res.locals.filter = filter;
