@@ -43,3 +43,12 @@ export async function deleteAeroplane(req, res) {
     message: 'Aeroplane deleted succesfully'
   });
 }
+
+export async function getAllAeroplanes(_req, res) {
+  const aeroplaneData = await aeroplaneServices.getAllAeroplanes();
+
+  res.status(200).json({
+    message: 'All aeroplanes retrieved successfully',
+    data: aeroplaneData
+  });
+}
