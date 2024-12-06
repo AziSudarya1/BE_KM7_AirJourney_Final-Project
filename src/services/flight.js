@@ -57,3 +57,9 @@ export async function getDetailFlightById(id) {
 
   return data;
 }
+
+export async function getFavouriteFlights(cursorId, continent) {
+  const data = await flightRepository.getFavouriteFlights(cursorId, continent);
+
+  return data;
+}
