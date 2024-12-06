@@ -13,7 +13,6 @@ const createUserSchema = Joi.object({
 
 const updateUserSchema = Joi.object({
   name: Joi.string().min(3).max(50),
-  email: Joi.string().email(),
   phoneNumber: Joi.string()
     .pattern(/^\+62[0-9]+$/)
     .min(11)
