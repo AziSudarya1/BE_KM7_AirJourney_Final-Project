@@ -57,3 +57,9 @@ export async function getDetailFlightById(id) {
 
   return data;
 }
+
+export async function getFlightById(id) {
+  const data = await flightRepository.getFlightById(id);
+
+  return data;
+}

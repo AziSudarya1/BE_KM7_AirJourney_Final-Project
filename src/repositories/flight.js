@@ -63,3 +63,11 @@ export function getDetailFlightById(id) {
     }
   });
 }
+
+export function getFlightById(id) {
+  return prisma.flight.findUnique({
+    where: {
+      id
+    }
+  });
+}
