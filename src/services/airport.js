@@ -35,3 +35,9 @@ export async function deleteAirport(id) {
 
   return data;
 }
+
+export async function getAllAirports() {
+  const data = await airportRepository.getAllAirports();
+
+  return data;
+}

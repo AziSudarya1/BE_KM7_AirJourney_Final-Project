@@ -17,19 +17,11 @@ export async function createUser(name, email, phoneNumber, password) {
 }
 
 export async function updateUserById(userId, data) {
-  const userData = await userRepository.updateUserById(userId, data);
+  const user = await userRepository.getUserWithId(userId);
 
-  return userData;
-}
+  if (!user) {
+    throw new HttpError('User not found', 404);
+  }
 
-export async function getUserByEmail(email) {
-  const userData = await userRepository.getUserByEmail(email);
-
-  return userData;
-}
-
-export async function getUserByPhoneNumber(phoneNumber) {
-  const userData = await userRepository.getUserByPhoneNumber(phoneNumber);
-
-  return userData;
+  return await userRepository.updateUserById(userId, data);
 }

@@ -52,3 +52,7 @@ export function deleteAirport(id) {
     }
   });
 }
+
+export function getAllAirports() {
+  return prisma.airport.findMany();
+}
