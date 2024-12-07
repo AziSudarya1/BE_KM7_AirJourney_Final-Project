@@ -21,7 +21,7 @@ const createPassengerSchema = Joi.object({
     then: Joi.forbidden(),
     otherwise: Joi.required()
   }),
-  returnSeatId: Joi.string().uuid().optional()
+  returnSeatId: Joi.string().uuid()
 });
 
 const passengerArraySchema = Joi.array()
