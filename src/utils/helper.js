@@ -7,18 +7,23 @@ export function generateJoiError(error) {
   return message;
 }
 
-export function calculateAmount(passengers, ticketPrice, returnFlightId) {
+export function calculateAmount(
+  passengers,
+  departurePrice,
+  returnPrice,
+  returnFlightId
+) {
   let amount = 0;
 
   for (const passenger of passengers) {
     if (passenger.type === 'INFANT') {
       continue;
     }
-    amount += ticketPrice;
+    amount += departurePrice;
   }
 
   if (returnFlightId) {
-    amount += ticketPrice;
+    amount += returnPrice;
   }
 
   return amount;

@@ -55,16 +55,19 @@ export async function createTransaction(payload) {
     throw new HttpError('User already has an active transaction', 400);
   }
 
-  const ticketPrice = departureFlight.price;
+  const departurePrice = departureFlight.price;
+  const returnPrice = returnFlight ? returnFlight.price : 0;
 
   const passengers = await generatePassengers(
     payload.passengers,
-    departureFlight
+    departureFlight,
+    returnFlight
   );
 
   const amount = calculateAmount(
     passengers,
-    ticketPrice,
+    departurePrice,
+    returnPrice,
     payload.returnFlightId
   );
 
