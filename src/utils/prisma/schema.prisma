@@ -76,7 +76,6 @@ model PasswordReset {
 model Transaction {
   id              String            @id @default(uuid(7)) @db.Uuid
   amount          Int
-  status          TransactionStatus
 
   userId            String  @map("user_id") @db.Uuid
   departureFlightId String  @map("departure_flight_id") @db.Uuid
@@ -185,9 +184,9 @@ model Payment {
   id              String        @id @default(uuid(7)) @db.Uuid
   status          PaymentStatus
   method          PaymentMethod?
-  snapToken       String        @map("snap_token")
-  snapRedirectUrl String        @map("snap_redirect_url")
-  paymentMethod   String        @map("payment_method")
+  snapToken       String?        @map("snap_token")
+  snapRedirectUrl String?        @map("snap_redirect_url")
+  paymentMethod   String?        @map("payment_method")
 
   transactionId String      @unique @map("transaction_id") @db.Uuid
   transaction   Transaction @relation(fields: [transactionId], references: [id])
@@ -239,12 +238,6 @@ enum Role {
   USER
 }
 
-enum TransactionStatus {
-  UNPAID
-  COMPLETED
-  CANCELLED
-}
-
 enum PaymentMethod {
   BANK_TRANSFER
   CREDIT_CARD
@@ -259,7 +252,6 @@ enum PaymentMethod {
 }
 
 enum PaymentStatus {
-  UNPAID
   PENDING
   SUCCESS
   CANCELLED
