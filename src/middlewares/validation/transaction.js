@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { generateJoiError } from '../../utils/helper.js';
+import { HttpError } from '../../utils/error.js';
 
 const ALLOWED_PASSESNGER_TYPES = ['INFANT', 'CHILD', 'ADULT'];
 
@@ -47,6 +48,27 @@ export async function createTransactionValidation(req, res, next) {
       abortEarly: false
     });
 
+    const passengers = req.body.passengers;
+
+    for (const passenger of passengers) {
+      if (passenger.departureSeatId !== passengers[0].departureSeatId) {
+        throw new HttpError(
+          'Departure seat must be the same for all passengers',
+          400
+        );
+      }
+
+      if (
+        passenger.returnSeatId &&
+        passenger.returnSeatId !== passengers[0].returnSeatId
+      ) {
+        throw new HttpError(
+          'Return seat must be the same for all passengers',
+          400
+        );
+      }
+    }
+
     next();
   } catch (error) {
     if (Joi.isError(error)) {
@@ -54,7 +76,7 @@ export async function createTransactionValidation(req, res, next) {
       return res.status(400).json({ message: errorMessages });
     }
 
-    res.status(500).json({ message: 'Internal server error' });
+    throw error;
   }
 }
 
@@ -69,6 +91,6 @@ export async function createPassengerValidation(req, res, next) {
       return res.status(400).json({ message: errorMessages });
     }
 
-    res.status(500).json({ message: 'Internal server error' });
+    throw error;
   }
 }
