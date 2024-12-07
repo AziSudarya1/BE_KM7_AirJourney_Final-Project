@@ -51,17 +51,21 @@ export async function createTransactionValidation(req, res, next) {
     const passengers = req.body.passengers;
 
     for (const passenger of passengers) {
-      if (passenger.departureSeatId !== passengers[0].departureSeatId) {
+      const skipSeatCheck = passenger.type === 'INFANT';
+      const departureSeatSame =
+        passengers[0].departureSeatId === passenger.departureSeatId;
+
+      if (!skipSeatCheck && !departureSeatSame) {
         throw new HttpError(
           'Departure seat must be the same for all passengers',
           400
         );
       }
 
-      if (
-        passenger.returnSeatId &&
-        passenger.returnSeatId !== passengers[0].returnSeatId
-      ) {
+      const returnSeatSame =
+        passengers[0].returnSeatId === passenger.returnSeatId;
+
+      if (passenger.returnSeatId && !skipSeatCheck && !returnSeatSame) {
         throw new HttpError(
           'Return seat must be the same for all passengers',
           400
