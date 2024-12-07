@@ -41,6 +41,17 @@ export async function createTransaction(payload) {
   }
 
   if (
+    payload.passengers.some(
+      (passenger) => passenger.returnSeatId && !payload.returnFlightId
+    )
+  ) {
+    throw new HttpError(
+      'Return Flight is required when return seat is provided',
+      400
+    );
+  }
+
+  if (
     payload.returnFlightId &&
     payload.passengers.some((passenger) => !passenger.returnSeatId)
   ) {

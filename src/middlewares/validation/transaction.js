@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { generateJoiError } from '../../utils/helper.js';
-import { HttpError } from '../../utils/error.js';
+// import { HttpError } from '../../utils/error.js';
 
 const ALLOWED_PASSESNGER_TYPES = ['INFANT', 'CHILD', 'ADULT'];
 
@@ -48,30 +48,30 @@ export async function createTransactionValidation(req, res, next) {
       abortEarly: false
     });
 
-    const passengers = req.body.passengers;
+    // const passengers = req.body.passengers;
 
-    for (const passenger of passengers) {
-      const skipSeatCheck = passenger.type === 'INFANT';
-      const departureSeatSame =
-        passengers[0].departureSeatId === passenger.departureSeatId;
+    // for (const passenger of passengers) {
+    //   const skipSeatCheck = passenger.type === 'INFANT';
+    //   const departureSeatSame =
+    //     passengers[0].departureSeatId === passenger.departureSeatId;
 
-      if (!skipSeatCheck && !departureSeatSame) {
-        throw new HttpError(
-          'Departure seat must be the same for all passengers',
-          400
-        );
-      }
+    //   if (!skipSeatCheck && !departureSeatSame) {
+    //     throw new HttpError(
+    //       'Departure seat must be the same for all passengers',
+    //       400
+    //     );
+    //   }
 
-      const returnSeatSame =
-        passengers[0].returnSeatId === passenger.returnSeatId;
+    //   const returnSeatSame =
+    //     passengers[0].returnSeatId === passenger.returnSeatId;
 
-      if (passenger.returnSeatId && !skipSeatCheck && !returnSeatSame) {
-        throw new HttpError(
-          'Return seat must be the same for all passengers',
-          400
-        );
-      }
-    }
+    //   if (passenger.returnSeatId && !skipSeatCheck && !returnSeatSame) {
+    //     throw new HttpError(
+    //       'Return seat must be the same for all passengers',
+    //       400
+    //     );
+    //   }
+    // }
 
     next();
   } catch (error) {
