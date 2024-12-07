@@ -37,10 +37,10 @@ const passengerArraySchema = Joi.array()
   });
 
 const createTransactionSchema = Joi.object({
-  departureFlightId: Joi.string().uuid(),
+  departureFlightId: Joi.string().uuid().required(),
   returnFlightId: Joi.string().uuid(),
-  passengers: passengerArraySchema
-}).min(2);
+  passengers: passengerArraySchema.required()
+});
 
 export async function createTransactionValidation(req, res, next) {
   try {
