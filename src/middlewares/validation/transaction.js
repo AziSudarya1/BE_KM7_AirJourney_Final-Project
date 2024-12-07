@@ -1,18 +1,27 @@
 import Joi from 'joi';
 import { generateJoiError } from '../../utils/helper.js';
 
+const ALLOWED_PASSESNGER_TYPES = ['INFANT', 'CHILD', 'ADULT'];
+
 const createPassengerSchema = Joi.object({
   title: Joi.string().required(),
   firstName: Joi.string().required(),
   familyName: Joi.string().required(),
   birthday: Joi.date().required(),
   nationality: Joi.string().required(),
-  type: Joi.string().required(),
+  type: Joi.string()
+    .valid(...ALLOWED_PASSESNGER_TYPES)
+    .required(),
   nikPaspor: Joi.string().required(),
   nikKtp: Joi.string().required(),
   expiredAt: Joi.date().required(),
-  departureSeatId: Joi.string().uuid().required(),
-  returnSeatId: Joi.string().uuid()
+  returnSeatId: Joi.string().uuid(),
+  departureSeatId: Joi.string().uuid().when('type', {
+    is: 'INFANT',
+    then: Joi.forbidden(),
+    otherwise: Joi.required()
+  }),
+  returnSeatId: Joi.string().uuid().optional()
 });
 
 const passengerArraySchema = Joi.array()
