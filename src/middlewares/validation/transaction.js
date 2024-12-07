@@ -14,9 +14,11 @@ const createPassengerSchema = Joi.object({
   departureSeatId: Joi.string().uuid().required(),
   returnSeatId: Joi.string().uuid().optional()
 });
+
 const passengerArraySchema = Joi.array()
   .items(createPassengerSchema)
   .min(1)
+  .unique((a, b) => a.nikPaspor === b.nikPaspor || a.nikKtp === b.nikKtp)
   .required();
 
 const createTransactionSchema = Joi.object({
