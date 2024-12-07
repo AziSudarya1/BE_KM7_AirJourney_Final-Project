@@ -176,7 +176,7 @@ async function seedFlights() {
   const flightExists = await prisma.flight.findFirst();
 
   if (flightExists) {
-    throw new Error('Flights are already exist');
+    return;
   }
 
   const flights = [
@@ -250,6 +250,14 @@ async function seedSeats() {
     const aeroplane = await prisma.aeroplane.findUnique({
       where: { id: flight.aeroplaneId }
     });
+
+    const seatsExist = await prisma.seat.findFirst({
+      where: { flightId: flight.id }
+    });
+
+    if (seatsExist) {
+      return;
+    }
 
     const seats = generateSeats(
       aeroplane.maxRow,
