@@ -30,6 +30,11 @@ export function getAllFlight(cursorId, filter) {
     where: {
       departureDate: {
         gte: new Date()
+      },
+      seat: {
+        some: {
+          status: 'AVAILABLE'
+        }
       }
     },
     take: 3,
@@ -51,8 +56,9 @@ export function getAllFlight(cursorId, filter) {
     query.skip = 1;
   }
 
-  if (filter) {
+  if (Object.keys(filter).length) {
     query.where = {
+      ...query.where,
       ...filter
     };
   }
