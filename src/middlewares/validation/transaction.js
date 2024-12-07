@@ -12,7 +12,7 @@ const createPassengerSchema = Joi.object({
   nikKtp: Joi.string().required(),
   expiredAt: Joi.date().required(),
   departureSeatId: Joi.string().uuid().required(),
-  returnSeatId: Joi.string().uuid().optional()
+  returnSeatId: Joi.string().uuid()
 });
 
 const passengerArraySchema = Joi.array()
@@ -28,7 +28,7 @@ const passengerArraySchema = Joi.array()
 
 const createTransactionSchema = Joi.object({
   departureFlightId: Joi.string().uuid(),
-  returnFlightId: Joi.string().uuid().optional(),
+  returnFlightId: Joi.string().uuid(),
   passengers: passengerArraySchema
 }).min(2);
 
