@@ -19,7 +19,12 @@ const passengerArraySchema = Joi.array()
   .items(createPassengerSchema)
   .min(1)
   .unique((a, b) => a.nikPaspor === b.nikPaspor || a.nikKtp === b.nikKtp)
-  .required();
+  .required()
+  .messages({
+    'array.min': 'Passengers must be at least 1',
+    'array.unique':
+      'Passenger with the same NIK Paspor or NIK KTP is not allowed'
+  });
 
 const createTransactionSchema = Joi.object({
   departureFlightId: Joi.string().uuid(),
