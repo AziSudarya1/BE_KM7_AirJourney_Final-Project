@@ -12,7 +12,7 @@ export async function generatePassengers(passengerData, flight) {
     );
 
     if (!isInfant) {
-      departureSeat = await seatService.updateSeatStatus(seat.id);
+      await seatService.updateSeatStatus(seat.id);
     }
 
     const passenger = {
