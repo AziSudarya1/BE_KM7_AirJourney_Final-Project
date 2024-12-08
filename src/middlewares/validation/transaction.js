@@ -35,8 +35,7 @@ const passengerArraySchema = Joi.array()
   .required()
   .messages({
     'array.min': 'The passengers array must contain at least one passenger.',
-    'array.unique':
-      'Each passenger must have a unique NIK Paspor, NIK KTP, return seat ID, and departure seat ID.'
+    'array.unique': 'Each passenger must have a unique NIK Paspor and NIK KTP.'
   });
 
 const createTransactionSchema = Joi.object({
