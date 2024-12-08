@@ -50,10 +50,10 @@ export function getTransactionById(id) {
   });
 }
 
-export function getAllTransactions(id) {
+export function getAllTransactions(userId) {
   return prisma.transaction.findMany({
     where: {
-      userId: id
+      userId
     },
     include: {
       passenger: true,

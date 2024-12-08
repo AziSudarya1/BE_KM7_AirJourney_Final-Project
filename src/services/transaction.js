@@ -93,8 +93,8 @@ export async function getTransactionById(id) {
   return data;
 }
 
-export async function getAllTransactions(id) {
-  const data = await transactionRepository.getAllTransactions(id);
+export async function getAllTransactions(userId) {
+  const data = await transactionRepository.getAllTransactions(userId);
 
   return data;
 }
