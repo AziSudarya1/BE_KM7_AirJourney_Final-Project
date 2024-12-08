@@ -29,7 +29,9 @@ export async function getTransactionById(req, res) {
 }
 
 export async function getAllTransactions(_req, res) {
-  const data = await transactionService.getAllTransactions();
+  const userId = res.locals.user.id;
+
+  const data = await transactionService.getAllTransactions(userId);
 
   res.status(200).json({
     message: 'Successfully get all transactions',

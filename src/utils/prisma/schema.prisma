@@ -85,7 +85,7 @@ model Transaction {
   departureFlight Flight      @relation("DepartureFlight", fields: [departureFlightId], references: [id])
   returnFlight    Flight?     @relation("ReturnFlight", fields: [returnFlightId], references: [id])
   payment         Payment?
-  Passenger       Passenger[]
+  passenger       Passenger[]
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()

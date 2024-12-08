@@ -7,7 +7,7 @@ export function createTransactionAndPassenger(payload) {
       userId: payload.userId,
       departureFlightId: payload.departureFlightId,
       returnFlightId: payload?.returnFlightId || null,
-      Passenger: {
+      passenger: {
         createMany: {
           data: payload.proccessedPassengers
         }
@@ -19,7 +19,7 @@ export function createTransactionAndPassenger(payload) {
       }
     },
     include: {
-      Passenger: true,
+      passenger: true,
       payment: true
     }
   });
@@ -44,16 +44,19 @@ export function getTransactionById(id) {
       id
     },
     include: {
-      Passenger: true,
+      passenger: true,
       payment: true
     }
   });
 }
 
-export function getAllTransactions() {
+export function getAllTransactions(id) {
   return prisma.transaction.findMany({
+    where: {
+      userId: id
+    },
     include: {
-      Passenger: true,
+      passenger: true,
       payment: true
     }
   });
