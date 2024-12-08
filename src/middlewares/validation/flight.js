@@ -1,0 +1,106 @@
+import Joi from 'joi';
+import { generateJoiError } from '../../utils/helper.js';
+import { HttpError } from '../../utils/error.js';
+import { ALLOWED_CONTINENTS } from './airport.js';
+
+const ALLOWED_CLASS = ['ECONOMY', 'PREMIUM_ECONOMY', 'BUSINESS', 'FIRST_CLASS'];
+
+const createFlightSchema = Joi.object({
+  departureDate: Joi.date().required(),
+  arrivalDate: Joi.date().required(),
+  arrivalTime: Joi.string().required(),
+  departureTime: Joi.string().required(),
+  price: Joi.number().required(),
+  class: Joi.string()
+    .valid(...ALLOWED_CLASS)
+    .required(),
+  description: Joi.string(),
+  airlineId: Joi.string().uuid().required(),
+  airportIdFrom: Joi.string().uuid().required(),
+  airportIdTo: Joi.string().uuid().required(),
+  aeroplaneId: Joi.string().uuid().required(),
+  duration: Joi.number().required()
+});
+
+export async function createFlightValidation(req, res, next) {
+  try {
+    await createFlightSchema.validateAsync(req.body, { abortEarly: false });
+
+    const expiredDate = new Date(req.body.departureDate) < new Date();
+
+    if (expiredDate) {
+      throw new HttpError('Departure date must be in the future', 400);
+    }
+
+    const invalidDate =
+      new Date(req.body.departureDate) > new Date(req.body.arrivalDate);
+
+    if (invalidDate) {
+      throw new HttpError('Departure date must be before arrival date', 400);
+    }
+
+    next();
+  } catch (err) {
+    if (err.isJoi) {
+      const errMessage = generateJoiError(err);
+      return res.status(400).json({ message: errMessage });
+    }
+    next(err);
+  }
+}
+
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const queryParamSchema = Joi.object({
+  cursorId: Joi.string().uuid(),
+  class: Joi.string().valid(...ALLOWED_CLASS),
+  departureDate: Joi.date().min(today),
+  arrivalDate: Joi.date().min(today),
+  airportIdFrom: Joi.string().uuid(),
+  airportIdTo: Joi.string().uuid(),
+  continent: Joi.string().valid(...ALLOWED_CONTINENTS)
+});
+
+const generateDateFilter = (date) => {
+  const initialHour = new Date(date);
+  initialHour.setHours(0, 0, 0, 0);
+
+  const finishHour = new Date(date);
+  finishHour.setHours(23, 59, 59, 999);
+
+  return {
+    gte: initialHour,
+    lte: finishHour
+  };
+};
+
+export async function validateFilterAndCursorIdParams(req, res, next) {
+  try {
+    await queryParamSchema.validateAsync(req.query, { abortEarly: false });
+
+    const { departureDate, arrivalDate, continent, ...filter } = req.query;
+
+    if (departureDate) {
+      filter.departureDate = generateDateFilter(departureDate);
+    }
+
+    if (arrivalDate) {
+      filter.arrivalDate = generateDateFilter(arrivalDate);
+    }
+
+    if (continent) {
+      filter.airportTo = { continent: continent };
+    }
+
+    res.locals.filter = filter;
+
+    next();
+  } catch (err) {
+    if (err.isJoi) {
+      const errMessage = generateJoiError(err);
+      return res.status(400).json({ message: errMessage });
+    }
+    next(err);
+  }
+}

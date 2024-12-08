@@ -29,3 +29,9 @@ export async function deleteAirlineById(id) {
 
   return data;
 }
+
+export async function getAllAirlines() {
+  const data = await airlineRepository.getAllAirlines();
+
+  return data;
+}
