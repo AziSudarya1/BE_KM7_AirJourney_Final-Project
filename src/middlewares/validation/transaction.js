@@ -16,7 +16,11 @@ const createPassengerSchema = Joi.object({
   nikPaspor: Joi.string().required(),
   nikKtp: Joi.string().required(),
   expiredAt: Joi.date().required(),
-  returnSeatId: Joi.string().uuid(),
+  returnSeatId: Joi.string().uuid().when('type', {
+    is: 'INFANT',
+    then: Joi.forbidden(),
+    otherwise: Joi.optional()
+  }),
   departureSeatId: Joi.string().uuid().when('type', {
     is: 'INFANT',
     then: Joi.forbidden(),
@@ -28,17 +32,23 @@ const createPassengerSchema = Joi.object({
 const passengerArraySchema = Joi.array()
   .items(createPassengerSchema)
   .min(1)
-  .unique((a, b) => a.nikPaspor === b.nikPaspor || a.nikKtp === b.nikKtp)
+  .unique(
+    (a, b) =>
+      a.nikPaspor === b.nikPaspor ||
+      a.nikKtp === b.nikKtp ||
+      a.returnSeatId === b.returnSeatId ||
+      a.departureSeatId === b.departureSeatId
+  )
   .required()
   .messages({
-    'array.min': 'Passengers must be at least 1',
+    'array.min': 'The passengers array must contain at least one passenger.',
     'array.unique':
-      'Passenger with the same NIK Paspor or NIK KTP is not allowed'
+      'Each passenger must have a unique NIK Paspor, NIK KTP, return seat ID, and departure seat ID.'
   });
 
 const createTransactionSchema = Joi.object({
   departureFlightId: Joi.string().uuid().required(),
-  returnFlightId: Joi.string().uuid(),
+  returnFlightId: Joi.string().uuid().disallow(Joi.ref('departureFlightId')),
   passengers: passengerArraySchema.required()
 });
 
@@ -47,31 +57,6 @@ export async function createTransactionValidation(req, res, next) {
     await createTransactionSchema.validateAsync(req.body, {
       abortEarly: false
     });
-
-    // const passengers = req.body.passengers;
-
-    // for (const passenger of passengers) {
-    //   const skipSeatCheck = passenger.type === 'INFANT';
-    //   const departureSeatSame =
-    //     passengers[0].departureSeatId === passenger.departureSeatId;
-
-    //   if (!skipSeatCheck && !departureSeatSame) {
-    //     throw new HttpError(
-    //       'Departure seat must be the same for all passengers',
-    //       400
-    //     );
-    //   }
-
-    //   const returnSeatSame =
-    //     passengers[0].returnSeatId === passenger.returnSeatId;
-
-    //   if (passenger.returnSeatId && !skipSeatCheck && !returnSeatSame) {
-    //     throw new HttpError(
-    //       'Return seat must be the same for all passengers',
-    //       400
-    //     );
-    //   }
-    // }
 
     next();
   } catch (error) {

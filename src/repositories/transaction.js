@@ -6,7 +6,7 @@ export function createTransactionAndPassenger(payload) {
       amount: payload.amount,
       userId: payload.userId,
       departureFlightId: payload.departureFlightId,
-      returnFlightId: payload.returnFlightId || null,
+      returnFlightId: payload?.returnFlightId || null,
       Passenger: {
         createMany: {
           data: payload.passengers
@@ -21,12 +21,14 @@ export function createTransactionAndPassenger(payload) {
   });
 }
 
-export function getBookingTransaction(id) {
+export function getActiveTransaction(id) {
   return prisma.transaction.findFirst({
     where: {
       userId: id,
       payment: {
-        status: 'PENDING'
+        status: {
+          notIn: ['UNPAID', 'SUCCESS']
+        }
       }
     }
   });

@@ -13,18 +13,17 @@ export function calculateAmount(
   returnPrice,
   returnFlightId
 ) {
-  let amount = 0;
+  let total = 0;
 
-  for (const passenger of passengers) {
-    if (passenger.type === 'INFANT') {
-      continue;
-    }
-    amount += departurePrice;
-  }
+  const nonInfantPassengers = passengers.filter(
+    (passenger) => passenger.type !== 'INFANT'
+  ).length;
+
+  total += nonInfantPassengers * departurePrice;
 
   if (returnFlightId) {
-    amount += returnPrice;
+    total += nonInfantPassengers * returnPrice;
   }
 
-  return amount;
+  return total;
 }
