@@ -75,20 +75,17 @@ model PasswordReset {
 
 model Transaction {
   id              String            @id @default(uuid(7)) @db.Uuid
-  transactionCode String            @map("transaction_code")
   amount          Int
-  status          TransactionStatus
 
   userId            String  @map("user_id") @db.Uuid
   departureFlightId String  @map("departure_flight_id") @db.Uuid
   returnFlightId    String? @map("return_flight_id") @db.Uuid
-  passengerId       String? @map("passenger_id") @db.Uuid
 
   user            User        @relation(fields: [userId], references: [id])
   departureFlight Flight      @relation("DepartureFlight", fields: [departureFlightId], references: [id])
   returnFlight    Flight?     @relation("ReturnFlight", fields: [returnFlightId], references: [id])
   payment         Payment?
-  Passenger       Passenger[]
+  passenger       Passenger[]
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
@@ -96,30 +93,31 @@ model Transaction {
   @@map("transaction")
 }
 
-model Passenger {
-  id            String   @id @default(uuid(7)) @db.Uuid
-  transactionId String   @map("transaction_id") @db.Uuid
-  title         String
-  firstName     String   @map("first_name")
-  familyName    String   @map("family_name")
-  birthday      String
-  nationality   String
-  nikPaspor     String   @map("nik_paspor")
-  nikKtp        String   @map("nik_ktp")
-  expiredAt     DateTime @map("expired_at")
+  model Passenger {
+    id            String   @id @default(uuid(7)) @db.Uuid
+    transactionId String   @map("transaction_id") @db.Uuid
+    title         String
+    firstName     String   @map("first_name")
+    familyName    String   @map("family_name")
+    birthday      DateTime 
+    nationality   String
+    type          TypePassenger 
+    nikPaspor     String   @map("nik_paspor")
+    nikKtp        String   @map("nik_ktp")
+    expiredAt     DateTime @map("expired_at")
 
-  departureSeatId String  @unique @map("departure_seat_id") @db.Uuid
-  returnSeatId    String? @unique @map("return_seat_id") @db.Uuid
+    departureSeatId String? @unique @map("departure_seat_id") @db.Uuid
+    returnSeatId    String? @unique @map("return_seat_id") @db.Uuid
 
-  transaction   Transaction @relation(fields: [transactionId], references: [id])
-  departureSeat Seat        @relation("DepartureSeat", fields: [departureSeatId], references: [id])
-  returnSeat    Seat?       @relation("ReturnSeat", fields: [returnSeatId], references: [id])
+    transaction   Transaction @relation(fields: [transactionId], references: [id])
+    departureSeat Seat?       @relation("DepartureSeat", fields: [departureSeatId], references: [id])
+    returnSeat    Seat?       @relation("ReturnSeat", fields: [returnSeatId], references: [id])
 
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+    createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+    updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
 
-  @@map("passenger")
-}
+    @@map("passenger")
+  }
 
 model Flight {
   id            String   @id @default(uuid(7)) @db.Uuid
@@ -185,10 +183,10 @@ model Airport {
 model Payment {
   id              String        @id @default(uuid(7)) @db.Uuid
   status          PaymentStatus
-  method          PaymentMethod
-  snapToken       String        @map("snap_token")
-  snapRedirectUrl String        @map("snap_redirect_url")
-  paymentMethod   String        @map("payment_method")
+  method          PaymentMethod?
+  snapToken       String?        @map("snap_token")
+  snapRedirectUrl String?        @map("snap_redirect_url")
+  paymentMethod   String?        @map("payment_method")
 
   transactionId String      @unique @map("transaction_id") @db.Uuid
   transaction   Transaction @relation(fields: [transactionId], references: [id])
@@ -240,12 +238,6 @@ enum Role {
   USER
 }
 
-enum TransactionStatus {
-  UNPAID
-  COMPLETED
-  CANCELLED
-}
-
 enum PaymentMethod {
   BANK_TRANSFER
   CREDIT_CARD
@@ -260,7 +252,6 @@ enum PaymentMethod {
 }
 
 enum PaymentStatus {
-  UNPAID
   PENDING
   SUCCESS
   CANCELLED
@@ -287,4 +278,10 @@ enum Continent {
   SOUTH_AMERICA
   AUSTRALIA
   ANTARCTICA
+}
+
+enum TypePassenger {
+  INFANT
+  ADULT
+  CHILD
 }

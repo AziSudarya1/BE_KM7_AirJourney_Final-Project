@@ -7,6 +7,7 @@ import aeroplanes from './aeroplanes.js';
 import airports from './airports.js';
 import flights from './flights.js';
 import airlines from './airlines.js';
+import transactions from './transactions.js';
 
 export default (app) => {
   const router = Router();
@@ -21,4 +22,5 @@ export default (app) => {
   airports(router);
   flights(router);
   airlines(router);
+  transactions(router);
 };

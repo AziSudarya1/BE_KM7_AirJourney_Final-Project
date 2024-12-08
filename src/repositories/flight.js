@@ -80,3 +80,22 @@ export function getDetailFlightById(id) {
     }
   });
 }
+
+export function getFlightWithSeatsById(id) {
+  return prisma.flight.findUnique({
+    where: {
+      id
+    },
+    include: {
+      seat: true
+    }
+  });
+}
+
+export function getFlightById(id) {
+  return prisma.flight.findUnique({
+    where: {
+      id
+    }
+  });
+}
