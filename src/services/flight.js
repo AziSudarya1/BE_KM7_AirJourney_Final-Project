@@ -58,8 +58,14 @@ export async function getDetailFlightById(id) {
   return data;
 }
 
-export async function getFavouriteFlights(cursorId, continent) {
-  const data = await flightRepository.getFavouriteFlights(cursorId, continent);
+export async function getFlightWithSeatsById(id) {
+  const data = await flightRepository.getFlightWithSeatsById(id);
+
+  return data;
+}
+
+export async function getFlightById(id) {
+  const data = await flightRepository.getFlightById(id);
 
   return data;
 }
