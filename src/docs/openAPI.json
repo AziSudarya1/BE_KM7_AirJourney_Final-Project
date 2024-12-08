@@ -4078,997 +4078,6 @@
         }
       }
     },
-    "/user-notifications": {
-      "get": {
-        "tags": ["Notifications"],
-        "summary": "Get all user notifications",
-        "description": "Get all user notifications",
-        "operationId": "getAllUserNotifications",
-        "responses": {
-          "200": {
-            "description": "200 OK  - Successful Response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "schema": {
-                  "type": "string",
-                  "example": "*"
-                }
-              },
-              "Connection": {
-                "schema": {
-                  "type": "string",
-                  "example": "keep-alive"
-                }
-              },
-              "Content-Length": {
-                "schema": {
-                  "type": "string",
-                  "example": "1702"
-                }
-              },
-              "Date": {
-                "schema": {
-                  "type": "string",
-                  "example": "Wed, 20 Dec 2023 08:35:33 GMT"
-                }
-              },
-              "ETag": {
-                "schema": {
-                  "type": "string",
-                  "example": "W/\"6a6-PWYzwpyct3a5yp7l8MQs4y9bySM\""
-                }
-              },
-              "Keep-Alive": {
-                "schema": {
-                  "type": "string",
-                  "example": "timeout=5"
-                }
-              },
-              "X-Powered-By": {
-                "schema": {
-                  "type": "string",
-                  "example": "Express"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "created_at": {
-                            "type": "string",
-                            "example": "2023-12-19T13:04:46.846Z"
-                          },
-                          "description": {
-                            "type": "string",
-                            "example": "Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of shoes & sandals"
-                          },
-                          "id": {
-                            "type": "string",
-                            "example": "fc376e1d-b409-450f-9f6d-a96eba4ba73c"
-                          },
-                          "name": {
-                            "type": "string",
-                            "example": "Table"
-                          },
-                          "updated_at": {
-                            "type": "string",
-                            "example": "2023-12-20T00:18:41.501Z"
-                          },
-                          "user_id": {
-                            "type": "string",
-                            "example": "68a58152-8b12-449f-9eae-ec3485941bad"
-                          },
-                          "viewed": {
-                            "type": "boolean",
-                            "example": true
-                          }
-                        }
-                      },
-                      "example": [
-                        {
-                          "created_at": "2023-12-19T13:04:46.846Z",
-                          "description": "Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of shoes & sandals",
-                          "id": "fc376e1d-b409-450f-9f6d-a96eba4ba73c",
-                          "name": "Table",
-                          "updated_at": "2023-12-20T00:18:41.501Z",
-                          "user_id": "68a58152-8b12-449f-9eae-ec3485941bad",
-                          "viewed": true
-                        },
-                        {
-                          "created_at": "2023-12-20T06:28:50.687Z",
-                          "description": "Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of shoes & sandals",
-                          "id": "9c0c7187-fd2a-41ee-b58c-5f3b0a11e1fb",
-                          "name": "Tuna",
-                          "updated_at": "2023-12-20T03:23:11.073Z",
-                          "user_id": "68a58152-8b12-449f-9eae-ec3485941bad",
-                          "viewed": false
-                        },
-                        {
-                          "created_at": "2023-12-20T07:20:24.777Z",
-                          "description": "Ergonomic executive chair upholstered in bonded black leather and PVC padded seat and back for all-day comfort and support",
-                          "id": "02d127f6-c8bc-431e-a770-dfee9f745ac1",
-                          "name": "Shoes",
-                          "updated_at": "2023-12-19T22:14:58.484Z",
-                          "user_id": "68a58152-8b12-449f-9eae-ec3485941bad",
-                          "viewed": false
-                        },
-                        {
-                          "created_at": "2023-12-20T00:48:22.531Z",
-                          "description": "The Nagasaki Lander is the trademarked name of several series of Nagasaki sport bikes, that started with the 1984 ABC800J",
-                          "id": "4694f916-55ea-4f38-9e94-e397bc27a880",
-                          "name": "Bacon",
-                          "updated_at": "2023-12-20T05:12:37.068Z",
-                          "user_id": "68a58152-8b12-449f-9eae-ec3485941bad",
-                          "viewed": false
-                        },
-                        {
-                          "created_at": "2023-12-19T13:57:07.291Z",
-                          "description": "New range of formal shirts are designed keeping you in mind. With fits and styling that will make you stand apart",
-                          "id": "48b416b9-ef78-433e-9f6e-74087b23b2a4",
-                          "name": "Bacon",
-                          "updated_at": "2023-12-19T09:55:32.360Z",
-                          "user_id": "68a58152-8b12-449f-9eae-ec3485941bad",
-                          "viewed": false
-                        }
-                      ]
-                    }
-                  }
-                },
-                "examples": {
-                  "200 OK  - Successful Response": {
-                    "value": {
-                      "data": [
-                        {
-                          "created_at": "2023-12-19T13:04:46.846Z",
-                          "description": "Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of shoes & sandals",
-                          "id": "fc376e1d-b409-450f-9f6d-a96eba4ba73c",
-                          "name": "Table",
-                          "updated_at": "2023-12-20T00:18:41.501Z",
-                          "user_id": "68a58152-8b12-449f-9eae-ec3485941bad",
-                          "viewed": true
-                        },
-                        {
-                          "created_at": "2023-12-20T06:28:50.687Z",
-                          "description": "Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of shoes & sandals",
-                          "id": "9c0c7187-fd2a-41ee-b58c-5f3b0a11e1fb",
-                          "name": "Tuna",
-                          "updated_at": "2023-12-20T03:23:11.073Z",
-                          "user_id": "68a58152-8b12-449f-9eae-ec3485941bad",
-                          "viewed": false
-                        },
-                        {
-                          "created_at": "2023-12-20T07:20:24.777Z",
-                          "description": "Ergonomic executive chair upholstered in bonded black leather and PVC padded seat and back for all-day comfort and support",
-                          "id": "02d127f6-c8bc-431e-a770-dfee9f745ac1",
-                          "name": "Shoes",
-                          "updated_at": "2023-12-19T22:14:58.484Z",
-                          "user_id": "68a58152-8b12-449f-9eae-ec3485941bad",
-                          "viewed": false
-                        },
-                        {
-                          "created_at": "2023-12-20T00:48:22.531Z",
-                          "description": "The Nagasaki Lander is the trademarked name of several series of Nagasaki sport bikes, that started with the 1984 ABC800J",
-                          "id": "4694f916-55ea-4f38-9e94-e397bc27a880",
-                          "name": "Bacon",
-                          "updated_at": "2023-12-20T05:12:37.068Z",
-                          "user_id": "68a58152-8b12-449f-9eae-ec3485941bad",
-                          "viewed": false
-                        },
-                        {
-                          "created_at": "2023-12-19T13:57:07.291Z",
-                          "description": "New range of formal shirts are designed keeping you in mind. With fits and styling that will make you stand apart",
-                          "id": "48b416b9-ef78-433e-9f6e-74087b23b2a4",
-                          "name": "Bacon",
-                          "updated_at": "2023-12-19T09:55:32.360Z",
-                          "user_id": "68a58152-8b12-449f-9eae-ec3485941bad",
-                          "viewed": false
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 Bad Request - Missing authorization header",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "schema": {
-                  "type": "string",
-                  "example": "*"
-                }
-              },
-              "Connection": {
-                "schema": {
-                  "type": "string",
-                  "example": "keep-alive"
-                }
-              },
-              "Content-Length": {
-                "schema": {
-                  "type": "string",
-                  "example": "42"
-                }
-              },
-              "Date": {
-                "schema": {
-                  "type": "string",
-                  "example": "Wed, 20 Dec 2023 08:37:13 GMT"
-                }
-              },
-              "ETag": {
-                "schema": {
-                  "type": "string",
-                  "example": "W/\"2a-nREveVs82jaHpGue4xwCz2jgZpA\""
-                }
-              },
-              "Keep-Alive": {
-                "schema": {
-                  "type": "string",
-                  "example": "timeout=5"
-                }
-              },
-              "X-Powered-By": {
-                "schema": {
-                  "type": "string",
-                  "example": "Express"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Missing authorization header"
-                    }
-                  }
-                },
-                "examples": {
-                  "400 Bad Request - Missing authorization header": {
-                    "value": {
-                      "message": "Missing authorization header"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/user-notifications/read-all": {
-      "post": {
-        "tags": ["Notifications"],
-        "summary": "Update all user notifications status viewed",
-        "description": "Update all user notifications status viewed",
-        "operationId": "updateAllUserNotificationsStatusViewed",
-        "responses": {
-          "200": {
-            "description": "200 OK  - Successful Response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "schema": {
-                  "type": "string",
-                  "example": "*"
-                }
-              },
-              "Connection": {
-                "schema": {
-                  "type": "string",
-                  "example": "keep-alive"
-                }
-              },
-              "Content-Length": {
-                "schema": {
-                  "type": "string",
-                  "example": "1074"
-                }
-              },
-              "Date": {
-                "schema": {
-                  "type": "string",
-                  "example": "Wed, 20 Dec 2023 08:43:29 GMT"
-                }
-              },
-              "ETag": {
-                "schema": {
-                  "type": "string",
-                  "example": "W/\"432-N/dY5Pj9b+lNDNE64f0Zw+9LfCw\""
-                }
-              },
-              "Keep-Alive": {
-                "schema": {
-                  "type": "string",
-                  "example": "timeout=5"
-                }
-              },
-              "X-Powered-By": {
-                "schema": {
-                  "type": "string",
-                  "example": "Express"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "created_at": {
-                            "type": "string",
-                            "example": "2023-12-20T07:20:24.777Z"
-                          },
-                          "description": {
-                            "type": "string",
-                            "example": "Ergonomic executive chair upholstered in bonded black leather and PVC padded seat and back for all-day comfort and support"
-                          },
-                          "id": {
-                            "type": "string",
-                            "example": "02d127f6-c8bc-431e-a770-dfee9f745ac1"
-                          },
-                          "name": {
-                            "type": "string",
-                            "example": "Shoes"
-                          },
-                          "updated_at": {
-                            "type": "string",
-                            "example": "2023-12-20T08:43:29.445Z"
-                          },
-                          "user_id": {
-                            "type": "string",
-                            "example": "68a58152-8b12-449f-9eae-ec3485941bad"
-                          },
-                          "viewed": {
-                            "type": "boolean",
-                            "example": true
-                          }
-                        }
-                      },
-                      "example": [
-                        {
-                          "created_at": "2023-12-20T07:20:24.777Z",
-                          "description": "Ergonomic executive chair upholstered in bonded black leather and PVC padded seat and back for all-day comfort and support",
-                          "id": "02d127f6-c8bc-431e-a770-dfee9f745ac1",
-                          "name": "Shoes",
-                          "updated_at": "2023-12-20T08:43:29.445Z",
-                          "user_id": "68a58152-8b12-449f-9eae-ec3485941bad",
-                          "viewed": true
-                        },
-                        {
-                          "created_at": "2023-12-20T00:48:22.531Z",
-                          "description": "The Nagasaki Lander is the trademarked name of several series of Nagasaki sport bikes, that started with the 1984 ABC800J",
-                          "id": "4694f916-55ea-4f38-9e94-e397bc27a880",
-                          "name": "Bacon",
-                          "updated_at": "2023-12-20T08:43:29.445Z",
-                          "user_id": "68a58152-8b12-449f-9eae-ec3485941bad",
-                          "viewed": true
-                        },
-                        {
-                          "created_at": "2023-12-19T13:57:07.291Z",
-                          "description": "New range of formal shirts are designed keeping you in mind. With fits and styling that will make you stand apart",
-                          "id": "48b416b9-ef78-433e-9f6e-74087b23b2a4",
-                          "name": "Bacon",
-                          "updated_at": "2023-12-20T08:43:29.445Z",
-                          "user_id": "68a58152-8b12-449f-9eae-ec3485941bad",
-                          "viewed": true
-                        }
-                      ]
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "All notifications have been read"
-                    }
-                  }
-                },
-                "examples": {
-                  "200 OK  - Successful Response": {
-                    "value": {
-                      "data": [
-                        {
-                          "created_at": "2023-12-20T07:20:24.777Z",
-                          "description": "Ergonomic executive chair upholstered in bonded black leather and PVC padded seat and back for all-day comfort and support",
-                          "id": "02d127f6-c8bc-431e-a770-dfee9f745ac1",
-                          "name": "Shoes",
-                          "updated_at": "2023-12-20T08:43:29.445Z",
-                          "user_id": "68a58152-8b12-449f-9eae-ec3485941bad",
-                          "viewed": true
-                        },
-                        {
-                          "created_at": "2023-12-20T00:48:22.531Z",
-                          "description": "The Nagasaki Lander is the trademarked name of several series of Nagasaki sport bikes, that started with the 1984 ABC800J",
-                          "id": "4694f916-55ea-4f38-9e94-e397bc27a880",
-                          "name": "Bacon",
-                          "updated_at": "2023-12-20T08:43:29.445Z",
-                          "user_id": "68a58152-8b12-449f-9eae-ec3485941bad",
-                          "viewed": true
-                        },
-                        {
-                          "created_at": "2023-12-19T13:57:07.291Z",
-                          "description": "New range of formal shirts are designed keeping you in mind. With fits and styling that will make you stand apart",
-                          "id": "48b416b9-ef78-433e-9f6e-74087b23b2a4",
-                          "name": "Bacon",
-                          "updated_at": "2023-12-20T08:43:29.445Z",
-                          "user_id": "68a58152-8b12-449f-9eae-ec3485941bad",
-                          "viewed": true
-                        }
-                      ],
-                      "message": "All notifications have been read"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 Bad Request - Missing authorization header",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "schema": {
-                  "type": "string",
-                  "example": "*"
-                }
-              },
-              "Connection": {
-                "schema": {
-                  "type": "string",
-                  "example": "keep-alive"
-                }
-              },
-              "Content-Length": {
-                "schema": {
-                  "type": "string",
-                  "example": "42"
-                }
-              },
-              "Date": {
-                "schema": {
-                  "type": "string",
-                  "example": "Wed, 20 Dec 2023 08:43:54 GMT"
-                }
-              },
-              "ETag": {
-                "schema": {
-                  "type": "string",
-                  "example": "W/\"2a-nREveVs82jaHpGue4xwCz2jgZpA\""
-                }
-              },
-              "Keep-Alive": {
-                "schema": {
-                  "type": "string",
-                  "example": "timeout=5"
-                }
-              },
-              "X-Powered-By": {
-                "schema": {
-                  "type": "string",
-                  "example": "Express"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Missing authorization header"
-                    }
-                  }
-                },
-                "examples": {
-                  "400 Bad Request - Missing authorization header": {
-                    "value": {
-                      "message": "Missing authorization header"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/user-notifications/9c0c7187-fd2a-41ee-b58c-5f3b0a11e1fb": {
-      "put": {
-        "tags": ["Notifications"],
-        "summary": "Update user notifications status viewed by ID",
-        "description": "Update user notifications status viewed by ID",
-        "operationId": "updateUserNotificationsStatusViewedById",
-        "responses": {
-          "200": {
-            "description": "200 OK  - Successful Response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "schema": {
-                  "type": "string",
-                  "example": "*"
-                }
-              },
-              "Connection": {
-                "schema": {
-                  "type": "string",
-                  "example": "keep-alive"
-                }
-              },
-              "Content-Length": {
-                "schema": {
-                  "type": "string",
-                  "example": "393"
-                }
-              },
-              "Date": {
-                "schema": {
-                  "type": "string",
-                  "example": "Wed, 20 Dec 2023 08:39:38 GMT"
-                }
-              },
-              "ETag": {
-                "schema": {
-                  "type": "string",
-                  "example": "W/\"189-YqpVOQLviDZ1F9REBQtzYCsHYfk\""
-                }
-              },
-              "Keep-Alive": {
-                "schema": {
-                  "type": "string",
-                  "example": "timeout=5"
-                }
-              },
-              "X-Powered-By": {
-                "schema": {
-                  "type": "string",
-                  "example": "Express"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "created_at": {
-                          "type": "string",
-                          "example": "2023-12-20T06:28:50.687Z"
-                        },
-                        "description": {
-                          "type": "string",
-                          "example": "Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of shoes & sandals"
-                        },
-                        "id": {
-                          "type": "string",
-                          "example": "9c0c7187-fd2a-41ee-b58c-5f3b0a11e1fb"
-                        },
-                        "name": {
-                          "type": "string",
-                          "example": "Tuna"
-                        },
-                        "updated_at": {
-                          "type": "string",
-                          "example": "2023-12-20T08:39:38.251Z"
-                        },
-                        "user_id": {
-                          "type": "string",
-                          "example": "68a58152-8b12-449f-9eae-ec3485941bad"
-                        },
-                        "viewed": {
-                          "type": "boolean",
-                          "example": true
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "User notification updated successfully"
-                    }
-                  }
-                },
-                "examples": {
-                  "200 OK  - Successful Response": {
-                    "value": {
-                      "data": {
-                        "created_at": "2023-12-20T06:28:50.687Z",
-                        "description": "Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of shoes & sandals",
-                        "id": "9c0c7187-fd2a-41ee-b58c-5f3b0a11e1fb",
-                        "name": "Tuna",
-                        "updated_at": "2023-12-20T08:39:38.251Z",
-                        "user_id": "68a58152-8b12-449f-9eae-ec3485941bad",
-                        "viewed": true
-                      },
-                      "message": "User notification updated successfully"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 Bad Request - Missing authorization header",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "schema": {
-                  "type": "string",
-                  "example": "*"
-                }
-              },
-              "Connection": {
-                "schema": {
-                  "type": "string",
-                  "example": "keep-alive"
-                }
-              },
-              "Content-Length": {
-                "schema": {
-                  "type": "string",
-                  "example": "42"
-                }
-              },
-              "Date": {
-                "schema": {
-                  "type": "string",
-                  "example": "Wed, 20 Dec 2023 08:41:17 GMT"
-                }
-              },
-              "ETag": {
-                "schema": {
-                  "type": "string",
-                  "example": "W/\"2a-nREveVs82jaHpGue4xwCz2jgZpA\""
-                }
-              },
-              "Keep-Alive": {
-                "schema": {
-                  "type": "string",
-                  "example": "timeout=5"
-                }
-              },
-              "X-Powered-By": {
-                "schema": {
-                  "type": "string",
-                  "example": "Express"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Missing authorization header"
-                    }
-                  }
-                },
-                "examples": {
-                  "400 Bad Request - Missing authorization header": {
-                    "value": {
-                      "message": "Missing authorization header"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "404 Not Found - User notification not found",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "schema": {
-                  "type": "string",
-                  "example": "*"
-                }
-              },
-              "Connection": {
-                "schema": {
-                  "type": "string",
-                  "example": "keep-alive"
-                }
-              },
-              "Content-Length": {
-                "schema": {
-                  "type": "string",
-                  "example": "88"
-                }
-              },
-              "Date": {
-                "schema": {
-                  "type": "string",
-                  "example": "Wed, 20 Dec 2023 08:40:30 GMT"
-                }
-              },
-              "ETag": {
-                "schema": {
-                  "type": "string",
-                  "example": "W/\"58-+yTgBAthN6Y4skiy6071J2QXxSY\""
-                }
-              },
-              "Keep-Alive": {
-                "schema": {
-                  "type": "string",
-                  "example": "timeout=5"
-                }
-              },
-              "X-Powered-By": {
-                "schema": {
-                  "type": "string",
-                  "example": "Express"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Error while getting user notification details: User notification not found"
-                    }
-                  }
-                },
-                "examples": {
-                  "404 Not Found - User notification not found": {
-                    "value": {
-                      "message": "Error while getting user notification details: User notification not found"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/user-notifications/48b416b9-ef78-433e-9f6e-74087b23b2a4": {
-      "delete": {
-        "tags": ["Notifications"],
-        "summary": "Delete user notification by ID",
-        "description": "Delete user notification by ID",
-        "operationId": "deleteUserNotificationById",
-        "responses": {
-          "200": {
-            "description": "200 OK  - Successful Response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "schema": {
-                  "type": "string",
-                  "example": "*"
-                }
-              },
-              "Connection": {
-                "schema": {
-                  "type": "string",
-                  "example": "keep-alive"
-                }
-              },
-              "Content-Length": {
-                "schema": {
-                  "type": "string",
-                  "example": "52"
-                }
-              },
-              "Date": {
-                "schema": {
-                  "type": "string",
-                  "example": "Wed, 20 Dec 2023 08:45:41 GMT"
-                }
-              },
-              "ETag": {
-                "schema": {
-                  "type": "string",
-                  "example": "W/\"34-PeYTFy0czYC253Q3/O30mxYHF/A\""
-                }
-              },
-              "Keep-Alive": {
-                "schema": {
-                  "type": "string",
-                  "example": "timeout=5"
-                }
-              },
-              "X-Powered-By": {
-                "schema": {
-                  "type": "string",
-                  "example": "Express"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "User notification deleted successfully"
-                    }
-                  }
-                },
-                "examples": {
-                  "200 OK  - Successful Response": {
-                    "value": {
-                      "message": "User notification deleted successfully"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 Bad Request - Missing authorization header",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "schema": {
-                  "type": "string",
-                  "example": "*"
-                }
-              },
-              "Connection": {
-                "schema": {
-                  "type": "string",
-                  "example": "keep-alive"
-                }
-              },
-              "Content-Length": {
-                "schema": {
-                  "type": "string",
-                  "example": "42"
-                }
-              },
-              "Date": {
-                "schema": {
-                  "type": "string",
-                  "example": "Wed, 20 Dec 2023 08:46:41 GMT"
-                }
-              },
-              "ETag": {
-                "schema": {
-                  "type": "string",
-                  "example": "W/\"2a-nREveVs82jaHpGue4xwCz2jgZpA\""
-                }
-              },
-              "Keep-Alive": {
-                "schema": {
-                  "type": "string",
-                  "example": "timeout=5"
-                }
-              },
-              "X-Powered-By": {
-                "schema": {
-                  "type": "string",
-                  "example": "Express"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Missing authorization header"
-                    }
-                  }
-                },
-                "examples": {
-                  "400 Bad Request - Missing authorization header": {
-                    "value": {
-                      "message": "Missing authorization header"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "404 Not Found - User notification not found",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "schema": {
-                  "type": "string",
-                  "example": "*"
-                }
-              },
-              "Connection": {
-                "schema": {
-                  "type": "string",
-                  "example": "keep-alive"
-                }
-              },
-              "Content-Length": {
-                "schema": {
-                  "type": "string",
-                  "example": "88"
-                }
-              },
-              "Date": {
-                "schema": {
-                  "type": "string",
-                  "example": "Wed, 20 Dec 2023 08:46:14 GMT"
-                }
-              },
-              "ETag": {
-                "schema": {
-                  "type": "string",
-                  "example": "W/\"58-+yTgBAthN6Y4skiy6071J2QXxSY\""
-                }
-              },
-              "Keep-Alive": {
-                "schema": {
-                  "type": "string",
-                  "example": "timeout=5"
-                }
-              },
-              "X-Powered-By": {
-                "schema": {
-                  "type": "string",
-                  "example": "Express"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Error while getting user notification details: User notification not found"
-                    }
-                  }
-                },
-                "examples": {
-                  "404 Not Found - User notification not found": {
-                    "value": {
-                      "message": "Error while getting user notification details: User notification not found"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
     "/upload/image": {
       "post": {
         "tags": ["Upload"],
@@ -9084,6 +8093,338 @@
       }
     },
     "/transactions": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get All Transactions",
+        "description": "Get All Transactions",
+        "operationId": "getAllTransactions",
+        "responses": {
+          "200": {
+            "description": "200 OK - Success",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "1096"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sun, 08 Dec 2024 10:39:50 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"448-SfRT/n953FAfcm7CNoJiv2hd2fg\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "Passenger": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "birthday": {
+                                  "type": "string",
+                                  "example": "1990-01-15T00:00:00.000Z"
+                                },
+                                "createdAt": {
+                                  "type": "string",
+                                  "example": "2024-12-08T09:55:55.188Z"
+                                },
+                                "departureSeatId": {
+                                  "type": "string",
+                                  "example": "0193a5b1-1218-7530-98c2-643a6e664ea2"
+                                },
+                                "expiredAt": {
+                                  "type": "string",
+                                  "example": "2030-01-15T00:00:00.000Z"
+                                },
+                                "familyName": {
+                                  "type": "string",
+                                  "example": "Doe"
+                                },
+                                "firstName": {
+                                  "type": "string",
+                                  "example": "John"
+                                },
+                                "id": {
+                                  "type": "string",
+                                  "example": "0193a5b2-70f1-7180-bda1-b415d0108ff8"
+                                },
+                                "nationality": {
+                                  "type": "string",
+                                  "example": "Indonesia"
+                                },
+                                "nikKtp": {
+                                  "type": "string",
+                                  "example": "3174012345678901"
+                                },
+                                "nikPaspor": {
+                                  "type": "string",
+                                  "example": "P12345672"
+                                },
+                                "returnSeatId": {
+                                  "nullable": true,
+                                  "example": null
+                                },
+                                "title": {
+                                  "type": "string",
+                                  "example": "Mr"
+                                },
+                                "transactionId": {
+                                  "type": "string",
+                                  "example": "0193a5b2-70f0-7bf2-9c75-667c21233964"
+                                },
+                                "type": {
+                                  "type": "string",
+                                  "example": "ADULT"
+                                },
+                                "updatedAt": {
+                                  "type": "string",
+                                  "example": "2024-12-08T09:55:55.188Z"
+                                }
+                              }
+                            },
+                            "example": [
+                              {
+                                "birthday": "1990-01-15T00:00:00.000Z",
+                                "createdAt": "2024-12-08T09:55:55.188Z",
+                                "departureSeatId": "0193a5b1-1218-7530-98c2-643a6e664ea2",
+                                "expiredAt": "2030-01-15T00:00:00.000Z",
+                                "familyName": "Doe",
+                                "firstName": "John",
+                                "id": "0193a5b2-70f1-7180-bda1-b415d0108ff8",
+                                "nationality": "Indonesia",
+                                "nikKtp": "3174012345678901",
+                                "nikPaspor": "P12345672",
+                                "returnSeatId": null,
+                                "title": "Mr",
+                                "transactionId": "0193a5b2-70f0-7bf2-9c75-667c21233964",
+                                "type": "ADULT",
+                                "updatedAt": "2024-12-08T09:55:55.188Z"
+                              }
+                            ]
+                          },
+                          "amount": {
+                            "type": "number",
+                            "example": 100
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "example": "2024-12-08T09:55:55.188Z"
+                          },
+                          "departureFlightId": {
+                            "type": "string",
+                            "example": "0193a5b1-1211-7241-a6da-4f8b3d952c21"
+                          },
+                          "id": {
+                            "type": "string",
+                            "example": "0193a5b2-70f0-7bf2-9c75-667c21233964"
+                          },
+                          "payment": {
+                            "type": "object",
+                            "properties": {
+                              "createdAt": {
+                                "type": "string",
+                                "example": "2024-12-08T09:55:55.188Z"
+                              },
+                              "id": {
+                                "type": "string",
+                                "example": "0193a5b2-70f1-7180-bda1-b42a478b00e0"
+                              },
+                              "method": {
+                                "nullable": true,
+                                "example": null
+                              },
+                              "paymentMethod": {
+                                "nullable": true,
+                                "example": null
+                              },
+                              "snapRedirectUrl": {
+                                "nullable": true,
+                                "example": null
+                              },
+                              "snapToken": {
+                                "nullable": true,
+                                "example": null
+                              },
+                              "status": {
+                                "type": "string",
+                                "example": "PENDING"
+                              },
+                              "transactionId": {
+                                "type": "string",
+                                "example": "0193a5b2-70f0-7bf2-9c75-667c21233964"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "example": "2024-12-08T09:55:55.188Z"
+                              }
+                            }
+                          },
+                          "returnFlightId": {
+                            "nullable": true,
+                            "example": null
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "example": "2024-12-08T09:55:55.188Z"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "example": "0193a5b1-11e7-7bc3-b0fa-0985386bae8c"
+                          }
+                        }
+                      },
+                      "example": [
+                        {
+                          "Passenger": [
+                            {
+                              "birthday": "1990-01-15T00:00:00.000Z",
+                              "createdAt": "2024-12-08T09:55:55.188Z",
+                              "departureSeatId": "0193a5b1-1218-7530-98c2-643a6e664ea2",
+                              "expiredAt": "2030-01-15T00:00:00.000Z",
+                              "familyName": "Doe",
+                              "firstName": "John",
+                              "id": "0193a5b2-70f1-7180-bda1-b415d0108ff8",
+                              "nationality": "Indonesia",
+                              "nikKtp": "3174012345678901",
+                              "nikPaspor": "P12345672",
+                              "returnSeatId": null,
+                              "title": "Mr",
+                              "transactionId": "0193a5b2-70f0-7bf2-9c75-667c21233964",
+                              "type": "ADULT",
+                              "updatedAt": "2024-12-08T09:55:55.188Z"
+                            }
+                          ],
+                          "amount": 100,
+                          "createdAt": "2024-12-08T09:55:55.188Z",
+                          "departureFlightId": "0193a5b1-1211-7241-a6da-4f8b3d952c21",
+                          "id": "0193a5b2-70f0-7bf2-9c75-667c21233964",
+                          "payment": {
+                            "createdAt": "2024-12-08T09:55:55.188Z",
+                            "id": "0193a5b2-70f1-7180-bda1-b42a478b00e0",
+                            "method": null,
+                            "paymentMethod": null,
+                            "snapRedirectUrl": null,
+                            "snapToken": null,
+                            "status": "PENDING",
+                            "transactionId": "0193a5b2-70f0-7bf2-9c75-667c21233964",
+                            "updatedAt": "2024-12-08T09:55:55.188Z"
+                          },
+                          "returnFlightId": null,
+                          "updatedAt": "2024-12-08T09:55:55.188Z",
+                          "userId": "0193a5b1-11e7-7bc3-b0fa-0985386bae8c"
+                        }
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully get all transactions"
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Success": {
+                    "value": {
+                      "data": [
+                        {
+                          "Passenger": [
+                            {
+                              "birthday": "1990-01-15T00:00:00.000Z",
+                              "createdAt": "2024-12-08T09:55:55.188Z",
+                              "departureSeatId": "0193a5b1-1218-7530-98c2-643a6e664ea2",
+                              "expiredAt": "2030-01-15T00:00:00.000Z",
+                              "familyName": "Doe",
+                              "firstName": "John",
+                              "id": "0193a5b2-70f1-7180-bda1-b415d0108ff8",
+                              "nationality": "Indonesia",
+                              "nikKtp": "3174012345678901",
+                              "nikPaspor": "P12345672",
+                              "returnSeatId": null,
+                              "title": "Mr",
+                              "transactionId": "0193a5b2-70f0-7bf2-9c75-667c21233964",
+                              "type": "ADULT",
+                              "updatedAt": "2024-12-08T09:55:55.188Z"
+                            }
+                          ],
+                          "amount": 100,
+                          "createdAt": "2024-12-08T09:55:55.188Z",
+                          "departureFlightId": "0193a5b1-1211-7241-a6da-4f8b3d952c21",
+                          "id": "0193a5b2-70f0-7bf2-9c75-667c21233964",
+                          "payment": {
+                            "createdAt": "2024-12-08T09:55:55.188Z",
+                            "id": "0193a5b2-70f1-7180-bda1-b42a478b00e0",
+                            "method": null,
+                            "paymentMethod": null,
+                            "snapRedirectUrl": null,
+                            "snapToken": null,
+                            "status": "PENDING",
+                            "transactionId": "0193a5b2-70f0-7bf2-9c75-667c21233964",
+                            "updatedAt": "2024-12-08T09:55:55.188Z"
+                          },
+                          "returnFlightId": null,
+                          "updatedAt": "2024-12-08T09:55:55.188Z",
+                          "userId": "0193a5b1-11e7-7bc3-b0fa-0985386bae8c"
+                        }
+                      ],
+                      "message": "Successfully get all transactions"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
       "post": {
         "tags": ["Transactions"],
         "summary": "Create Transaction",
@@ -9092,17 +8433,770 @@
         "requestBody": {
           "content": {
             "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "departureFlightId": {
+                    "type": "string",
+                    "example": "0193a5f2-1b37-7ab2-8afc-57a42ae7641c"
+                  },
+                  "passengers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "birthday": {
+                          "type": "string",
+                          "example": "1990-01-15T00:00:00.000Z"
+                        },
+                        "departureSeatId": {
+                          "type": "string",
+                          "example": "0193a5f2-1b41-7d83-94f8-c72eb672ad82"
+                        },
+                        "expiredAt": {
+                          "type": "string",
+                          "example": "2030-01-15T00:00:00Z"
+                        },
+                        "familyName": {
+                          "type": "string",
+                          "example": "Doe"
+                        },
+                        "firstName": {
+                          "type": "string",
+                          "example": "John"
+                        },
+                        "nationality": {
+                          "type": "string",
+                          "example": "Indonesia"
+                        },
+                        "nikKtp": {
+                          "type": "string",
+                          "example": "3174012345678901"
+                        },
+                        "nikPaspor": {
+                          "type": "string",
+                          "example": "P12345672"
+                        },
+                        "returnSeatId": {
+                          "type": "string",
+                          "example": "0193a5f2-1b94-77b1-87e5-8b614648d3b3"
+                        },
+                        "title": {
+                          "type": "string",
+                          "example": "Mr"
+                        },
+                        "type": {
+                          "type": "string",
+                          "example": "ADULT"
+                        }
+                      }
+                    },
+                    "example": [
+                      {
+                        "birthday": "1990-01-15T00:00:00.000Z",
+                        "departureSeatId": "0193a5f2-1b41-7d83-94f8-c72eb672ad82",
+                        "expiredAt": "2030-01-15T00:00:00Z",
+                        "familyName": "Doe",
+                        "firstName": "John",
+                        "nationality": "Indonesia",
+                        "nikKtp": "3174012345678901",
+                        "nikPaspor": "P12345672",
+                        "returnSeatId": "0193a5f2-1b94-77b1-87e5-8b614648d3b3",
+                        "title": "Mr",
+                        "type": "ADULT"
+                      },
+                      {
+                        "birthday": "1990-01-15T00:00:00.000Z",
+                        "departureSeatId": "0193a5f2-1b41-7d83-94f8-c73c6ad6ee44",
+                        "expiredAt": "2030-01-15T00:00:00Z",
+                        "familyName": "Doe",
+                        "firstName": "John",
+                        "nationality": "Indonesia",
+                        "nikKtp": "3174012345678901",
+                        "nikPaspor": "P12345672",
+                        "returnSeatId": "0193a5f2-1b94-77b1-87e5-8b70415b327a",
+                        "title": "Mr",
+                        "type": "ADULT"
+                      }
+                    ]
+                  },
+                  "returnFlightId": {
+                    "type": "string",
+                    "example": "0193a5f2-1b37-7ab2-8afc-57d700508d92"
+                  }
+                }
+              },
               "examples": {
                 "Create Transaction": {
-                  "value": "{\r\n  \"departureFlightId\": \"01939c4a-c417-75f3-9593-ea4f2fc46640\",  \r\n//   \"returnFlightId\": \"01939c23-1aa1-7bb0-8afa-3600e5634c1c\", \r\n  \"passengers\": [\r\n    {\r\n      \"title\": \"Mr\", \r\n      \"firstName\": \"John\",\r\n      \"familyName\": \"Doe\", \r\n      \"birthday\": \"1990-01-15\",  \r\n      \"nationality\": \"Indonesia\", \r\n      \"type\": \"ADULT\",\r\n      \"nikPaspor\": \"P123456789\",  \r\n      \"nikKtp\": \"3174012345678901\",  \r\n      \"expiredAt\": \"2030-01-15T00:00:00Z\",  \r\n      \"departureSeatId\": \"01939c23-1aa9-7b63-b2b5-2d5afeba351f\"\r\n    //   \"returnSeatId\": \"seat-uuid-4\"  \r\n    }\r\n  ]\r\n}\r\n"
+                  "value": {
+                    "departureFlightId": "0193a5f2-1b37-7ab2-8afc-57a42ae7641c",
+                    "passengers": [
+                      {
+                        "birthday": "1990-01-15T00:00:00.000Z",
+                        "departureSeatId": "0193a5f2-1b41-7d83-94f8-c72eb672ad82",
+                        "expiredAt": "2030-01-15T00:00:00Z",
+                        "familyName": "Doe",
+                        "firstName": "John",
+                        "nationality": "Indonesia",
+                        "nikKtp": "3174012345678901",
+                        "nikPaspor": "P12345672",
+                        "returnSeatId": "0193a5f2-1b94-77b1-87e5-8b614648d3b3",
+                        "title": "Mr",
+                        "type": "ADULT"
+                      },
+                      {
+                        "birthday": "1990-01-15T00:00:00.000Z",
+                        "departureSeatId": "0193a5f2-1b41-7d83-94f8-c73c6ad6ee44",
+                        "expiredAt": "2030-01-15T00:00:00Z",
+                        "familyName": "Doe",
+                        "firstName": "John",
+                        "nationality": "Indonesia",
+                        "nikKtp": "3174012345678901",
+                        "nikPaspor": "P12345672",
+                        "returnSeatId": "0193a5f2-1b94-77b1-87e5-8b70415b327a",
+                        "title": "Mr",
+                        "type": "ADULT"
+                      }
+                    ],
+                    "returnFlightId": "0193a5f2-1b37-7ab2-8afc-57d700508d92"
+                  }
                 }
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": ""
+          "201": {
+            "description": "201 Created - Success create transaction departure flight / 201 Created - Success create transaction departure and return flight, one passenger / 201 Created - Succes two passenger (INFANT) / 201 Created - Success two passengers",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "1049"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sun, 08 Dec 2024 09:45:59 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"419-XaNFDNhbLdZTVdwLP9C05dK/8gg\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "dataTransaction": {
+                          "type": "object",
+                          "properties": {
+                            "amount": {
+                              "type": "number",
+                              "example": 100
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "example": "2024-12-08T11:14:17.218Z"
+                            },
+                            "departureFlightId": {
+                              "type": "string",
+                              "example": "0193a5f9-22be-78c3-b39f-500b1f6d678b"
+                            },
+                            "id": {
+                              "type": "string",
+                              "example": "0193a5fa-3043-7e60-83f4-b3fcce712266"
+                            },
+                            "returnFlightId": {
+                              "type": "string",
+                              "nullable": true,
+                              "example": null
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "example": "2024-12-08T11:14:17.218Z"
+                            },
+                            "userId": {
+                              "type": "string",
+                              "example": "0193a5f9-2291-7c63-b870-4b852190aac1"
+                            }
+                          }
+                        },
+                        "passengers": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "birthday": {
+                                "type": "string",
+                                "example": "1990-01-15T00:00:00.000Z"
+                              },
+                              "departureSeatId": {
+                                "type": "string",
+                                "example": "0193a5f9-22c6-7023-b9d3-94f827018a0b"
+                              },
+                              "expiredAt": {
+                                "type": "string",
+                                "example": "2030-01-15T00:00:00Z"
+                              },
+                              "familyName": {
+                                "type": "string",
+                                "example": "Doe"
+                              },
+                              "firstName": {
+                                "type": "string",
+                                "example": "John"
+                              },
+                              "nationality": {
+                                "type": "string",
+                                "example": "Indonesia"
+                              },
+                              "nikKtp": {
+                                "type": "string",
+                                "example": "3174012345678901"
+                              },
+                              "nikPaspor": {
+                                "type": "string",
+                                "example": "P12345672"
+                              },
+                              "returnSeatId": {
+                                "nullable": true,
+                                "example": null
+                              },
+                              "title": {
+                                "type": "string",
+                                "example": "Mr"
+                              },
+                              "type": {
+                                "type": "string",
+                                "example": "ADULT"
+                              }
+                            }
+                          },
+                          "example": [
+                            {
+                              "birthday": "1990-01-15T00:00:00.000Z",
+                              "departureSeatId": "0193a5f9-22c6-7023-b9d3-94f827018a0b",
+                              "expiredAt": "2030-01-15T00:00:00Z",
+                              "familyName": "Doe",
+                              "firstName": "John",
+                              "nationality": "Indonesia",
+                              "nikKtp": "3174012345678901",
+                              "nikPaspor": "P12345672",
+                              "returnSeatId": null,
+                              "title": "Mr",
+                              "type": "ADULT"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction created successfully"
+                    }
+                  }
+                },
+                "examples": {
+                  "201 Created - Succes two passenger (INFANT)": {
+                    "value": {
+                      "data": {
+                        "dataTransaction": {
+                          "amount": 500,
+                          "createdAt": "2024-12-08T06:40:33.003Z",
+                          "departureFlightId": "0193a4cc-1c41-7a71-8146-f09e7bae3960",
+                          "id": "0193a4ff-9325-7cf0-b00f-b73ad383898a",
+                          "returnFlightId": "0193a4cc-1c41-7a71-8146-f0c2fe104b50",
+                          "updatedAt": "2024-12-08T06:40:33.003Z",
+                          "userId": "0193a4cc-1c1f-7eb3-a706-cb6512a6d5c9"
+                        },
+                        "passengers": [
+                          {
+                            "birthday": "1990-01-15T00:00:00.000Z",
+                            "departureSeatId": "0193a4cc-1c4b-7300-bd79-ea3745c832f6",
+                            "expiredAt": "2030-01-15T00:00:00Z",
+                            "familyName": "Doe",
+                            "firstName": "John",
+                            "nationality": "Indonesia",
+                            "nikKtp": "3174012345678901",
+                            "nikPaspor": "P12345672",
+                            "returnSeatId": "0193a4cc-1c8f-7ee2-a66b-52180aa936ad",
+                            "title": "Mr",
+                            "type": "ADULT"
+                          },
+                          {
+                            "birthday": "1990-01-15T00:00:00.000Z",
+                            "expiredAt": "2030-01-15T00:00:00Z",
+                            "familyName": "Doe",
+                            "firstName": "John",
+                            "nationality": "Indonesia",
+                            "nikKtp": "3174012345678902",
+                            "nikPaspor": "P12345673",
+                            "title": "Mr",
+                            "type": "INFANT"
+                          }
+                        ]
+                      },
+                      "message": "Transaction created successfully"
+                    }
+                  },
+                  "201 Created - Success create transaction departure and return flight, one passenger": {
+                    "value": {
+                      "data": {
+                        "dataTransaction": {
+                          "amount": 500,
+                          "createdAt": "2024-12-08T11:03:36.892Z",
+                          "departureFlightId": "0193a5ec-7b31-7813-8d58-75f8b6e7ac00",
+                          "id": "0193a5f0-6af4-7e03-8a4f-535d589cf010",
+                          "returnFlightId": "0193a5ec-7b31-7813-8d58-7621567abb50",
+                          "updatedAt": "2024-12-08T11:03:36.892Z",
+                          "userId": "0193a5ec-7afa-7ad1-82eb-603611600b8f"
+                        },
+                        "passengers": [
+                          {
+                            "birthday": "1990-01-15T00:00:00.000Z",
+                            "departureSeatId": "0193a5ec-7b3b-7392-83c1-06b95e6a8c6b",
+                            "expiredAt": "2030-01-15T00:00:00Z",
+                            "familyName": "Doe",
+                            "firstName": "John",
+                            "nationality": "Indonesia",
+                            "nikKtp": "3174012345678901",
+                            "nikPaspor": "P12345672",
+                            "returnSeatId": "0193a5ec-7b93-78b1-afff-8fcaf3030e8d",
+                            "title": "Mr",
+                            "type": "ADULT"
+                          }
+                        ]
+                      },
+                      "message": "Transaction created successfully"
+                    }
+                  },
+                  "201 Created - Success create transaction departure flight": {
+                    "value": {
+                      "data": {
+                        "dataTransaction": {
+                          "amount": 100,
+                          "createdAt": "2024-12-08T11:14:17.218Z",
+                          "departureFlightId": "0193a5f9-22be-78c3-b39f-500b1f6d678b",
+                          "id": "0193a5fa-3043-7e60-83f4-b3fcce712266",
+                          "returnFlightId": null,
+                          "updatedAt": "2024-12-08T11:14:17.218Z",
+                          "userId": "0193a5f9-2291-7c63-b870-4b852190aac1"
+                        },
+                        "passengers": [
+                          {
+                            "birthday": "1990-01-15T00:00:00.000Z",
+                            "departureSeatId": "0193a5f9-22c6-7023-b9d3-94f827018a0b",
+                            "expiredAt": "2030-01-15T00:00:00Z",
+                            "familyName": "Doe",
+                            "firstName": "John",
+                            "nationality": "Indonesia",
+                            "nikKtp": "3174012345678901",
+                            "nikPaspor": "P12345672",
+                            "returnSeatId": null,
+                            "title": "Mr",
+                            "type": "ADULT"
+                          }
+                        ]
+                      },
+                      "message": "Transaction created successfully"
+                    }
+                  },
+                  "201 Created - Success two passengers": {
+                    "value": {
+                      "data": {
+                        "dataTransaction": {
+                          "amount": 1000,
+                          "createdAt": "2024-12-08T09:45:58.979Z",
+                          "departureFlightId": "0193a5a6-a49a-7a71-a1ef-cb6fd5d492ac",
+                          "id": "0193a5a9-57fe-7f42-8161-c250d8604aec",
+                          "returnFlightId": "0193a5a6-a49b-7d90-9d3e-04684005e2ea",
+                          "updatedAt": "2024-12-08T09:45:58.979Z",
+                          "userId": "0193a5a6-a46b-7720-b785-7119bb944a82"
+                        },
+                        "passengers": [
+                          {
+                            "birthday": "1990-01-15T00:00:00.000Z",
+                            "departureSeatId": "0193a5a6-a4a4-7241-b740-7f59849fed60",
+                            "expiredAt": "2030-01-15T00:00:00Z",
+                            "familyName": "Doe",
+                            "firstName": "John",
+                            "nationality": "Indonesia",
+                            "nikKtp": "3174012345678901",
+                            "nikPaspor": "P12345672",
+                            "returnSeatId": "0193a5a6-a4e7-7581-b2ea-a26c5f23b398",
+                            "title": "Mr",
+                            "type": "ADULT"
+                          },
+                          {
+                            "birthday": "1990-01-15T00:00:00.000Z",
+                            "departureSeatId": "0193a5a6-a4a4-7241-b740-7f65d10fda0d",
+                            "expiredAt": "2030-01-15T00:00:00Z",
+                            "familyName": "Doe",
+                            "firstName": "John",
+                            "nationality": "Indonesia",
+                            "nikKtp": "3174012345678920",
+                            "nikPaspor": "P12345692",
+                            "returnSeatId": "0193a5a6-a4e7-7581-b2ea-a2ad546440c3",
+                            "title": "Mr",
+                            "type": "ADULT"
+                          }
+                        ]
+                      },
+                      "message": "Transaction created successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400 Bad Request - contains an invalid value / 400 Bad Request - Return flight date cannot be earlier than departure flight date / 400 Bad Request - Departure and Return Seat not found / 400 Bad Request - Return flight must be provided / 400 Bad Request - Return seat must be provided for return flight / 400 Bad Request - Departure and Return seat is already booked / 400 Bad Request - Departure seat and Return seat ID must be unique for all passengers / 400 Bad Request - Each passenger must have a unique NIK Paspor and NIK KTP.",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "73"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sun, 08 Dec 2024 11:10:52 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"49-zk3vdNyepjQwK1a8b1ulzCcr4NI\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "example": [
+                        "\"returnFlightId\" contains an invalid value"
+                      ],
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "example": "\"returnFlightId\" contains an invalid value"
+                          },
+                          "example": [
+                            "\"returnFlightId\" contains an invalid value"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "example": "Return flight date cannot be earlier than departure flight date"
+                        },
+                        {
+                          "type": "string",
+                          "example": "Departure seat not found"
+                        },
+                        {
+                          "type": "string",
+                          "example": "Return flight must be provided"
+                        },
+                        {
+                          "type": "string",
+                          "example": "Return seat must be provided for return flight"
+                        },
+                        {
+                          "type": "string",
+                          "example": "Return seat is already booked"
+                        },
+                        {
+                          "type": "string",
+                          "example": "Departure seat ID must be unique for all passengers"
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "example": "Each passenger must have a unique NIK Paspor and NIK KTP."
+                          },
+                          "example": [
+                            "Each passenger must have a unique NIK Paspor and NIK KTP."
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                },
+                "examples": {
+                  "400 Bad Request - Departure and Return Seat not found": {
+                    "value": {
+                      "message": "Departure seat not found"
+                    }
+                  },
+                  "400 Bad Request - Departure and Return seat is already booked": {
+                    "value": {
+                      "message": "Return seat is already booked"
+                    }
+                  },
+                  "400 Bad Request - Departure seat and Return seat ID must be unique for all passengers": {
+                    "value": {
+                      "message": "Departure seat ID must be unique for all passengers"
+                    }
+                  },
+                  "400 Bad Request - Each passenger must have a unique NIK Paspor and NIK KTP.": {
+                    "value": {
+                      "message": [
+                        "Each passenger must have a unique NIK Paspor and NIK KTP."
+                      ]
+                    }
+                  },
+                  "400 Bad Request - Return flight date cannot be earlier than departure flight date": {
+                    "value": {
+                      "message": "Return flight date cannot be earlier than departure flight date"
+                    }
+                  },
+                  "400 Bad Request - Return flight must be provided": {
+                    "value": {
+                      "message": "Return flight must be provided"
+                    }
+                  },
+                  "400 Bad Request - Return seat must be provided for return flight": {
+                    "value": {
+                      "message": "Return seat must be provided for return flight"
+                    }
+                  },
+                  "400 Bad Request - contains an invalid value": {
+                    "value": {
+                      "message": [
+                        "\"returnFlightId\" contains an invalid value"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - User Not Found",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "28"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sun, 08 Dec 2024 05:45:44 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"1c-ZEVVcvtFhxKX/QUvVKqKxwGbbNA\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - User Not Found": {
+                    "value": {
+                      "message": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 Not Found - Departure Flight Not Found / 404 Not Found - Return Flight Not Found",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "37"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sun, 08 Dec 2024 05:49:04 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"25-ZSYXpDgqaNijOQvwlZptva8nZD4\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Departure Flight not found"
+                    }
+                  }
+                },
+                "examples": {
+                  "404 Not Found - Departure Flight Not Found": {
+                    "value": {
+                      "message": "Departure Flight not found"
+                    }
+                  },
+                  "404 Not Found - Return Flight Not Found": {
+                    "value": {
+                      "message": "Return Flight not found"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -9111,6 +9205,388 @@
           }
         ]
       }
+    },
+    "/transactions/{id}": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get Detail Transaction By Id",
+        "description": "Get Detail Transaction By Id",
+        "operationId": "getDetailTransactionById",
+        "parameters": [
+          {
+            "name": "",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 OK - Success",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "1096"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sun, 08 Dec 2024 10:39:29 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"448-F3iOayiJ9yGJRAhan/fd4WAU6jc\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "Passenger": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "birthday": {
+                                "type": "string",
+                                "example": "1990-01-15T00:00:00.000Z"
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "example": "2024-12-08T09:55:55.188Z"
+                              },
+                              "departureSeatId": {
+                                "type": "string",
+                                "example": "0193a5b1-1218-7530-98c2-643a6e664ea2"
+                              },
+                              "expiredAt": {
+                                "type": "string",
+                                "example": "2030-01-15T00:00:00.000Z"
+                              },
+                              "familyName": {
+                                "type": "string",
+                                "example": "Doe"
+                              },
+                              "firstName": {
+                                "type": "string",
+                                "example": "John"
+                              },
+                              "id": {
+                                "type": "string",
+                                "example": "0193a5b2-70f1-7180-bda1-b415d0108ff8"
+                              },
+                              "nationality": {
+                                "type": "string",
+                                "example": "Indonesia"
+                              },
+                              "nikKtp": {
+                                "type": "string",
+                                "example": "3174012345678901"
+                              },
+                              "nikPaspor": {
+                                "type": "string",
+                                "example": "P12345672"
+                              },
+                              "returnSeatId": {
+                                "nullable": true,
+                                "example": null
+                              },
+                              "title": {
+                                "type": "string",
+                                "example": "Mr"
+                              },
+                              "transactionId": {
+                                "type": "string",
+                                "example": "0193a5b2-70f0-7bf2-9c75-667c21233964"
+                              },
+                              "type": {
+                                "type": "string",
+                                "example": "ADULT"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "example": "2024-12-08T09:55:55.188Z"
+                              }
+                            }
+                          },
+                          "example": [
+                            {
+                              "birthday": "1990-01-15T00:00:00.000Z",
+                              "createdAt": "2024-12-08T09:55:55.188Z",
+                              "departureSeatId": "0193a5b1-1218-7530-98c2-643a6e664ea2",
+                              "expiredAt": "2030-01-15T00:00:00.000Z",
+                              "familyName": "Doe",
+                              "firstName": "John",
+                              "id": "0193a5b2-70f1-7180-bda1-b415d0108ff8",
+                              "nationality": "Indonesia",
+                              "nikKtp": "3174012345678901",
+                              "nikPaspor": "P12345672",
+                              "returnSeatId": null,
+                              "title": "Mr",
+                              "transactionId": "0193a5b2-70f0-7bf2-9c75-667c21233964",
+                              "type": "ADULT",
+                              "updatedAt": "2024-12-08T09:55:55.188Z"
+                            }
+                          ]
+                        },
+                        "amount": {
+                          "type": "number",
+                          "example": 100
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "example": "2024-12-08T09:55:55.188Z"
+                        },
+                        "departureFlightId": {
+                          "type": "string",
+                          "example": "0193a5b1-1211-7241-a6da-4f8b3d952c21"
+                        },
+                        "id": {
+                          "type": "string",
+                          "example": "0193a5b2-70f0-7bf2-9c75-667c21233964"
+                        },
+                        "payment": {
+                          "type": "object",
+                          "properties": {
+                            "createdAt": {
+                              "type": "string",
+                              "example": "2024-12-08T09:55:55.188Z"
+                            },
+                            "id": {
+                              "type": "string",
+                              "example": "0193a5b2-70f1-7180-bda1-b42a478b00e0"
+                            },
+                            "method": {
+                              "nullable": true,
+                              "example": null
+                            },
+                            "paymentMethod": {
+                              "nullable": true,
+                              "example": null
+                            },
+                            "snapRedirectUrl": {
+                              "nullable": true,
+                              "example": null
+                            },
+                            "snapToken": {
+                              "nullable": true,
+                              "example": null
+                            },
+                            "status": {
+                              "type": "string",
+                              "example": "PENDING"
+                            },
+                            "transactionId": {
+                              "type": "string",
+                              "example": "0193a5b2-70f0-7bf2-9c75-667c21233964"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "example": "2024-12-08T09:55:55.188Z"
+                            }
+                          }
+                        },
+                        "returnFlightId": {
+                          "nullable": true,
+                          "example": null
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "example": "2024-12-08T09:55:55.188Z"
+                        },
+                        "userId": {
+                          "type": "string",
+                          "example": "0193a5b1-11e7-7bc3-b0fa-0985386bae8c"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully get detail transaction"
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Success": {
+                    "value": {
+                      "data": {
+                        "Passenger": [
+                          {
+                            "birthday": "1990-01-15T00:00:00.000Z",
+                            "createdAt": "2024-12-08T09:55:55.188Z",
+                            "departureSeatId": "0193a5b1-1218-7530-98c2-643a6e664ea2",
+                            "expiredAt": "2030-01-15T00:00:00.000Z",
+                            "familyName": "Doe",
+                            "firstName": "John",
+                            "id": "0193a5b2-70f1-7180-bda1-b415d0108ff8",
+                            "nationality": "Indonesia",
+                            "nikKtp": "3174012345678901",
+                            "nikPaspor": "P12345672",
+                            "returnSeatId": null,
+                            "title": "Mr",
+                            "transactionId": "0193a5b2-70f0-7bf2-9c75-667c21233964",
+                            "type": "ADULT",
+                            "updatedAt": "2024-12-08T09:55:55.188Z"
+                          }
+                        ],
+                        "amount": 100,
+                        "createdAt": "2024-12-08T09:55:55.188Z",
+                        "departureFlightId": "0193a5b1-1211-7241-a6da-4f8b3d952c21",
+                        "id": "0193a5b2-70f0-7bf2-9c75-667c21233964",
+                        "payment": {
+                          "createdAt": "2024-12-08T09:55:55.188Z",
+                          "id": "0193a5b2-70f1-7180-bda1-b42a478b00e0",
+                          "method": null,
+                          "paymentMethod": null,
+                          "snapRedirectUrl": null,
+                          "snapToken": null,
+                          "status": "PENDING",
+                          "transactionId": "0193a5b2-70f0-7bf2-9c75-667c21233964",
+                          "updatedAt": "2024-12-08T09:55:55.188Z"
+                        },
+                        "returnFlightId": null,
+                        "updatedAt": "2024-12-08T09:55:55.188Z",
+                        "userId": "0193a5b1-11e7-7bc3-b0fa-0985386bae8c"
+                      },
+                      "message": "Successfully get detail transaction"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 Not Found - Transaction not found",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "35"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sun, 08 Dec 2024 10:40:16 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"23-l9tJ1eYfMXboaoT68Eh78gFH/2Y\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction not found"
+                    }
+                  }
+                },
+                "examples": {
+                  "404 Not Found - Transaction not found": {
+                    "value": {
+                      "message": "Transaction not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "0193a6c2-ebf8-78a1-8225-e2261075f7a9"
+          }
+        }
+      ]
     },
     "/flights": {
       "get": {
@@ -19616,17 +20092,489 @@
           "required": true,
           "schema": {
             "type": "string",
-            "example": "01938cfc-cb82-7291-b66a-acbba1d3a6fc"
+            "example": "0193a6a3-c8de-7682-b43d-8a7bc2cc594e"
           }
         }
       ]
     },
     "/notifications": {
+      "get": {
+        "tags": ["Notifications"],
+        "summary": "Get All Notification",
+        "description": "Get All Notification",
+        "operationId": "getAllNotification",
+        "responses": {
+          "200": {
+            "description": "200 OK -  Get all notification succesfully / 200 OK - No notification found",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "11"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sun, 08 Dec 2024 05:56:51 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"b-EFAlOux7Kcr/ZEgGkn2r+oFAbu4\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "createdAt": {
+                            "type": "string",
+                            "example": "2024-12-07T16:15:19.523Z"
+                          },
+                          "id": {
+                            "type": "string",
+                            "example": "0193a1e7-6fe8-7e92-be9e-f798fa587d2e"
+                          },
+                          "isRead": {
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "your payment is pending"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "PENDING"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "example": "2024-12-07T16:15:19.523Z"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "example": "019387c6-8dc3-7cd3-ac76-94a02ad579da"
+                          }
+                        }
+                      },
+                      "example": [
+                        {
+                          "createdAt": "2024-12-07T16:15:19.523Z",
+                          "id": "0193a1e7-6fe8-7e92-be9e-f798fa587d2e",
+                          "isRead": false,
+                          "message": "your payment is pending",
+                          "title": "PENDING",
+                          "updatedAt": "2024-12-07T16:15:19.523Z",
+                          "userId": "019387c6-8dc3-7cd3-ac76-94a02ad579da"
+                        },
+                        {
+                          "createdAt": "2024-12-07T16:15:35.913Z",
+                          "id": "0193a1e7-afe9-7641-a229-2bcd002e3a9a",
+                          "isRead": false,
+                          "message": "your payment is succes",
+                          "title": "SUCCES",
+                          "updatedAt": "2024-12-07T16:15:35.913Z",
+                          "userId": "019387c6-8dc3-7cd3-ac76-94a02ad579da"
+                        }
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Get all notification succesfully"
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK -  Get all notification succesfully": {
+                    "value": {
+                      "data": [
+                        {
+                          "createdAt": "2024-12-07T16:15:19.523Z",
+                          "id": "0193a1e7-6fe8-7e92-be9e-f798fa587d2e",
+                          "isRead": false,
+                          "message": "your payment is pending",
+                          "title": "PENDING",
+                          "updatedAt": "2024-12-07T16:15:19.523Z",
+                          "userId": "019387c6-8dc3-7cd3-ac76-94a02ad579da"
+                        },
+                        {
+                          "createdAt": "2024-12-07T16:15:35.913Z",
+                          "id": "0193a1e7-afe9-7641-a229-2bcd002e3a9a",
+                          "isRead": false,
+                          "message": "your payment is succes",
+                          "title": "SUCCES",
+                          "updatedAt": "2024-12-07T16:15:35.913Z",
+                          "userId": "019387c6-8dc3-7cd3-ac76-94a02ad579da"
+                        }
+                      ],
+                      "message": "Get all notification succesfully"
+                    }
+                  },
+                  "200 OK - No notification found": {
+                    "value": {
+                      "data": []
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "403 Forbidden - Unauthorized access to these notifications",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "56"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sun, 08 Dec 2024 02:49:01 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"38-bS3H1YN9Ufqmf/1XmeIJSAQYGcA\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized access to these notifications"
+                    }
+                  }
+                },
+                "examples": {
+                  "403 Forbidden - Unauthorized access to these notifications": {
+                    "value": {
+                      "message": "Unauthorized access to these notifications"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["Notifications"],
+        "summary": "Update all notification",
+        "description": "Update all notification",
+        "operationId": "updateAllNotification",
+        "responses": {
+          "200": {
+            "description": "200 OK - All notivication have been read",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "47"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 07 Dec 2024 05:53:56 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"2f-6Xl5NhpcD9C1I6PBq8WrDjisaVo\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "All notifications have been read!"
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - All notivication have been read": {
+                    "value": {
+                      "message": "All notifications have been read!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "403 Forbidden - Unauthorized access to notifications",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "56"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 07 Dec 2024 03:40:30 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"38-bS3H1YN9Ufqmf/1XmeIJSAQYGcA\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized access to these notifications"
+                    }
+                  }
+                },
+                "examples": {
+                  "403 Forbidden - Unauthorized access to notifications": {
+                    "value": {
+                      "message": "Unauthorized access to these notifications"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 Not Found - No unread notification found!",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "43"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 07 Dec 2024 17:09:42 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"2b-mtLNf/xtI5Pr62KvMne7A2vNR0Y\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "No unread notification found!"
+                    }
+                  }
+                },
+                "examples": {
+                  "404 Not Found - No unread notification found!": {
+                    "value": {
+                      "message": "No unread notification found!"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
       "post": {
-        "tags": ["Notifications1"],
-        "summary": "New Request",
-        "description": "New Request",
-        "operationId": "newRequest",
+        "tags": ["Notifications"],
+        "summary": "Create Notification",
+        "description": "Create Notification",
+        "operationId": "createNotification",
         "requestBody": {
           "content": {
             "application/json": {
@@ -19635,24 +20583,24 @@
                 "properties": {
                   "message": {
                     "type": "string",
-                    "example": "Your payment is pending, please complete the payment!"
+                    "example": "your payment is Pending!"
                   },
                   "title": {
                     "type": "string",
-                    "example": "PENDING"
+                    "example": "Pending"
                   },
                   "userId": {
                     "type": "string",
-                    "example": "019387c6-8dc3-7cd3-ac76-94a02ad579da"
+                    "example": "01939757-54fe-7bd3-83ec-6e7438970db5"
                   }
                 }
               },
               "examples": {
-                "New Request": {
+                "Create Notification": {
                   "value": {
-                    "message": "Your payment is pending, please complete the payment!",
-                    "title": "PENDING",
-                    "userId": "019387c6-8dc3-7cd3-ac76-94a02ad579da"
+                    "message": "your payment is Pending!",
+                    "title": "Pending",
+                    "userId": "01939757-54fe-7bd3-83ec-6e7438970db5"
                   }
                 }
               }
@@ -19774,6 +20722,237 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "400 Bad Request -Invalid req body",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "88"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 07 Dec 2024 03:02:09 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"58-zhfQqPU2fbAw8lyy0nVQ5tJn5Rs\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "\"title\" is required"
+                      },
+                      "example": [
+                        "\"title\" is required",
+                        "\"message\" is required",
+                        "\"userId\" is required"
+                      ]
+                    }
+                  }
+                },
+                "examples": {
+                  "400 Bad Request -Invalid req body": {
+                    "value": {
+                      "message": [
+                        "\"title\" is required",
+                        "\"message\" is required",
+                        "\"userId\" is required"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "403 Forbidden - Unauthirized",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "26"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sun, 08 Dec 2024 12:10:59 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"1a-pljHtlo127JYJR4E/RYOPb6ucbw\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                },
+                "examples": {
+                  "403 Forbidden - Unauthirized": {
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 Not Found - User not found",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "29"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 07 Dec 2024 18:04:16 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"1d-QBO3n2KR+AbWHh2cmvMh+7ruNHY\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found!"
+                    }
+                  }
+                },
+                "examples": {
+                  "404 Not Found - User not found": {
+                    "value": {
+                      "message": "User not found!"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -19783,15 +20962,617 @@
         ]
       }
     },
-    "/notifications/{id}/{userId}": {
+    "/notifications/{id}": {
       "put": {
-        "tags": ["Notifications1"],
-        "summary": "New Request",
-        "description": "New Request",
-        "operationId": "newRequest1",
+        "tags": ["Notifications"],
+        "summary": "Update notification by id",
+        "description": "Update notification by id",
+        "operationId": "updateNotificationById",
         "responses": {
           "200": {
-            "description": ""
+            "description": "200 OK - Notification has been read",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "41"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 07 Dec 2024 05:59:43 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"29-7sJLtpQP44s1PaM0bw2adZWNYAk\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Notification has been read!"
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Notification has been read": {
+                    "value": {
+                      "message": "Notification has been read!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400 Bad Request - Invalid req body",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "43"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 07 Dec 2024 05:57:30 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"2b-X/vV3wGJv0BT3YDJ6Ru/VdFaUO0\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "\"id\" must be a valid GUID"
+                      },
+                      "example": ["\"id\" must be a valid GUID"]
+                    }
+                  }
+                },
+                "examples": {
+                  "400 Bad Request - Invalid req body": {
+                    "value": {
+                      "message": ["\"id\" must be a valid GUID"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "403 Forbidden - Unauthorized access to notifications",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "56"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 07 Dec 2024 05:59:07 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"38-bS3H1YN9Ufqmf/1XmeIJSAQYGcA\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized access to these notifications"
+                    }
+                  }
+                },
+                "examples": {
+                  "403 Forbidden - Unauthorized access to notifications": {
+                    "value": {
+                      "message": "Unauthorized access to these notifications"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 Not Found - Id not found",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "27"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sun, 08 Dec 2024 12:17:16 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"1b-87z+TOPWcQbRFWnkjKj5hTbE/V8\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Id not found!"
+                    }
+                  }
+                },
+                "examples": {
+                  "404 Not Found - Id not found": {
+                    "value": {
+                      "message": "Id not found!"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Notifications"],
+        "summary": "Delete notification",
+        "description": "Delete notification",
+        "operationId": "deleteNotification",
+        "responses": {
+          "200": {
+            "description": "200 OK - Notivication deleted succesffully",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "47"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 07 Dec 2024 06:01:25 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"2f-mbJR0KRNvTRblQBaV4NfYyXDlD8\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Notification deleted succesfully!"
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Notivication deleted succesffully": {
+                    "value": {
+                      "message": "Notification deleted succesfully!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400 Bad Request - invalid req body",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "43"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 07 Dec 2024 06:04:31 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"2b-X/vV3wGJv0BT3YDJ6Ru/VdFaUO0\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "\"id\" must be a valid GUID"
+                      },
+                      "example": ["\"id\" must be a valid GUID"]
+                    }
+                  }
+                },
+                "examples": {
+                  "400 Bad Request - invalid req body": {
+                    "value": {
+                      "message": ["\"id\" must be a valid GUID"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "403 Forbidden - Unauthorized access to notifications",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "56"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 07 Dec 2024 06:03:47 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"38-bS3H1YN9Ufqmf/1XmeIJSAQYGcA\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized access to these notifications"
+                    }
+                  }
+                },
+                "examples": {
+                  "403 Forbidden - Unauthorized access to notifications": {
+                    "value": {
+                      "message": "Unauthorized access to these notifications"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 Not Found - Id not found",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "27"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sun, 08 Dec 2024 12:18:34 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"1b-87z+TOPWcQbRFWnkjKj5hTbE/V8\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Id not found!"
+                    }
+                  }
+                },
+                "examples": {
+                  "404 Not Found - Id not found": {
+                    "value": {
+                      "message": "Id not found!"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -19803,15 +21584,6 @@
       "parameters": [
         {
           "name": "id",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "example": ""
-          }
-        },
-        {
-          "name": "userId",
           "in": "path",
           "required": true,
           "schema": {
@@ -19868,9 +21640,6 @@
       "name": "Payments"
     },
     {
-      "name": "Notifications"
-    },
-    {
       "name": "Upload"
     },
     {
@@ -19889,7 +21658,7 @@
       "name": "Flights"
     },
     {
-      "name": "Notifications1"
+      "name": "Notifications"
     }
   ]
 }
