@@ -27,7 +27,7 @@ export function getActiveTransaction(id) {
       userId: id,
       payment: {
         status: {
-          notIn: ['UNPAID', 'SUCCESS']
+          notIn: ['PENDING', 'SUCCESS']
         }
       }
     }

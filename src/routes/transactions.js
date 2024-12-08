@@ -12,7 +12,6 @@ export default (app) => {
     '/',
     authMiddleware.isAuthorized,
     transactionValidationMiddleware.createTransactionValidation,
-    // transactionValidationMiddleware.createPassengerValidation,
     transactionController.createTransaction
   );
 };

@@ -10,7 +10,7 @@ export async function validatePassengersSeats(
 
   for (const passengerItem of passengers) {
     if (passengerItem.type !== 'INFANT') {
-      const departureSeatId = passengerItem.seatId;
+      const departureSeatId = passengerItem.departureSeatId;
 
       const departureSeat = departureSeats.find(
         (seat) => seat.id === departureSeatId
@@ -24,7 +24,18 @@ export async function validatePassengersSeats(
         throw new HttpError('Departure seat is already booked', 400);
       }
 
-      seatIds.push(passengerItem.seatId);
+      if (seatIds.includes(departureSeatId)) {
+        throw new HttpError(
+          'Departure seat ID must be unique for all passengers',
+          400
+        );
+      }
+
+      if (!returnFlight && passengerItem.returnSeatId) {
+        throw new HttpError('Return flight must be provided', 400);
+      }
+
+      seatIds.push(passengerItem.departureSeatId);
     }
   }
 
@@ -48,6 +59,13 @@ export async function validatePassengersSeats(
 
         if (returnSeat.status !== 'AVAILABLE') {
           throw new HttpError('Return seat is already booked', 400);
+        }
+
+        if (seatIds.includes(returnSeatId)) {
+          throw new HttpError(
+            'Return seat ID must be unique for all passengers',
+            400
+          );
         }
 
         seatIds.push(passengerItem.returnSeatId);
