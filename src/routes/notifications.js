@@ -21,15 +21,13 @@ export default (app) => {
   router.get(
     '/',
     authMiddleware.isAuthorized,
-    notificationMiddleware.checkNotificationIdExist,
-    notificationMiddleware.checkUserAccesToNotification,
     notificationController.getAllNotification
   );
 
   router.put(
     '/',
     authMiddleware.isAuthorized,
-    notificationMiddleware.checkUserAccesToNotification,
+    notificationMiddleware.checkUserHasAtLeastOneNotification,
     notificationController.updateAllNotification
   );
 
@@ -37,7 +35,7 @@ export default (app) => {
     '/:id',
     authMiddleware.isAuthorized,
     commonValidationMiddleware.validateIdParams,
-    notificationMiddleware.checkNotificationIdExist,
+    notificationMiddleware.checkNotificationExistById,
     notificationMiddleware.checkUserAccesToNotification,
     notificationController.updateNotification
   );
@@ -46,7 +44,7 @@ export default (app) => {
     '/:id',
     authMiddleware.isAuthorized,
     commonValidationMiddleware.validateIdParams,
-    notificationMiddleware.checkNotificationIdExist,
+    notificationMiddleware.checkNotificationExistById,
     notificationMiddleware.checkUserAccesToNotification,
     notificationController.deleteNotification
   );
