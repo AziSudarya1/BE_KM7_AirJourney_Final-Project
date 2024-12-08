@@ -8,7 +8,9 @@ export async function validatePassengersSeats(
 ) {
   const seatIds = [];
 
-  for (const passengerItem of passengers) {
+  const proccessedPassengers = passengers.map((passengerItem, index) => {
+    const passengerNumber = index + 1;
+
     if (passengerItem.type !== 'INFANT') {
       const departureSeatId = passengerItem.departureSeatId;
 
@@ -17,11 +19,17 @@ export async function validatePassengersSeats(
       );
 
       if (!departureSeat) {
-        throw new HttpError('Departure seat not found', 400);
+        throw new HttpError(
+          `Departure seat for passenger number ${passengerNumber} not found`,
+          400
+        );
       }
 
       if (departureSeat.status !== 'AVAILABLE') {
-        throw new HttpError('Departure seat is already booked', 400);
+        throw new HttpError(
+          `Departure seat for passenger number ${passengerNumber} is already booked`,
+          400
+        );
       }
 
       if (seatIds.includes(departureSeatId)) {
@@ -32,33 +40,43 @@ export async function validatePassengersSeats(
       }
 
       if (!returnFlight && passengerItem.returnSeatId) {
-        throw new HttpError('Return flight must be provided', 400);
+        throw new HttpError(
+          `Return flight seat for passenger number ${passengerNumber} forbidden`,
+          400
+        );
       }
 
-      seatIds.push(passengerItem.departureSeatId);
+      seatIds.push(departureSeatId);
     }
-  }
+
+    return {
+      ...passengerItem,
+      birthday: new Date(passengerItem.birthday),
+      expiredAt: new Date(passengerItem.expiredAt)
+    };
+  });
 
   if (returnFlight) {
-    for (const passengerItem of passengers) {
+    passengers.map((passengerItem, index) => {
+      const passengerNumber = index + 1;
+
       if (passengerItem.type !== 'INFANT') {
         const returnSeatId = passengerItem.returnSeatId;
-
-        if (!returnSeatId) {
-          throw new HttpError(
-            'Return seat must be provided for return flight',
-            400
-          );
-        }
 
         const returnSeat = returnSeats.find((seat) => seat.id === returnSeatId);
 
         if (!returnSeat) {
-          throw new HttpError('Return seat not found', 400);
+          throw new HttpError(
+            `Return seat for passenger number ${passengerNumber} not found`,
+            400
+          );
         }
 
         if (returnSeat.status !== 'AVAILABLE') {
-          throw new HttpError('Return seat is already booked', 400);
+          throw new HttpError(
+            `Return seat for passenger number ${passengerNumber} is already booked`,
+            400
+          );
         }
 
         if (seatIds.includes(returnSeatId)) {
@@ -68,10 +86,10 @@ export async function validatePassengersSeats(
           );
         }
 
-        seatIds.push(passengerItem.returnSeatId);
+        seatIds.push(returnSeatId);
       }
-    }
+    });
   }
 
-  return seatIds;
+  return { seatIds, proccessedPassengers };
 }

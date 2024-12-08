@@ -35,12 +35,15 @@ export async function createTransaction(payload) {
     }
   }
 
+  const invalidDepartureDate =
+    new Date(departureFlight.departureDate) < new Date();
+
   const invalidDate =
     returnFlight &&
     new Date(departureFlight.departureDate) >
       new Date(returnFlight.departureDate);
 
-  if (invalidDate) {
+  if (invalidDate || invalidDepartureDate) {
     throw new HttpError(
       'Return flight date cannot be earlier than departure flight date',
       400
@@ -53,7 +56,7 @@ export async function createTransaction(payload) {
   const departureSeats = departureFlight.seat;
   const returnSeats = returnFlight?.seat;
 
-  const seats = await validatePassengersSeats(
+  const { seatIds, proccessedPassengers } = await validatePassengersSeats(
     passengers,
     returnFlight,
     departureSeats,
@@ -67,21 +70,15 @@ export async function createTransaction(payload) {
     returnFlightId
   );
 
-  if (!returnFlightId) {
-    passengers.forEach((passenger) => {
-      passenger.returnSeatId = null;
-    });
-  }
-
-  const transactionData = prisma.$transaction(async (transaction) => {
-    await seatRepository.updateSeatStatusBySeats(seats, transaction);
+  const transactionData = await prisma.$transaction(async (transaction) => {
+    await seatRepository.updateSeatStatusBySeats(seatIds, transaction);
 
     const data = await transactionRepository.createTransactionAndPassenger({
       amount,
       userId: payload.userId,
       departureFlightId: payload.departureFlightId,
       returnFlightId: returnFlightId,
-      passengers
+      proccessedPassengers
     });
 
     return data;

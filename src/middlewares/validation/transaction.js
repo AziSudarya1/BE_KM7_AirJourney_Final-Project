@@ -1,6 +1,5 @@
 import Joi from 'joi';
 import { generateJoiError } from '../../utils/helper.js';
-// import { HttpError } from '../../utils/error.js';
 
 const ALLOWED_PASSESNGER_TYPES = ['INFANT', 'CHILD', 'ADULT'];
 
@@ -19,12 +18,12 @@ const createPassengerSchema = Joi.object({
   departureSeatId: Joi.string().uuid().when('type', {
     is: 'INFANT',
     then: Joi.forbidden(),
-    otherwise: Joi.required()
+    otherwise: Joi.string().required()
   }),
   returnSeatId: Joi.string().uuid().when('type', {
     is: 'INFANT',
     then: Joi.forbidden(),
-    otherwise: Joi.optional()
+    otherwise: Joi.string().optional()
   })
 });
 

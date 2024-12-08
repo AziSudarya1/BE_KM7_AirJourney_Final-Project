@@ -9,7 +9,7 @@ export function createTransactionAndPassenger(payload) {
       returnFlightId: payload?.returnFlightId || null,
       Passenger: {
         createMany: {
-          data: payload.passengers
+          data: payload.proccessedPassengers
         }
       },
       payment: {
@@ -17,6 +17,10 @@ export function createTransactionAndPassenger(payload) {
           status: 'PENDING'
         }
       }
+    },
+    include: {
+      Passenger: true,
+      payment: true
     }
   });
 }
@@ -27,7 +31,7 @@ export function getActiveTransaction(id) {
       userId: id,
       payment: {
         status: {
-          notIn: ['PENDING', 'SUCCESS']
+          notIn: ['CANCELLED', 'SUCCESS']
         }
       }
     }

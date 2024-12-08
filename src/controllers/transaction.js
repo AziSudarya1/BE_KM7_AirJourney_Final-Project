@@ -4,7 +4,7 @@ export async function createTransaction(req, res) {
   const user = res.locals.user;
   const { departureFlightId, returnFlightId, passengers } = req.body;
 
-  const dataTransaction = await transactionService.createTransaction({
+  const data = await transactionService.createTransaction({
     userId: user.id,
     departureFlightId,
     returnFlightId,
@@ -13,10 +13,7 @@ export async function createTransaction(req, res) {
 
   res.status(201).json({
     message: 'Transaction created successfully',
-    data: {
-      dataTransaction,
-      passengers
-    }
+    data
   });
 }
 
