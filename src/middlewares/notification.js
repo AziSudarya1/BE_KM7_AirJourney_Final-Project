@@ -7,7 +7,7 @@ export async function checkNotificationExistById(req, res, next) {
   const notification = await notificationServices.checkNotificationId(id);
 
   if (!notification) {
-    throw new HttpError('Id not found!', 404);
+    throw new HttpError('Notification not found!', 404);
   }
 
   res.locals.notification = notification;
@@ -16,24 +16,12 @@ export async function checkNotificationExistById(req, res, next) {
 }
 
 export async function checkUserHasAtLeastOneNotification(_req, res, next) {
-  const { id } = res.locals.user;
+  const userId = res.locals.user.id;
 
-  const notification = await notificationServices.getNotification(id);
+  const notification = await notificationServices.getNotification(userId);
 
   if (!notification) {
     throw new HttpError('No unread notification found!', 404);
-  }
-
-  next();
-}
-
-export async function checkNotificationByUserIdViaLocalsUser(_req, res, next) {
-  const { id: userId } = res.locals.user;
-
-  const notification = await notificationServices.getAllNotification(userId);
-
-  if (!notification) {
-    res.status(200).json({ data: notification });
   }
 
   next();
@@ -44,13 +32,9 @@ export async function checkUserAccesToNotification(_req, res, next) {
 
   const notification = res.locals.notification;
 
-  if (!notification) {
-    throw new HttpError('Notification not found!', 404);
-  }
+  const access = user.id === notification.userId;
 
-  const acces = user.id === notification.userId;
-
-  if (!acces) {
+  if (!access) {
     throw new HttpError('Unauthorized access to these notifications', 403);
   }
 

@@ -21,7 +21,6 @@ export default (app) => {
   router.get(
     '/',
     authMiddleware.isAuthorized,
-    notificationMiddleware.checkNotificationByUserIdViaLocalsUser,
     notificationController.getAllNotification
   );
 

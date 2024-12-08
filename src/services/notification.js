@@ -43,7 +43,11 @@ export async function getAllNotification(userId) {
   return data;
 }
 
-export async function updateNotification(id, userId) {
+export async function updateNotification(id, userId, notification) {
+  if (notification.isRead) {
+    throw new HttpError('Notification already read!', 400);
+  }
+
   const data = await notificationRepository.updateNotification(id, userId);
 
   return data;
