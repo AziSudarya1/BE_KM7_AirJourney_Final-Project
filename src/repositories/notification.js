@@ -27,6 +27,15 @@ export function checkUserId(userId) {
   });
 }
 
+export function getNotification(userId) {
+  return prisma.notification.findFirst({
+    where: {
+      userId,
+      isRead: false
+    }
+  });
+}
+
 export function getAllNotification(userId) {
   return prisma.notification.findMany({
     where: {
