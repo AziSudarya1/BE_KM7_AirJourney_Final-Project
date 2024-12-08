@@ -89,3 +89,15 @@ export async function createTransaction(payload) {
 
   return transactionData;
 }
+
+export async function getTransactionById(id) {
+  const data = await transactionRepository.getTransactionById(id);
+
+  return data;
+}
+
+export async function getAllTransactions() {
+  const data = await transactionRepository.getAllTransactions();
+
+  return data;
+}

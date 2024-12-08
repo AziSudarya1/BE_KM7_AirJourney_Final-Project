@@ -33,3 +33,24 @@ export function getActiveTransaction(id) {
     }
   });
 }
+
+export function getTransactionById(id) {
+  return prisma.transaction.findUnique({
+    where: {
+      id
+    },
+    include: {
+      Passenger: true,
+      payment: true
+    }
+  });
+}
+
+export function getAllTransactions() {
+  return prisma.transaction.findMany({
+    include: {
+      Passenger: true,
+      payment: true
+    }
+  });
+}
