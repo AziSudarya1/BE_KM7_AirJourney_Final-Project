@@ -43,7 +43,11 @@ export async function createTransaction(payload) {
     new Date(departureFlight.departureDate) >
       new Date(returnFlight.departureDate);
 
-  if (invalidDate || invalidDepartureDate) {
+  if (invalidDepartureDate) {
+    throw new HttpError('Departure flight date cannot be in the past', 400);
+  }
+
+  if (invalidDate) {
     throw new HttpError(
       'Return flight date cannot be earlier than departure flight date',
       400
