@@ -29,7 +29,7 @@ export default (app) => {
 
   router.get(
     '/',
-    flightValidationMiddleware.validateFilterAndCursorIdParams,
+    flightValidationMiddleware.validateFilterSortingAndCursorIdParams,
     flightController.getAllFlights
   );
 };

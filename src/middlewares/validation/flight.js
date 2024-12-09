@@ -84,7 +84,7 @@ const generateDateFilter = (date) => {
   };
 };
 
-export async function validateFilterAndCursorIdParams(req, res, next) {
+export async function validateFilterSortingAndCursorIdParams(req, res, next) {
   try {
     await queryParamSchema.validateAsync(req.query, { abortEarly: false });
 
