@@ -74,11 +74,14 @@ export async function createTransaction(payload) {
     returnFlightId
   );
 
+  const tax = Math.round(amount * 0.1);
+  const total = amount + tax;
+
   const transactionData = await prisma.$transaction(async (transaction) => {
     await seatRepository.updateSeatStatusBySeats(seatIds, transaction);
 
     const data = await transactionRepository.createTransactionAndPassenger({
-      amount,
+      amount: total,
       userId: payload.userId,
       departureFlightId: payload.departureFlightId,
       returnFlightId: returnFlightId,
@@ -88,7 +91,18 @@ export async function createTransaction(payload) {
     return data;
   });
 
-  return transactionData;
+  return {
+    ...transactionData,
+    tax,
+    passenger: proccessedPassengers.map((passenger) => {
+      const { ...passengerData } = passenger;
+      const passengerAmount = amount / proccessedPassengers.length;
+      return {
+        ...passengerData,
+        totalPrice: passengerAmount
+      };
+    })
+  };
 }
 
 export async function getTransactionById(id) {

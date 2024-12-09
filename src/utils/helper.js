@@ -25,8 +25,5 @@ export function calculateAmount(
     total += nonInfantPassengers * returnPrice;
   }
 
-  const tax = Math.round(total * 0.1);
-  total += tax;
-
   return total;
 }
