@@ -123,8 +123,8 @@ export async function getTransactionById(id) {
   };
 }
 
-export async function getAllTransactions(userId) {
-  const data = await transactionRepository.getAllTransactions(userId);
+export async function getAllTransactions(userId, filter) {
+  const data = await transactionRepository.getAllTransactions(userId, filter);
 
   return data;
 }

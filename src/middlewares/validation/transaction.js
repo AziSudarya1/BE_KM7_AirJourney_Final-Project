@@ -54,3 +54,37 @@ export async function createTransactionValidation(req, res, next) {
     throw error;
   }
 }
+
+const queryParamSchema = Joi.object({
+  startDate: Joi.date(),
+  endDate: Joi.date().when('startDate', {
+    is: Joi.exist(),
+    then: Joi.required()
+  })
+});
+
+export async function getTransactionFilterValidation(req, res, next) {
+  try {
+    await queryParamSchema.validateAsync(req.query, { abortEarly: false });
+
+    const filter = {
+      ...(req.query.startDate && {
+        createdAt: {
+          gte: new Date(req.query.startDate),
+          lte: new Date(req.query.endDate)
+        }
+      })
+    };
+
+    res.locals.filter = filter;
+
+    next();
+  } catch (error) {
+    if (Joi.isError(error)) {
+      const errorMessages = generateJoiError(error);
+      return res.status(400).json({ message: errorMessages });
+    }
+
+    throw error;
+  }
+}
