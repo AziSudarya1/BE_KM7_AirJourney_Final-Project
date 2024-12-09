@@ -45,9 +45,9 @@ export async function createFlightAndSeat(payload, aeroplane) {
   return flight;
 }
 
-export async function getAllFlight(filter) {
+export async function getAllFlight(filter, sort) {
   const { cursorId, ...restFilter } = filter;
-  const data = await flightRepository.getAllFlight(cursorId, restFilter);
+  const data = await flightRepository.getAllFlight(cursorId, restFilter, sort);
 
   return data;
 }
