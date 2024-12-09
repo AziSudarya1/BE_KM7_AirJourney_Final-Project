@@ -12,8 +12,14 @@ export async function getAirportById(id) {
   return data;
 }
 
-export async function getAirportByNameOrCode(name, code) {
-  const data = await airportRepository.getAirportByNameOrCode(name, code);
+export async function getAirportByName(name) {
+  const data = await airportRepository.getAirportByName(name);
+
+  return data;
+}
+
+export async function getAirportByCode(code) {
+  const data = await airportRepository.getAirportByCode(code);
 
   return data;
 }
