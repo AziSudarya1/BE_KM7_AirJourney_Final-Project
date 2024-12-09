@@ -72,10 +72,18 @@ export function updateUserById(userId, data) {
   });
 }
 
-export function getUserByEmailOrPhoneNumber(email, phoneNumber) {
-  return prisma.user.findFirst({
+export function getUserByEmail(email) {
+  return prisma.user.findUnique({
     where: {
-      OR: [{ email }, { phoneNumber }]
+      email
+    }
+  });
+}
+
+export function getUserByPhoneNumber(phoneNumber) {
+  return prisma.user.findUnique({
+    where: {
+      phoneNumber
     }
   });
 }
