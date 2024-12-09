@@ -18,8 +18,6 @@ export default (app) => {
     airlineController.createAirline
   );
 
-  router.get('/', airlineController.getAllAirlines);
-
   router.get(
     '/:id',
     authMiddleware.isAuthorized,
@@ -36,6 +34,7 @@ export default (app) => {
     commonValidationMiddleware.validateIdParams,
     airlineValidation.updateAirlineValidation,
     airlineMiddleware.checkAirlineById,
+    airlineMiddleware.checkAirlineCodeOrNameExist,
     airlineController.updateAirline
   );
 

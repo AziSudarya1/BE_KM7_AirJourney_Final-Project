@@ -12,8 +12,14 @@ export async function getAirlineById(id) {
   return data;
 }
 
-export async function getAirlineByNameOrCode(name, code) {
-  const data = await airlineRepository.getAirlineByNameOrCode(name, code);
+export async function getAirlineByName(name) {
+  const data = await airlineRepository.getAirlineByName(name);
+
+  return data;
+}
+
+export async function getAirlineByCode(code) {
+  const data = await airlineRepository.getAirlineByCode(code);
 
   return data;
 }
@@ -26,12 +32,6 @@ export async function updateAirlineById(id, payload) {
 
 export async function deleteAirlineById(id) {
   const data = await airlineRepository.deleteAirline(id);
-
-  return data;
-}
-
-export async function getAllAirlines() {
-  const data = await airlineRepository.getAllAirlines();
 
   return data;
 }
