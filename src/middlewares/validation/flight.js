@@ -49,6 +49,7 @@ export async function createFlightValidation(req, res, next) {
   }
 }
 
+const ALLOWED_SORTING = ['asc', 'desc'];
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 
@@ -59,7 +60,11 @@ const queryParamSchema = Joi.object({
   arrivalDate: Joi.date().min(today),
   airportIdFrom: Joi.string().uuid(),
   airportIdTo: Joi.string().uuid(),
-  continent: Joi.string().valid(...ALLOWED_CONTINENTS)
+  continent: Joi.string().valid(...ALLOWED_CONTINENTS),
+  priceSort: Joi.string().valid(...ALLOWED_SORTING),
+  durationSort: Joi.string().valid(...ALLOWED_SORTING),
+  departureDateSort: Joi.string().valid(...ALLOWED_SORTING),
+  arrivalDateSort: Joi.string().valid(...ALLOWED_SORTING)
 });
 
 const generateDateFilter = (date) => {
@@ -79,21 +84,48 @@ export async function validateFilterAndCursorIdParams(req, res, next) {
   try {
     await queryParamSchema.validateAsync(req.query, { abortEarly: false });
 
-    const { departureDate, arrivalDate, continent, ...filter } = req.query;
+    const {
+      departureDate,
+      arrivalDate,
+      continent,
+      priceSort,
+      durationSort,
+      departureDateSort,
+      arrivalDateSort,
+      ...filterQuery
+    } = req.query;
 
-    if (departureDate) {
-      filter.departureDate = generateDateFilter(departureDate);
+    const filter = {
+      ...filterQuery,
+      ...(departureDate && {
+        departureDate: generateDateFilter(departureDate)
+      }),
+      ...(arrivalDate && { arrivalDate: generateDateFilter(arrivalDate) }),
+      ...(continent && { airportTo: { continent: continent } })
+    };
+
+    const sortField = [
+      'priceSort',
+      'durationSort',
+      'departureDateSort',
+      'arrivalDateSort'
+    ];
+
+    const activeSortField = sortField.filter((field) => req.query[field]);
+
+    if (activeSortField.length > 1) {
+      throw new HttpError('Only one sort field is allowed', 400);
     }
 
-    if (arrivalDate) {
-      filter.arrivalDate = generateDateFilter(arrivalDate);
-    }
-
-    if (continent) {
-      filter.airportTo = { continent: continent };
-    }
+    const sort = {
+      ...(priceSort && { price: priceSort }),
+      ...(durationSort && { duration: durationSort }),
+      ...(departureDateSort && { departureDate: departureDateSort }),
+      ...(arrivalDateSort && { arrivalDate: arrivalDateSort })
+    };
 
     res.locals.filter = filter;
+    res.locals.sort = sort;
 
     next();
   } catch (err) {

@@ -25,7 +25,7 @@ export function createFlightAndSeat(payload) {
   });
 }
 
-export function getAllFlight(cursorId, filter) {
+export function getAllFlight(cursorId, filter, sort) {
   const query = {
     where: {
       departureDate: {
@@ -60,6 +60,12 @@ export function getAllFlight(cursorId, filter) {
     query.where = {
       ...query.where,
       ...filter
+    };
+  }
+
+  if (Object.keys(sort).length) {
+    query.orderBy = {
+      ...sort
     };
   }
 
