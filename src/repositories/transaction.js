@@ -50,8 +50,8 @@ export function getTransactionById(id) {
   });
 }
 
-export function getAllTransactions(userId) {
-  return prisma.transaction.findMany({
+export function getAllTransactions(userId, filter) {
+  const query = {
     where: {
       userId
     },
@@ -59,5 +59,14 @@ export function getAllTransactions(userId) {
       passenger: true,
       payment: true
     }
-  });
+  };
+
+  if (Object.keys(filter).length) {
+    query.where = {
+      ...query.where,
+      ...filter
+    };
+  }
+
+  return prisma.transaction.findMany(query);
 }
