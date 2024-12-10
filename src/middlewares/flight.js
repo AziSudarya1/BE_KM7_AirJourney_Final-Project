@@ -35,7 +35,7 @@ export async function checkFlightIdExist(req, res, next) {
 
   res.locals.flight = {
     departureFlight,
-    returnFlight
+    ...(returnFlight && { returnFlight })
   };
 
   next();
