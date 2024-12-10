@@ -122,3 +122,21 @@ export async function validateFilterSortingAndCursorIdParams(req, res, next) {
     next(err);
   }
 }
+
+const returnFlightIdSchema = Joi.object({
+  returnFlightId: Joi.string().uuid()
+});
+
+export async function validateReturnFlightId(req, res, next) {
+  try {
+    await returnFlightIdSchema.validateAsync(req.query, { abortEarly: false });
+
+    next();
+  } catch (err) {
+    if (err.isJoi) {
+      const errMessage = generateJoiError(err);
+      return res.status(400).json({ message: errMessage });
+    }
+    next(err);
+  }
+}

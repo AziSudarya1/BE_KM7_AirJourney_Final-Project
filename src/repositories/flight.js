@@ -30,11 +30,6 @@ export function getAllFlight(cursorId, filter, sort) {
     where: {
       departureDate: {
         gte: new Date()
-      },
-      seat: {
-        some: {
-          status: 'AVAILABLE'
-        }
       }
     },
     take: 3,

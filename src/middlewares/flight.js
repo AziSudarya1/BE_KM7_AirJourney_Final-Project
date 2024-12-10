@@ -3,13 +3,56 @@ import * as flightService from '../services/flight.js';
 
 export async function checkFlightIdExist(req, res, next) {
   const { id } = req.params;
-  const flight = await flightService.getDetailFlightById(id);
+  const returnFlightId = req.query.returnFlightId;
 
-  if (!flight) {
+  const departureFlight = await flightService.getDetailFlightById(id);
+
+  if (!departureFlight) {
     throw new HttpError('Flight not found', 404);
   }
 
-  res.locals.flight = flight;
+  let returnFlight;
+
+  if (returnFlightId) {
+    if (returnFlightId === id) {
+      throw new HttpError(
+        'Return flight must be different from departure flight',
+        400
+      );
+    }
+
+    const departureAirport = departureFlight.airportIdFrom;
+    const arrivalAirport = departureFlight.airportIdTo;
+    returnFlight = await flightService.getDetailFlightById(returnFlightId);
+
+    if (!returnFlight) {
+      throw new HttpError('Return flight not found', 404);
+    }
+    const validDepartureDate =
+      new Date(departureFlight.departureDate) <
+      new Date(returnFlight.departureDate);
+    const validDepartureAirport = arrivalAirport === returnFlight.airportIdFrom;
+    const validArrivalAirport = departureAirport === returnFlight.airportIdTo;
+
+    if (!validDepartureDate) {
+      throw new HttpError(
+        'Return flight departure date must be after departure flight',
+        400
+      );
+    }
+
+    if (!validDepartureAirport || !validArrivalAirport) {
+      throw new HttpError(
+        'Return flight must be the opposite of departure flight',
+        400
+      );
+    }
+  }
+
+  res.locals.flight = {
+    departureFlight,
+    ...(returnFlight && { returnFlight })
+  };
 
   next();
 }
