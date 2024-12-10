@@ -35,12 +35,24 @@ export async function createTransaction(payload) {
     }
   }
 
+  const departureAirport = departureFlight.airportIdFrom;
+  const arrivalAirport = departureFlight.airportIdTo;
+  const validDepartureAirport = arrivalAirport === returnFlight.airportIdFrom;
+  const validArrivalAirport = departureAirport === returnFlight.airportIdTo;
+
+  if (!validDepartureAirport || !validArrivalAirport) {
+    throw new HttpError(
+      'Return flight must be the opposite of departure flight',
+      400
+    );
+  }
+
   const invalidDepartureDate =
     new Date(departureFlight.departureDate) < new Date();
 
   const invalidDate =
     returnFlight &&
-    new Date(departureFlight.departureDate) >
+    new Date(departureFlight.arrivalDate) >
       new Date(returnFlight.departureDate);
 
   if (invalidDepartureDate) {
