@@ -120,36 +120,36 @@ async function seedAeroplanes() {
       name: 'Boeing 737',
       code: 'B737',
       type: 'Narrow-body',
-      maxRow: 30,
+      maxRow: 12,
       maxColumn: 6
     },
     {
       name: 'Airbus A350',
       code: 'A350',
       type: 'Wide-body',
-      maxRow: 40,
-      maxColumn: 9
+      maxRow: 6,
+      maxColumn: 4
     },
     {
       name: 'Boeing 777',
       code: 'B777',
       type: 'Wide-body',
-      maxRow: 45,
-      maxColumn: 10
+      maxRow: 8,
+      maxColumn: 5
     },
     {
       name: 'Airbus A380',
       code: 'A380',
       type: 'Wide-body',
-      maxRow: 50,
-      maxColumn: 10
+      maxRow: 9,
+      maxColumn: 6
     },
     {
       name: 'Boeing 787',
       code: 'B787',
       type: 'Wide-body',
-      maxRow: 35,
-      maxColumn: 9
+      maxRow: 12,
+      maxColumn: 4
     }
   ];
 
