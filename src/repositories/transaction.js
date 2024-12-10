@@ -61,3 +61,10 @@ export function getAllTransactions(userId) {
     }
   });
 }
+
+export function updateTransactionStatus(transactionId, status) {
+  return prisma.transaction.update({
+    where: { id: transactionId },
+    data: { status }
+  });
+}
