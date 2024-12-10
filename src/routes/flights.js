@@ -23,6 +23,7 @@ export default (app) => {
   router.get(
     '/:id',
     commonValidationMiddleware.validateIdParams,
+    flightValidationMiddleware.validateReturnFlightId,
     flightMiddleware.checkFlightIdExist,
     flightController.getFlightById
   );
