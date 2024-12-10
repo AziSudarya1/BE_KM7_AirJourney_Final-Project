@@ -45,7 +45,16 @@ export function getAllFlight(cursorId, filter, sort) {
       airportFrom: true,
       airportTo: true,
       airline: true,
-      aeroplane: true
+      aeroplane: true,
+      _count: {
+        select: {
+          seat: {
+            where: {
+              status: 'AVAILABLE'
+            }
+          }
+        }
+      }
     }
   };
 
@@ -78,6 +87,15 @@ export function getDetailFlightById(id) {
       id
     },
     include: {
+      _count: {
+        select: {
+          seat: {
+            where: {
+              status: 'AVAILABLE'
+            }
+          }
+        }
+      },
       seat: true,
       airportFrom: true,
       airportTo: true,
