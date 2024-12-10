@@ -129,7 +129,7 @@ const returnFlightIdSchema = Joi.object({
 
 export async function validateReturnFlightId(req, res, next) {
   try {
-    await returnFlightIdSchema.validateAsync(req.body, { abortEarly: false });
+    await returnFlightIdSchema.validateAsync(req.query, { abortEarly: false });
 
     next();
   } catch (err) {
