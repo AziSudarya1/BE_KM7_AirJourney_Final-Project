@@ -14,8 +14,8 @@ model User {
   email       String  @unique
   role        Role
   verified    Boolean @default(false)
-  password    String
-  phoneNumber String  @unique @map("phone_number")
+  password    String?
+  phoneNumber String?  @unique @map("phone_number")
 
   notification  Notification[]
   otp           Otp[]
