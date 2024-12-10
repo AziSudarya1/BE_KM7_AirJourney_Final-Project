@@ -49,6 +49,8 @@ export async function createFlightValidation(req, res, next) {
   }
 }
 
+const ALLOWED_ORDER = ['asc', 'desc'];
+const ALLOWED_SORTING = ['price', 'duration', 'departureDate', 'arrivalDate'];
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 
@@ -59,7 +61,14 @@ const queryParamSchema = Joi.object({
   arrivalDate: Joi.date().min(today),
   airportIdFrom: Joi.string().uuid(),
   airportIdTo: Joi.string().uuid(),
-  continent: Joi.string().valid(...ALLOWED_CONTINENTS)
+  continent: Joi.string().valid(...ALLOWED_CONTINENTS),
+  sortBy: Joi.string().valid(...ALLOWED_SORTING),
+  sortOrder: Joi.string()
+    .valid(...ALLOWED_ORDER)
+    .when('sortBy', {
+      is: Joi.exist(),
+      then: Joi.required()
+    })
 });
 
 const generateDateFilter = (date) => {
@@ -75,25 +84,52 @@ const generateDateFilter = (date) => {
   };
 };
 
-export async function validateFilterAndCursorIdParams(req, res, next) {
+export async function validateFilterSortingAndCursorIdParams(req, res, next) {
   try {
     await queryParamSchema.validateAsync(req.query, { abortEarly: false });
 
-    const { departureDate, arrivalDate, continent, ...filter } = req.query;
+    const {
+      departureDate,
+      arrivalDate,
+      continent,
+      sortBy,
+      sortOrder,
+      ...filterQuery
+    } = req.query;
 
-    if (departureDate) {
-      filter.departureDate = generateDateFilter(departureDate);
-    }
+    const filter = {
+      ...filterQuery,
+      ...(departureDate && {
+        departureDate: generateDateFilter(departureDate)
+      }),
+      ...(arrivalDate && { arrivalDate: generateDateFilter(arrivalDate) }),
+      ...(continent && { airportTo: { continent: continent } })
+    };
 
-    if (arrivalDate) {
-      filter.arrivalDate = generateDateFilter(arrivalDate);
-    }
-
-    if (continent) {
-      filter.airportTo = { continent: continent };
-    }
+    const sort = {
+      ...(sortBy && { [sortBy]: sortOrder })
+    };
 
     res.locals.filter = filter;
+    res.locals.sort = sort;
+
+    next();
+  } catch (err) {
+    if (err.isJoi) {
+      const errMessage = generateJoiError(err);
+      return res.status(400).json({ message: errMessage });
+    }
+    next(err);
+  }
+}
+
+const returnFlightIdSchema = Joi.object({
+  returnFlightId: Joi.string().uuid()
+});
+
+export async function validateReturnFlightId(req, res, next) {
+  try {
+    await returnFlightIdSchema.validateAsync(req.query, { abortEarly: false });
 
     next();
   } catch (err) {

@@ -20,8 +20,9 @@ export async function createFlight(req, res) {
 
 export async function getAllFlights(_req, res) {
   const filter = res.locals.filter;
+  const sort = res.locals.sort;
 
-  const data = await flightService.getAllFlight(filter);
+  const data = await flightService.getAllFlight(filter, sort);
 
   return res.json({
     message: 'Successfully get all flight',

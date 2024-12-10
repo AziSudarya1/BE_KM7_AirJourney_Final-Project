@@ -28,6 +28,7 @@ export default (app) => {
   router.get(
     '/',
     authMiddleware.isAuthorized,
+    transactionValidationMiddleware.getTransactionFilterValidation,
     transactionController.getAllTransactions
   );
 };

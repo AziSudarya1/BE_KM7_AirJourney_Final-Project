@@ -25,16 +25,11 @@ export function createFlightAndSeat(payload) {
   });
 }
 
-export function getAllFlight(cursorId, filter) {
+export function getAllFlight(cursorId, filter, sort) {
   const query = {
     where: {
       departureDate: {
         gte: new Date()
-      },
-      seat: {
-        some: {
-          status: 'AVAILABLE'
-        }
       }
     },
     take: 3,
@@ -45,7 +40,16 @@ export function getAllFlight(cursorId, filter) {
       airportFrom: true,
       airportTo: true,
       airline: true,
-      aeroplane: true
+      aeroplane: true,
+      _count: {
+        select: {
+          seat: {
+            where: {
+              status: 'AVAILABLE'
+            }
+          }
+        }
+      }
     }
   };
 
@@ -63,6 +67,12 @@ export function getAllFlight(cursorId, filter) {
     };
   }
 
+  if (Object.keys(sort).length) {
+    query.orderBy = {
+      ...sort
+    };
+  }
+
   return prisma.flight.findMany(query);
 }
 
@@ -72,6 +82,15 @@ export function getDetailFlightById(id) {
       id
     },
     include: {
+      _count: {
+        select: {
+          seat: {
+            where: {
+              status: 'AVAILABLE'
+            }
+          }
+        }
+      },
       seat: true,
       airportFrom: true,
       airportTo: true,
