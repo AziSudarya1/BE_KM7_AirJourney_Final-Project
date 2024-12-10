@@ -1,39 +1,47 @@
-import snap from '../utils/midtrans.js';
-import { prisma } from '../utils/db.js';
+import midtransClient from 'midtrans-client';
+import * as transactionRepository from '../repositories/transaction.js';
 
-export async function createPayment(transaction) {
+const midtrans = new midtransClient.Snap({
+  isProduction: false, 
+  serverKey: process.env.MIDTRANS_SERVER_KEY,
+  clientKey: process.env.MIDTRANS_CLIENT_KEY
+});
+
+export async function createPayment(transactionId, amount) {
+  const transaction = await transactionRepository.getTransactionById(transactionId);
+  if (!transaction) {
+    throw new Error('Transaction not found');
+  }
+
   const paymentPayload = {
     transaction_details: {
-      order_id: transaction.id,
-      gross_amount: transaction.amount
+      order_id: transactionId,
+      gross_amount: amount
     },
     customer_details: {
       email: transaction.user.email,
-      first_name: transaction.user.name
+      phone: transaction.user.phoneNumber
     }
   };
 
-  const payment = await snap.createTransaction(paymentPayload);
-  await prisma.payment.create({
-    data: {
-      transactionId: transaction.id,
-      paymentUrl: payment.redirect_url,
-      paymentToken: payment.token,
-      status: 'PENDING'
-    }
-  });
-
-  return payment.redirect_url;
+  const paymentResponse = await midtrans.createTransaction(paymentPayload);
+  return paymentResponse.redirect_url;
 }
 
-export async function updatePaymentStatus(orderId, status) {
-  await prisma.payment.update({
-    where: { transactionId: orderId },
-    data: { status }
-  });
+export async function updateTransactionStatus(orderId, status) {
+  const transaction = await transactionRepository.getTransactionById(orderId);
+  if (!transaction) {
+    throw new Error('Transaction not found');
+  }
 
-  await prisma.transaction.update({
-    where: { id: orderId },
-    data: { status: status === 'settlement' ? 'PAID' : 'FAILED' }
-  });
+  let newStatus;
+  if (status === 'settlement') {
+    newStatus = 'PAID';
+  } else if (['cancel', 'expire'].includes(status)) {
+    newStatus = 'FAILED';
+  } else if (status === 'pending') {
+    newStatus = 'PENDING';
+  }
+
+  await transactionRepository.updateTransactionStatus(orderId, newStatus);
 }
