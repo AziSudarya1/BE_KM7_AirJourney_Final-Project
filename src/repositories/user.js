@@ -9,6 +9,37 @@ export function createUser(data) {
   });
 }
 
+export function createNotificationAndVerifiedUser(payload) {
+  return prisma.user.create({
+    data: {
+      ...payload,
+      role: 'USER',
+      verified: true,
+      notification: {
+        create: {
+          title: 'Registrasi Berhasil',
+          message: 'Selamat datang di Terbangin!'
+        }
+      }
+    }
+  });
+}
+
+export function updateVerifiedUserAndCreateNotification(userId) {
+  return prisma.user.update({
+    where: { id: userId },
+    data: {
+      verified: true,
+      notification: {
+        create: {
+          title: 'Registrasi Berhasil',
+          message: 'Selamat datang di Terbangin!'
+        }
+      }
+    }
+  });
+}
+
 export function findUserByEmail(email) {
   return prisma.user.findUnique({
     where: {
