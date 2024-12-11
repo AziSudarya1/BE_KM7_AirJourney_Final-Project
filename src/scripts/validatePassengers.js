@@ -1,12 +1,13 @@
 import { HttpError } from '../utils/error.js';
 
-export async function validatePassengersSeats(
+export async function validatePassengers(
   passengers,
   returnFlight,
   departureSeats,
   returnSeats
 ) {
   const seatIds = [];
+  const identityNumbers = [];
 
   const proccessedPassengers = passengers.map((passengerItem, index) => {
     const passengerNumber = index + 1;
@@ -46,6 +47,19 @@ export async function validatePassengersSeats(
         );
       }
 
+      const identityNumber = passengerItem.identityNumber;
+      const identityNumberPassenger = identityNumbers.find(
+        (number) => number === identityNumber
+      );
+
+      if (identityNumberPassenger) {
+        throw new HttpError(
+          `Identity number for passenger number ${passengerNumber} must be unique`,
+          400
+        );
+      }
+
+      identityNumbers.push(identityNumber);
       seatIds.push(departureSeatId);
     }
 

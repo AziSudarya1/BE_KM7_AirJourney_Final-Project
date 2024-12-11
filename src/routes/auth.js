@@ -8,6 +8,8 @@ import * as userValidationMiddleware from '../middlewares/validation/user.js';
 import * as authValidationMiddleware from '../middlewares/validation/auth.js';
 import * as otpValidationMiddleware from '../middlewares/validation/otp.js';
 import * as passwordResetValidationMiddleware from '../middlewares/validation/passwordReset.js';
+import * as oauthController from '../controllers/oauth.js';
+import * as oauthValidationMiddleware from '../middlewares/validation/oauth.js';
 
 export default (app) => {
   const router = Router();
@@ -55,5 +57,13 @@ export default (app) => {
     '/reset-password',
     passwordResetValidationMiddleware.resetPasswordValidation,
     passwordResetController.resetPassword
+  );
+
+  router.get('/google', oauthController.getGoogleAuthorizationUrl);
+
+  router.get(
+    '/google/callback',
+    oauthValidationMiddleware.isValidGoogleOauthCode,
+    oauthController.authenticateWithGoogle
   );
 };

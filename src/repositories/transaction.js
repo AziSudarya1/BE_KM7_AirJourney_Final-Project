@@ -45,7 +45,23 @@ export function getTransactionById(id) {
     },
     include: {
       passenger: true,
-      payment: true
+      payment: true,
+      departureFlight: {
+        include: {
+          airportFrom: true,
+          airportTo: true,
+          airline: true,
+          aeroplane: true
+        }
+      },
+      returnFlight: {
+        include: {
+          airportFrom: true,
+          airportTo: true,
+          airline: true,
+          aeroplane: true
+        }
+      }
     }
   });
 }
