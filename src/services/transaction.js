@@ -2,7 +2,7 @@ import * as transactionRepository from '../repositories/transaction.js';
 import * as seatRepository from '../repositories/seat.js';
 import * as flightService from '../services/flight.js';
 import { prisma } from '../utils/db.js';
-import { validatePassengersSeats } from '../scripts/validatePassengerSeats.js';
+import { validatePassengers } from '../scripts/validatePassengers.js';
 import { calculateAmount } from '../utils/helper.js';
 import { HttpError } from '../utils/error.js';
 
@@ -35,15 +35,31 @@ export async function createTransaction(payload) {
     }
   }
 
+  const departureAirport = departureFlight.airportIdFrom;
+  const arrivalAirport = departureFlight.airportIdTo;
+  const validDepartureAirport = arrivalAirport === returnFlight.airportIdFrom;
+  const validArrivalAirport = departureAirport === returnFlight.airportIdTo;
+
+  if (!validDepartureAirport || !validArrivalAirport) {
+    throw new HttpError(
+      'Return flight must be the opposite of departure flight',
+      400
+    );
+  }
+
   const invalidDepartureDate =
     new Date(departureFlight.departureDate) < new Date();
 
   const invalidDate =
     returnFlight &&
-    new Date(departureFlight.departureDate) >
+    new Date(departureFlight.arrivalDate) >
       new Date(returnFlight.departureDate);
 
-  if (invalidDate || invalidDepartureDate) {
+  if (invalidDepartureDate) {
+    throw new HttpError('Departure flight date cannot be in the past', 400);
+  }
+
+  if (invalidDate) {
     throw new HttpError(
       'Return flight date cannot be earlier than departure flight date',
       400
@@ -56,7 +72,7 @@ export async function createTransaction(payload) {
   const departureSeats = departureFlight.seat;
   const returnSeats = returnFlight?.seat;
 
-  const { seatIds, proccessedPassengers } = await validatePassengersSeats(
+  const { seatIds, proccessedPassengers } = await validatePassengers(
     passengers,
     returnFlight,
     departureSeats,
@@ -70,11 +86,14 @@ export async function createTransaction(payload) {
     returnFlightId
   );
 
+  const tax = Math.round(amount * 0.1);
+  const total = amount + tax;
+
   const transactionData = await prisma.$transaction(async (transaction) => {
     await seatRepository.updateSeatStatusBySeats(seatIds, transaction);
 
     const data = await transactionRepository.createTransactionAndPassenger({
-      amount,
+      amount: total,
       userId: payload.userId,
       departureFlightId: payload.departureFlightId,
       returnFlightId: returnFlightId,
@@ -90,7 +109,30 @@ export async function createTransaction(payload) {
 export async function getTransactionById(id) {
   const data = await transactionRepository.getTransactionById(id);
 
-  return data;
+  const passengers = data.passenger;
+  const departurePrice = data.departureFlight.price;
+  const returnPrice = data.returnFlight?.price || 0;
+  const returnFlightId = data.returnFlight?.id || null;
+
+  let totalPrice = 0;
+
+  passengers.forEach((passenger) => {
+    const passengerPrice = calculateAmount(
+      [passenger],
+      departurePrice,
+      returnPrice,
+      returnFlightId
+    );
+    passenger.totalPrice = passengerPrice;
+    totalPrice += passengerPrice;
+  });
+
+  const tax = Math.round(totalPrice * 0.1);
+
+  return {
+    ...data,
+    tax
+  };
 }
 
 export async function getAllTransactions(userId, filter) {

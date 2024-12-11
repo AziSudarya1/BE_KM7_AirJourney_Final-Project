@@ -29,7 +29,7 @@ export async function checkFlightIdExist(req, res, next) {
       throw new HttpError('Return flight not found', 404);
     }
     const validDepartureDate =
-      new Date(departureFlight.departureDate) <
+      new Date(departureFlight.arrivalDate) <
       new Date(returnFlight.departureDate);
     const validDepartureAirport = arrivalAirport === returnFlight.airportIdFrom;
     const validArrivalAirport = departureAirport === returnFlight.airportIdTo;
