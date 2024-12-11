@@ -33,18 +33,18 @@ export async function createTransaction(payload) {
     if (!returnFlight) {
       throw new HttpError('Return Flight not found', 404);
     }
-  }
 
-  const departureAirport = departureFlight.airportIdFrom;
-  const arrivalAirport = departureFlight.airportIdTo;
-  const validDepartureAirport = arrivalAirport === returnFlight.airportIdFrom;
-  const validArrivalAirport = departureAirport === returnFlight.airportIdTo;
+    const departureAirport = departureFlight.airportIdFrom;
+    const arrivalAirport = departureFlight.airportIdTo;
+    const validDepartureAirport = arrivalAirport === returnFlight.airportIdFrom;
+    const validArrivalAirport = departureAirport === returnFlight.airportIdTo;
 
-  if (!validDepartureAirport || !validArrivalAirport) {
-    throw new HttpError(
-      'Return flight must be the opposite of departure flight',
-      400
-    );
+    if (!validDepartureAirport || !validArrivalAirport) {
+      throw new HttpError(
+        'Return flight must be the opposite of departure flight',
+        400
+      );
+    }
   }
 
   const invalidDepartureDate =
