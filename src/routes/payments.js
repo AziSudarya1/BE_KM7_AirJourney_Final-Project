@@ -7,7 +7,7 @@ import * as authMiddleware from '../middlewares/auth.js';
 export default (app) => {
   const router = Router();
 
-  app.use('/payment', router);
+  app.use('/payments', router);
 
   router.post(
     '/initiate',
