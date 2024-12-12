@@ -3,7 +3,10 @@ import { prisma } from '../utils/db.js';
 export function createUser(payload) {
   return prisma.user.create({
     data: {
-      ...payload,
+      name: payload.name,
+      email: payload.email,
+      phoneNumber: payload.phoneNumber,
+      password: payload.password,
       role: 'USER',
       otp: {
         create: {

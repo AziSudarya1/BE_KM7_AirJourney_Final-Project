@@ -20,7 +20,7 @@ export async function createUser(name, email, phoneNumber, password) {
     password: hashedPassword
   };
 
-  const data = await userRepository.createUser({ payload });
+  const data = await userRepository.createUser(payload);
 
   return data;
 }
