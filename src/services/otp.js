@@ -22,7 +22,6 @@ export async function sendOtp(email) {
   }
 
   const otp = generateOtp();
-
   const expiredAt = new Date(Date.now() + 1 * 60 * 1000);
 
   const data = await otpRepository.createOtp(user.id, otp, expiredAt);

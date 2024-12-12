@@ -1,6 +1,7 @@
 import * as userRepository from '../repositories/user.js';
 import { appEnv } from '../utils/env.js';
 import { generateOtp } from '../utils/helper.js';
+import { sendEmail } from '../utils/email/mail.js';
 import bcrypt from 'bcrypt';
 
 export async function createUser(name, email, phoneNumber, password) {
@@ -21,6 +22,12 @@ export async function createUser(name, email, phoneNumber, password) {
   };
 
   const data = await userRepository.createUser(payload);
+
+  await sendEmail(
+    email,
+    'Your OTP Code',
+    `Your OTP code is: ${otp}. It will expire in 1 minute.`
+  );
 
   return data;
 }
