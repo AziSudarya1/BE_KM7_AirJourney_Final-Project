@@ -3,7 +3,7 @@ import { HttpError } from '../utils/error.js';
 import * as userRepository from '../repositories/user.js';
 
 export async function createNotification(payload) {
-  const user = await userRepository.getUserWithId(payload.userId);
+  const user = await userRepository.getUserById(payload.userId);
 
   if (!user) {
     throw new HttpError('User not found!', 404);
