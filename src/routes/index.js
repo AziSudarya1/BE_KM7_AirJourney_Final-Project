@@ -10,6 +10,7 @@ import airlines from './airlines.js';
 import notifications from './notifications.js';
 import transactions from './transactions.js';
 import uploads from './uploads.js';
+import payment from './payment.js';
 
 export default (app) => {
   const router = Router();
@@ -27,4 +28,5 @@ export default (app) => {
   notifications(router);
   transactions(router);
   uploads(router);
+  payment(router);
 };
