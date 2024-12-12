@@ -38,6 +38,17 @@ export function getActiveTransaction(id) {
   });
 }
 
+export function getTransactionWithUserById(id) {
+  return prisma.transaction.findUnique({
+    where: {
+      id
+    },
+    include: {
+      user: true
+    }
+  });
+}
+
 export function getTransactionById(id) {
   return prisma.transaction.findUnique({
     where: {

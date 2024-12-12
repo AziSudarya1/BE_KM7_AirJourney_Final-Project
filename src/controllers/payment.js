@@ -1,9 +1,9 @@
 import * as paymentService from '../services/payment.js';
 
 export async function initiatePayment(req, res) {
-  const { transactionId, amount } = req.body;
+  const { transactionId } = req.body;
 
-  const paymentUrl = await paymentService.createPayment(transactionId, amount);
+  const paymentUrl = await paymentService.createPayment(transactionId);
   res.status(201).json({
     message: 'Payment initiated successfully',
     paymentUrl
