@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 export async function login(email, password) {
-  const user = await userRepository.findUserByEmail(email);
+  const user = await userRepository.getUserByEmail(email);
 
   if (!user) {
     throw new HttpError('User not found', 404);
@@ -37,7 +37,7 @@ export async function verifyTokenAndUser(token) {
   try {
     const { id } = verifyToken(token);
 
-    const user = await userRepository.getUserWithId(id);
+    const user = await userRepository.getUserById(id);
 
     if (!user) {
       throw new HttpError('User not found', 401);
