@@ -186,7 +186,6 @@ model Payment {
   method          PaymentMethod?
   snapToken       String?        @map("snap_token")
   snapRedirectUrl String?        @map("snap_redirect_url")
-  paymentMethod   String?        @map("payment_method")
 
   transactionId String      @unique @map("transaction_id") @db.Uuid
   transaction   Transaction @relation(fields: [transactionId], references: [id])

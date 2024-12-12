@@ -1,16 +1,15 @@
 import { midtrans } from '../utils/midtrans.js';
 import * as transactionRepository from '../repositories/transaction.js';
+import { HttpError } from '../utils/error.js';
 
-export async function createPayment(transactionId) {
-  const transaction =
-    await transactionRepository.getTransactionWithUserById(transactionId);
+export async function createMidtransToken(transaction) {
   if (!transaction) {
-    throw new Error('Transaction not found');
+    throw new HttpError('Transaction not found');
   }
 
   const paymentPayload = {
     transaction_details: {
-      order_id: transactionId,
+      order_id: transaction.id,
       gross_amount: transaction.amount
     },
     customer_details: {
@@ -20,7 +19,7 @@ export async function createPayment(transactionId) {
 
   const paymentResponse = await midtrans.createTransaction(paymentPayload);
 
-  return paymentResponse.redirect_url;
+  return paymentResponse;
 }
 
 export async function updateTransactionStatus(orderId, status) {

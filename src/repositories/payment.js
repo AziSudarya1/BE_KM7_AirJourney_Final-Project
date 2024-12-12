@@ -9,3 +9,14 @@ export async function updateStatus(transactionId, status) {
     }
   });
 }
+
+export async function createPayment(payload, transaction) {
+  return transaction.payment.create({
+    data: {
+      transactionId: payload.transactionId,
+      status: 'PENDING',
+      snapToken: payload.snapToken,
+      snapRedirectUrl: payload.snapRedirectUrl
+    }
+  });
+}
