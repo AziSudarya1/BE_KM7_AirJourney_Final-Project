@@ -37,7 +37,7 @@ export async function verifyTokenAndUser(token) {
   try {
     const { id } = verifyToken(token);
 
-    const user = await userRepository.getUserWithId(id);
+    const user = await userRepository.getUserById(id);
 
     if (!user) {
       throw new HttpError('User not found', 401);

@@ -1,5 +1,6 @@
 import * as userRepository from '../repositories/user.js';
 import { appEnv } from '../utils/env.js';
+import { generateOtp } from '../utils/helper.js';
 import bcrypt from 'bcrypt';
 
 export async function createUser(name, email, phoneNumber, password) {
@@ -7,21 +8,43 @@ export async function createUser(name, email, phoneNumber, password) {
     password,
     Number(appEnv.BCRYPT_SALT)
   );
+  const otp = generateOtp();
+  const expiredAt = new Date(Date.now() + 1 * 60 * 1000);
 
-  return await userRepository.createUser({
+  const payload = {
     name,
     email,
     phoneNumber,
+    otp,
+    expiredAt,
     password: hashedPassword
-  });
+  };
+
+  const data = await userRepository.createUser({ payload });
+
+  return data;
 }
 
-export async function updateUserById(userId, data) {
-  const user = await userRepository.getUserWithId(userId);
+export async function updateUserById(userId, payload) {
+  const data = await userRepository.updateUserById(userId, payload);
 
-  if (!user) {
-    throw new HttpError('User not found', 404);
-  }
+  return data;
+}
 
-  return await userRepository.updateUserById(userId, data);
+export async function getUserByEmail(email) {
+  const data = await userRepository.getUserByEmail(email);
+
+  return data;
+}
+
+export async function getUserByPhoneNumber(phoneNumber) {
+  const data = await userRepository.getUserByPhoneNumber(phoneNumber);
+
+  return data;
+}
+
+export async function getUserById(userId) {
+  const data = await userRepository.getUserById(userId);
+
+  return data;
 }
