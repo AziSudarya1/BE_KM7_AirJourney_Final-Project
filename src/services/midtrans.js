@@ -14,19 +14,19 @@ const snap = new midtransClient.Snap({
 // });
 
 export async function createSnapTransaction(orderId, amount, customerDetails) {
-    const parameters = {
-        transaction_details: {
-            order_id: orderId,
-            gross_amount: amount
-        },
-        customer_details: customerDetails
-    };
+  const parameters = {
+    transaction_details: {
+      order_id: orderId,
+      gross_amount: amount
+    },
+    customer_details: customerDetails
+  };
 
-    try {
-        return await snap.createTransaction(parameters);
-    } catch (error) {
-        throw new Error(`Failed to create Snap transaction: ${error.message}`);
-    }
+  try {
+    return await snap.createTransaction(parameters);
+  } catch (error) {
+    throw new Error(`Failed to create Snap transaction: ${error.message}`);
+  }
 }
 
 export async function updateSnapToken(transactionId, orderDetails) {
@@ -54,14 +54,14 @@ export async function updateSnapToken(transactionId, orderDetails) {
 }
 
 export async function parseNotification(payload) {
-    const core = new midtransClient.CoreApi({
-        isProduction: false,
-        serverKey: process.env.MIDTRANS_SERVER_KEY
-    });
+  const core = new midtransClient.CoreApi({
+    isProduction: false,
+    serverKey: process.env.MIDTRANS_SERVER_KEY
+  });
 
-    try {
-        return await core.transaction.notification(payload);
-    } catch (error) {
-        throw new Error(`Failed to parse notification: ${error.message}`);
-    }
+  try {
+    return await core.transaction.notification(payload);
+  } catch (error) {
+    throw new Error(`Failed to parse notification: ${error.message}`);
+  }
 }

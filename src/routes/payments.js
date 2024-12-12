@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import * as paymentController from '../controllers/payment.js';
-import * as paymentValidation from '../middlewares/validation/payment.js';
-import { verifyMidtransSignature } from '../middlewares/webhookVerifier.js';
+import * as paymentValidationMiddleware from '../middlewares/validation/payment.js';
+import * as midtransMiddleware from '../middlewares/midtrans.js';
 import * as authMiddleware from '../middlewares/auth.js';
 
 export default (app) => {
@@ -12,13 +12,13 @@ export default (app) => {
   router.post(
     '/initiate',
     authMiddleware.isAuthorized,
-    paymentValidation.validatePaymentRequest,
+    paymentValidationMiddleware.validatePaymentRequest,
     paymentController.initiatePayment
   );
 
   router.post(
     '/webhook',
-    verifyMidtransSignature,
+    midtransMiddleware.verifyMidtransSignature,
     paymentController.handleWebhook
   );
 };
