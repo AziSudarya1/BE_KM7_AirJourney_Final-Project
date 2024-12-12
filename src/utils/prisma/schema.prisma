@@ -14,8 +14,8 @@ model User {
   email       String  @unique
   role        Role
   verified    Boolean @default(false)
-  password    String
-  phoneNumber String  @unique @map("phone_number")
+  password    String?
+  phoneNumber String?  @unique @map("phone_number")
 
   notification  Notification[]
   otp           Otp[]
@@ -94,17 +94,17 @@ model Transaction {
 }
 
   model Passenger {
-    id            String   @id @default(uuid(7)) @db.Uuid
-    transactionId String   @map("transaction_id") @db.Uuid
-    title         String
-    firstName     String   @map("first_name")
-    familyName    String   @map("family_name")
-    birthday      DateTime 
-    nationality   String
-    type          TypePassenger 
-    nikPaspor     String   @map("nik_paspor")
-    nikKtp        String   @map("nik_ktp")
-    expiredAt     DateTime @map("expired_at")
+    id              String   @id @default(uuid(7)) @db.Uuid
+    transactionId   String   @map("transaction_id") @db.Uuid
+    title           String
+    firstName       String   @map("first_name")
+    familyName      String?  @map("family_name")
+    birthday        DateTime 
+    nationality     String
+    type            TypePassenger 
+    identityNumber  String  @map("identity_number")
+    originCountry   String  @map("origin_country")
+    expiredAt       DateTime @map("expired_at")
 
     departureSeatId String? @unique @map("departure_seat_id") @db.Uuid
     returnSeatId    String? @unique @map("return_seat_id") @db.Uuid

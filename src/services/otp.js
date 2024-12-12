@@ -1,13 +1,11 @@
 import * as otpRepository from '../repositories/otp.js';
 import * as userRepository from '../repositories/user.js';
-import * as userNotificationService from '../services/userNotification.js';
 import { sendEmail } from '../utils/email/mail.js';
 import { generateOtp } from '../utils/helper.js';
-import { prisma } from '../utils/db.js';
 import { HttpError } from '../utils/error.js';
 
 export async function sendOtp(email) {
-  const user = await userRepository.findUserByEmail(email);
+  const user = await userRepository.getUserByEmail(email);
 
   if (!user) {
     throw new HttpError('User not found', 404);
@@ -24,10 +22,9 @@ export async function sendOtp(email) {
   }
 
   const otp = generateOtp();
-
   const expiredAt = new Date(Date.now() + 1 * 60 * 1000);
 
-  await otpRepository.createOtp(user.id, otp, expiredAt);
+  const data = await otpRepository.createOtp(user.id, otp, expiredAt);
 
   await sendEmail(
     user.email,
@@ -35,11 +32,11 @@ export async function sendOtp(email) {
     `Your OTP code is: ${otp}. It will expire in 1 minute.`
   );
 
-  return 'OTP sent successfully';
+  return data;
 }
 
 export async function verifyOtp(email, otp) {
-  const user = await userRepository.findUserByEmail(email);
+  const user = await userRepository.getUserByEmail(email);
   if (!user) {
     throw new HttpError('User not found', 404);
   }
@@ -50,15 +47,11 @@ export async function verifyOtp(email, otp) {
     throw new HttpError('Invalid or expired OTP', 400);
   }
 
-  await prisma.$transaction(async (tx) => {
-    await otpRepository.markOtpAsUsed(validOtp.id, tx);
-
-    await userRepository.updateUserVerification(user.id, tx);
-
-    await userNotificationService.createUserNotification(
+  const data =
+    await userRepository.updateUserVerificationMarkOtpUsedAndCreateNotification(
       user.id,
-      { title: 'Notifikasi', message: 'Selamat datang di Terbangin!' },
-      tx
+      validOtp.id
     );
-  });
+
+  return data;
 }

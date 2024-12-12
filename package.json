@@ -42,6 +42,7 @@
   },
   "homepage": "https://github.com/AziSudarya1/BE_KM7_AirJourney_Final-Project#readme",
   "dependencies": {
+    "@googleapis/oauth2": "^1.0.7",
     "@prisma/client": "^5.22.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",

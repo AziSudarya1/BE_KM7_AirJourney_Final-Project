@@ -6,14 +6,14 @@ const ALLOWED_PASSESNGER_TYPES = ['INFANT', 'CHILD', 'ADULT'];
 const createPassengerSchema = Joi.object({
   title: Joi.string().required(),
   firstName: Joi.string().required(),
-  familyName: Joi.string().required(),
+  familyName: Joi.string(),
   birthday: Joi.date().required(),
   nationality: Joi.string().required(),
   type: Joi.string()
     .valid(...ALLOWED_PASSESNGER_TYPES)
     .required(),
-  nikPaspor: Joi.string().required(),
-  nikKtp: Joi.string().required(),
+  identityNumber: Joi.string().required(),
+  originCountry: Joi.string().required(),
   expiredAt: Joi.date().required(),
   departureSeatId: Joi.string().uuid().when('type', {
     is: 'INFANT',
@@ -30,12 +30,7 @@ const createPassengerSchema = Joi.object({
 const passengerArraySchema = Joi.array()
   .items(createPassengerSchema)
   .min(1)
-  .unique((a, b) => a.nikPaspor === b.nikPaspor || a.nikKtp === b.nikKtp)
-  .required()
-  .messages({
-    'array.min': 'The passengers array must contain at least one passenger.',
-    'array.unique': 'Each passenger must have a unique NIK Paspor and NIK KTP.'
-  });
+  .required();
 
 const createTransactionSchema = Joi.object({
   departureFlightId: Joi.string().uuid().required(),

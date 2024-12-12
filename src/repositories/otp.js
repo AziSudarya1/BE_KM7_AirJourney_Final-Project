@@ -32,14 +32,3 @@ export function findActiveOtp(userId) {
     }
   });
 }
-
-export function markOtpAsUsed(otpId, tx) {
-  return tx.otp.update({
-    where: {
-      id: otpId
-    },
-    data: {
-      used: true
-    }
-  });
-}

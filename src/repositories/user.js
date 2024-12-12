@@ -1,23 +1,58 @@
 import { prisma } from '../utils/db.js';
 
-export function createUser(data) {
+export function createUser(payload) {
   return prisma.user.create({
     data: {
-      ...data,
-      role: 'USER'
+      name: payload.name,
+      email: payload.email,
+      phoneNumber: payload.phoneNumber,
+      password: payload.password,
+      role: 'USER',
+      otp: {
+        create: {
+          otp: payload.otp,
+          expiredAt: payload.expiredAt
+        }
+      }
+    },
+    include: {
+      otp: true
     }
   });
 }
 
-export function findUserByEmail(email) {
-  return prisma.user.findUnique({
-    where: {
-      email
+export function createNotificationAndVerifiedUser(payload) {
+  return prisma.user.create({
+    data: {
+      ...payload,
+      role: 'USER',
+      verified: true,
+      notification: {
+        create: {
+          title: 'Registrasi Berhasil',
+          message: 'Selamat datang di Terbangin!'
+        }
+      }
     }
   });
 }
 
-export function getUserWithId(userId) {
+export function updateVerifiedUserAndCreateNotification(userId) {
+  return prisma.user.update({
+    where: { id: userId },
+    data: {
+      verified: true,
+      notification: {
+        create: {
+          title: 'Registrasi Berhasil',
+          message: 'Selamat datang di Terbangin!'
+        }
+      }
+    }
+  });
+}
+
+export function getUserById(userId) {
   return prisma.user.findUnique({
     where: {
       id: userId
@@ -25,11 +60,33 @@ export function getUserWithId(userId) {
   });
 }
 
-export function updateUserVerification(userId, tx) {
-  const db = tx ?? prisma;
-  return db.user.update({
-    where: { id: userId },
-    data: { verified: true }
+export function updateUserVerificationMarkOtpUsedAndCreateNotification(
+  userId,
+  otpId
+) {
+  return prisma.user.update({
+    where: {
+      id: userId
+    },
+    data: {
+      verified: true,
+      otp: {
+        update: {
+          where: {
+            id: otpId
+          },
+          data: {
+            used: true
+          }
+        }
+      },
+      notification: {
+        create: {
+          title: 'Registrasi Berhasil',
+          message: 'Selamat datang di Terbangin!'
+        }
+      }
+    }
   });
 }
 
@@ -60,14 +117,14 @@ export async function updateUserPassword(userId, password) {
   });
 }
 
-export function updateUserById(userId, data) {
+export function updateUserById(userId, payload) {
   return prisma.user.update({
     where: {
       id: userId
     },
     data: {
-      name: data.name,
-      phoneNumber: data.phoneNumber
+      name: payload.name,
+      phoneNumber: payload.phoneNumber
     }
   });
 }

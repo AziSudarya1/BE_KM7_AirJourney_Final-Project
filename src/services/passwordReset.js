@@ -7,7 +7,7 @@ import crypto from 'crypto';
 import { appEnv } from '../utils/env.js';
 
 export async function sendResetPasswordEmail(email) {
-  const user = await userRepository.findUserByEmail(email);
+  const user = await userRepository.getUserByEmail(email);
 
   if (!user) {
     throw new HttpError('User not found', 404);
