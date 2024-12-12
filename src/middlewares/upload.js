@@ -1,5 +1,5 @@
 import { uploadToMemory } from '../utils/multer.js';
-import { imageKit } from '../utils/imageKit.js';
+import { imageKit } from '../utils/imagekit.js';
 import { HttpError } from '../utils/error.js';
 import crypto from 'crypto';
 
