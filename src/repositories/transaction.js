@@ -72,8 +72,19 @@ export function getAllTransactions(userId, filter) {
       userId
     },
     include: {
-      passenger: true,
-      payment: true
+      payment: true,
+      departureFlight: {
+        include: {
+          airportFrom: true,
+          airportTo: true
+        }
+      },
+      returnFlight: {
+        include: {
+          airportFrom: true,
+          airportTo: true
+        }
+      }
     }
   };
 
