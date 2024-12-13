@@ -25,7 +25,7 @@ export function createFlightAndSeat(payload) {
   });
 }
 
-export function getAllFlight(cursorId, filter, sort) {
+export function getAllFlight(cursorId, filter) {
   const query = {
     where: {
       departureDate: {
@@ -33,9 +33,6 @@ export function getAllFlight(cursorId, filter, sort) {
       }
     },
     take: 3,
-    orderBy: {
-      departureDate: 'asc'
-    },
     include: {
       airportFrom: true,
       airportTo: true,
@@ -50,6 +47,9 @@ export function getAllFlight(cursorId, filter, sort) {
           }
         }
       }
+    },
+    orderBy: {
+      id: 'asc'
     }
   };
 
@@ -64,12 +64,6 @@ export function getAllFlight(cursorId, filter, sort) {
     query.where = {
       ...query.where,
       ...filter
-    };
-  }
-
-  if (Object.keys(sort).length) {
-    query.orderBy = {
-      ...sort
     };
   }
 
