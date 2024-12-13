@@ -3,6 +3,7 @@ import * as paymentController from '../controllers/payment.js';
 import * as paymentValidationMiddleware from '../middlewares/validation/payment.js';
 import * as midtransMiddleware from '../middlewares/midtrans.js';
 import * as authMiddleware from '../middlewares/auth.js';
+import * as authKeyMiddleware from '../middlewares/authKey';
 
 export default (app) => {
   const router = Router();
@@ -18,6 +19,7 @@ export default (app) => {
 
   router.post(
     '/webhook',
+    authKeyMiddleware.validateAuthKey,
     midtransMiddleware.verifyMidtransSignature,
     paymentController.handleWebhook
   );
