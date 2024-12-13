@@ -1,4 +1,4 @@
-import { appEnv } from './env.js';
+import { appEnv } from '../utils/env.js';
 
 export function validateAuthKey(req, res, next) {
   const authKey = req.headers['x-auth-key'];

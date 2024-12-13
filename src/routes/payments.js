@@ -3,7 +3,7 @@ import * as paymentController from '../controllers/payment.js';
 import * as paymentValidationMiddleware from '../middlewares/validation/payment.js';
 import * as midtransMiddleware from '../middlewares/midtrans.js';
 import * as authMiddleware from '../middlewares/auth.js';
-import * as authKeyMiddleware from '../middlewares/authKey';
+import * as authKeyMiddleware from '../middlewares/authKey.js';
 
 export default (app) => {
   const router = Router();
