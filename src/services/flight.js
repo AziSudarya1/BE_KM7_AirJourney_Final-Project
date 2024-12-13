@@ -47,9 +47,29 @@ export async function createFlightAndSeat(payload, aeroplane) {
 
 export async function getAllFlight(filter, sort) {
   const { cursorId, ...restFilter } = filter;
-  const data = await flightRepository.getAllFlight(cursorId, restFilter, sort);
+  const flight = await flightRepository.getAllFlight(cursorId, restFilter);
 
-  return data;
+  const meta = {
+    limit: 3,
+    cursorId: flight[flight.length - 1]?.id
+  };
+
+  const sortKey = Object.keys(sort)[0];
+
+  if (sortKey) {
+    flight.sort((a, b) => {
+      if (sort[sortKey] === 'asc') {
+        return a[sortKey] - b[sortKey];
+      }
+
+      return b[sortKey] - a[sortKey];
+    });
+  }
+
+  return {
+    meta,
+    flight
+  };
 }
 
 export async function getDetailFlightById(id) {
