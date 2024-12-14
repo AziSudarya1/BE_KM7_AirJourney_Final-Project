@@ -3,9 +3,12 @@ import { prisma } from '../utils/db.js';
 export async function updatePaymentStatusAndMethod(
   transactionId,
   status,
-  method
+  method,
+  tx
 ) {
-  return prisma.payment.update({
+  const db = tx ?? prisma;
+
+  return db.payment.update({
     where: { transactionId },
     data: {
       status,

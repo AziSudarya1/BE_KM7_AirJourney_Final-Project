@@ -1,7 +1,9 @@
 import { midtrans } from '../utils/midtrans.js';
 import * as paymentRepository from '../repositories/payment.js';
 import * as transactionRepository from '../repositories/transaction.js';
+import * as seatRepository from '../repositories/seat.js';
 import { HttpError } from '../utils/error.js';
+import { prisma } from '../utils/db.js';
 
 export async function createMidtransToken(transaction) {
   if (!transaction) {
@@ -25,24 +27,36 @@ export async function createMidtransToken(transaction) {
 
 export async function updateTransactionStatus(orderId, status, method) {
   const transaction =
-    await transactionRepository.getTransactionWithPaymentById(orderId);
+    await transactionRepository.getTransactionWithPaymentWithPassengerById(
+      orderId
+    );
 
   if (!transaction) {
     throw new HttpError('Transaction not found', 404);
   }
 
-  let newStatus;
-  if (status === 'settlement') {
-    newStatus = 'SUCCESS';
-  } else if (['cancel', 'expire'].includes(status)) {
-    newStatus = 'CANCELLED';
-  } else if (status === 'pending') {
-    newStatus = 'PENDING';
-  }
-
-  await paymentRepository.updatePaymentStatusAndMethod(
-    orderId,
-    newStatus,
-    method
+  const seatIds = transaction.passenger.map(
+    (p) => p.departureSeatId,
+    p.returnSeatId
   );
+
+  await prisma.$transaction(async (tx) => {
+    let newStatus;
+    if (status === 'settlement') {
+      await seatRepository.updateSeatStatusBySeats(seatIds, 'BOOKED', tx);
+      newStatus = 'SUCCESS';
+    } else if (['cancel', 'expire'].includes(status)) {
+      await seatRepository.updateSeatStatusBySeats(seatIds, 'AVAILABLE', tx);
+      newStatus = 'CANCELLED';
+    } else if (status === 'pending') {
+      newStatus = 'PENDING';
+    }
+
+    await paymentRepository.updatePaymentStatusAndMethod(
+      orderId,
+      newStatus,
+      method,
+      tx
+    );
+  });
 }
