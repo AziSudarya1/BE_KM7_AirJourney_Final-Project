@@ -9544,32 +9544,6 @@
         "summary": "Get all flights",
         "description": "Get all flights",
         "operationId": "getAllFlights",
-        "parameters": [
-          {
-            "name": "cursorId",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "example": "0193bb68-fb2c-7323-9dbb-d0ce565da4b3"
-            }
-          },
-          {
-            "name": "sortBy",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "example": "duration"
-            }
-          },
-          {
-            "name": "sortOrder",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "example": "desc"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -9583,7 +9557,7 @@
         },
         "responses": {
           "200": {
-            "description": "200 OK - Get all flight with filter and sort / 200 OK - Get flight with cursorId",
+            "description": "200 OK - Get all flight with filter and sort / 200 OK - Get flight with cursorId / 200 OK - Get Flight with airlines array filter",
             "headers": {
               "Access-Control-Allow-Credentials": {
                 "schema": {
@@ -9600,19 +9574,19 @@
               "Content-Length": {
                 "schema": {
                   "type": "string",
-                  "example": "3103"
+                  "example": "15079"
                 }
               },
               "Date": {
                 "schema": {
                   "type": "string",
-                  "example": "Fri, 13 Dec 2024 15:41:33 GMT"
+                  "example": "Sat, 14 Dec 2024 04:05:56 GMT"
                 }
               },
               "ETag": {
                 "schema": {
                   "type": "string",
-                  "example": "W/\"c1f-BmSS1cW/BTsZqaSwSEGCj3NTaFE\""
+                  "example": "W/\"3ae7-Moyagn+fYrz27pneti700gnZ3V0\""
                 }
               },
               "Keep-Alive": {
@@ -9979,6 +9953,597 @@
                   }
                 },
                 "examples": {
+                  "200 OK - Get Flight with airlines array filter": {
+                    "value": {
+                      "data": [
+                        {
+                          "_count": {
+                            "seat": 48
+                          },
+                          "aeroplane": {
+                            "code": "B787",
+                            "createdAt": "2024-12-14T03:57:51.630Z",
+                            "id": "0193c350-c88d-7231-83f6-7235d46928a6",
+                            "maxColumn": 4,
+                            "maxRow": 12,
+                            "name": "Boeing 787",
+                            "type": "Wide-body",
+                            "updatedAt": "2024-12-14T03:57:51.630Z"
+                          },
+                          "aeroplaneId": "0193c350-c88d-7231-83f6-7235d46928a6",
+                          "airline": {
+                            "code": "BA",
+                            "createdAt": "2024-12-14T03:57:51.609Z",
+                            "id": "0193c350-c878-73a1-8929-733b622abaa2",
+                            "image": null,
+                            "name": "British Airways",
+                            "updatedAt": "2024-12-14T03:57:51.609Z"
+                          },
+                          "airlineId": "0193c350-c878-73a1-8929-733b622abaa2",
+                          "airportFrom": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-14T03:57:51.580Z",
+                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                          },
+                          "airportIdFrom": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportIdTo": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportTo": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-14T03:57:51.580Z",
+                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                          },
+                          "arrivalDate": "2025-01-06T03:57:51.639Z",
+                          "arrivalTime": "16:00",
+                          "class": "FIRST_CLASS",
+                          "createdAt": "2024-12-14T03:57:51.647Z",
+                          "departureDate": "2025-01-05T03:57:51.639Z",
+                          "departureTime": "14:00",
+                          "description": "Flight from Jakarta to Destination 14",
+                          "duration": 120,
+                          "id": "0193c350-c8a1-73b0-894e-27a06c6f46f8",
+                          "price": 1150,
+                          "updatedAt": "2024-12-14T03:57:51.647Z"
+                        },
+                        {
+                          "_count": {
+                            "seat": 48
+                          },
+                          "aeroplane": {
+                            "code": "B787",
+                            "createdAt": "2024-12-14T03:57:51.630Z",
+                            "id": "0193c350-c88d-7231-83f6-7235d46928a6",
+                            "maxColumn": 4,
+                            "maxRow": 12,
+                            "name": "Boeing 787",
+                            "type": "Wide-body",
+                            "updatedAt": "2024-12-14T03:57:51.630Z"
+                          },
+                          "aeroplaneId": "0193c350-c88d-7231-83f6-7235d46928a6",
+                          "airline": {
+                            "code": "BA",
+                            "createdAt": "2024-12-14T03:57:51.609Z",
+                            "id": "0193c350-c878-73a1-8929-733b622abaa2",
+                            "image": null,
+                            "name": "British Airways",
+                            "updatedAt": "2024-12-14T03:57:51.609Z"
+                          },
+                          "airlineId": "0193c350-c878-73a1-8929-733b622abaa2",
+                          "airportFrom": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-14T03:57:51.580Z",
+                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                          },
+                          "airportIdFrom": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportIdTo": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportTo": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-14T03:57:51.580Z",
+                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                          },
+                          "arrivalDate": "2025-01-08T03:57:51.639Z",
+                          "arrivalTime": "18:00",
+                          "class": "FIRST_CLASS",
+                          "createdAt": "2024-12-14T03:57:51.647Z",
+                          "departureDate": "2025-01-07T03:57:51.639Z",
+                          "departureTime": "16:00",
+                          "description": "Return flight from Destination 14 to Jakarta",
+                          "duration": 120,
+                          "id": "0193c350-c8a1-73b0-894e-27b16115b81e",
+                          "price": 1150,
+                          "updatedAt": "2024-12-14T03:57:51.647Z"
+                        },
+                        {
+                          "_count": {
+                            "seat": 40
+                          },
+                          "aeroplane": {
+                            "code": "B777",
+                            "createdAt": "2024-12-14T03:57:51.624Z",
+                            "id": "0193c350-c888-7291-b521-e75bf4871fbe",
+                            "maxColumn": 5,
+                            "maxRow": 8,
+                            "name": "Boeing 777",
+                            "type": "Wide-body",
+                            "updatedAt": "2024-12-14T03:57:51.624Z"
+                          },
+                          "aeroplaneId": "0193c350-c888-7291-b521-e75bf4871fbe",
+                          "airline": {
+                            "code": "BA",
+                            "createdAt": "2024-12-14T03:57:51.609Z",
+                            "id": "0193c350-c878-73a1-8929-733b622abaa2",
+                            "image": null,
+                            "name": "British Airways",
+                            "updatedAt": "2024-12-14T03:57:51.609Z"
+                          },
+                          "airlineId": "0193c350-c878-73a1-8929-733b622abaa2",
+                          "airportFrom": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-14T03:57:51.580Z",
+                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                          },
+                          "airportIdFrom": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportIdTo": "0193c350-c863-78f0-82a8-2052abf1a750",
+                          "airportTo": {
+                            "city": "Singapore",
+                            "code": "SIN",
+                            "continent": "ASIA",
+                            "country": "Singapore",
+                            "createdAt": "2024-12-14T03:57:51.587Z",
+                            "id": "0193c350-c863-78f0-82a8-2052abf1a750",
+                            "name": "Changi Airport",
+                            "updatedAt": "2024-12-14T03:57:51.587Z"
+                          },
+                          "arrivalDate": "2025-01-07T03:57:51.639Z",
+                          "arrivalTime": "16:00",
+                          "class": "ECONOMY",
+                          "createdAt": "2024-12-14T03:57:51.647Z",
+                          "departureDate": "2025-01-06T03:57:51.639Z",
+                          "departureTime": "14:00",
+                          "description": "Flight from Jakarta to Destination 15",
+                          "duration": 120,
+                          "id": "0193c350-c8a1-73b0-894e-27cb3fc66653",
+                          "price": 1200,
+                          "updatedAt": "2024-12-14T03:57:51.647Z"
+                        },
+                        {
+                          "_count": {
+                            "seat": 40
+                          },
+                          "aeroplane": {
+                            "code": "B777",
+                            "createdAt": "2024-12-14T03:57:51.624Z",
+                            "id": "0193c350-c888-7291-b521-e75bf4871fbe",
+                            "maxColumn": 5,
+                            "maxRow": 8,
+                            "name": "Boeing 777",
+                            "type": "Wide-body",
+                            "updatedAt": "2024-12-14T03:57:51.624Z"
+                          },
+                          "aeroplaneId": "0193c350-c888-7291-b521-e75bf4871fbe",
+                          "airline": {
+                            "code": "BA",
+                            "createdAt": "2024-12-14T03:57:51.609Z",
+                            "id": "0193c350-c878-73a1-8929-733b622abaa2",
+                            "image": null,
+                            "name": "British Airways",
+                            "updatedAt": "2024-12-14T03:57:51.609Z"
+                          },
+                          "airlineId": "0193c350-c878-73a1-8929-733b622abaa2",
+                          "airportFrom": {
+                            "city": "Singapore",
+                            "code": "SIN",
+                            "continent": "ASIA",
+                            "country": "Singapore",
+                            "createdAt": "2024-12-14T03:57:51.587Z",
+                            "id": "0193c350-c863-78f0-82a8-2052abf1a750",
+                            "name": "Changi Airport",
+                            "updatedAt": "2024-12-14T03:57:51.587Z"
+                          },
+                          "airportIdFrom": "0193c350-c863-78f0-82a8-2052abf1a750",
+                          "airportIdTo": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportTo": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-14T03:57:51.580Z",
+                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                          },
+                          "arrivalDate": "2025-01-09T03:57:51.639Z",
+                          "arrivalTime": "18:00",
+                          "class": "ECONOMY",
+                          "createdAt": "2024-12-14T03:57:51.647Z",
+                          "departureDate": "2025-01-08T03:57:51.639Z",
+                          "departureTime": "16:00",
+                          "description": "Return flight from Destination 15 to Jakarta",
+                          "duration": 120,
+                          "id": "0193c350-c8a1-73b0-894e-27d5f46278c9",
+                          "price": 1200,
+                          "updatedAt": "2024-12-14T03:57:51.647Z"
+                        },
+                        {
+                          "_count": {
+                            "seat": 72
+                          },
+                          "aeroplane": {
+                            "code": "B737",
+                            "createdAt": "2024-12-14T03:57:51.617Z",
+                            "id": "0193c350-c880-7a50-98f7-a542c202e8dc",
+                            "maxColumn": 6,
+                            "maxRow": 12,
+                            "name": "Boeing 737",
+                            "type": "Narrow-body",
+                            "updatedAt": "2024-12-14T03:57:51.617Z"
+                          },
+                          "aeroplaneId": "0193c350-c880-7a50-98f7-a542c202e8dc",
+                          "airline": {
+                            "code": "BA",
+                            "createdAt": "2024-12-14T03:57:51.609Z",
+                            "id": "0193c350-c878-73a1-8929-733b622abaa2",
+                            "image": null,
+                            "name": "British Airways",
+                            "updatedAt": "2024-12-14T03:57:51.609Z"
+                          },
+                          "airlineId": "0193c350-c878-73a1-8929-733b622abaa2",
+                          "airportFrom": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-14T03:57:51.580Z",
+                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                          },
+                          "airportIdFrom": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportIdTo": "0193c350-c863-78f0-82a8-2052abf1a750",
+                          "airportTo": {
+                            "city": "Singapore",
+                            "code": "SIN",
+                            "continent": "ASIA",
+                            "country": "Singapore",
+                            "createdAt": "2024-12-14T03:57:51.587Z",
+                            "id": "0193c350-c863-78f0-82a8-2052abf1a750",
+                            "name": "Changi Airport",
+                            "updatedAt": "2024-12-14T03:57:51.587Z"
+                          },
+                          "arrivalDate": "2025-01-09T03:57:51.639Z",
+                          "arrivalTime": "16:00",
+                          "class": "FIRST_CLASS",
+                          "createdAt": "2024-12-14T03:57:51.647Z",
+                          "departureDate": "2025-01-08T03:57:51.639Z",
+                          "departureTime": "14:00",
+                          "description": "Flight from Jakarta to Destination 17",
+                          "duration": 120,
+                          "id": "0193c350-c8a1-73b0-894e-280efaad4af0",
+                          "price": 1300,
+                          "updatedAt": "2024-12-14T03:57:51.647Z"
+                        },
+                        {
+                          "_count": {
+                            "seat": 72
+                          },
+                          "aeroplane": {
+                            "code": "B737",
+                            "createdAt": "2024-12-14T03:57:51.617Z",
+                            "id": "0193c350-c880-7a50-98f7-a542c202e8dc",
+                            "maxColumn": 6,
+                            "maxRow": 12,
+                            "name": "Boeing 737",
+                            "type": "Narrow-body",
+                            "updatedAt": "2024-12-14T03:57:51.617Z"
+                          },
+                          "aeroplaneId": "0193c350-c880-7a50-98f7-a542c202e8dc",
+                          "airline": {
+                            "code": "BA",
+                            "createdAt": "2024-12-14T03:57:51.609Z",
+                            "id": "0193c350-c878-73a1-8929-733b622abaa2",
+                            "image": null,
+                            "name": "British Airways",
+                            "updatedAt": "2024-12-14T03:57:51.609Z"
+                          },
+                          "airlineId": "0193c350-c878-73a1-8929-733b622abaa2",
+                          "airportFrom": {
+                            "city": "Singapore",
+                            "code": "SIN",
+                            "continent": "ASIA",
+                            "country": "Singapore",
+                            "createdAt": "2024-12-14T03:57:51.587Z",
+                            "id": "0193c350-c863-78f0-82a8-2052abf1a750",
+                            "name": "Changi Airport",
+                            "updatedAt": "2024-12-14T03:57:51.587Z"
+                          },
+                          "airportIdFrom": "0193c350-c863-78f0-82a8-2052abf1a750",
+                          "airportIdTo": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportTo": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-14T03:57:51.580Z",
+                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                          },
+                          "arrivalDate": "2025-01-11T03:57:51.639Z",
+                          "arrivalTime": "18:00",
+                          "class": "FIRST_CLASS",
+                          "createdAt": "2024-12-14T03:57:51.647Z",
+                          "departureDate": "2025-01-10T03:57:51.639Z",
+                          "departureTime": "16:00",
+                          "description": "Return flight from Destination 17 to Jakarta",
+                          "duration": 120,
+                          "id": "0193c350-c8a1-73b0-894e-2816ce1b0342",
+                          "price": 1300,
+                          "updatedAt": "2024-12-14T03:57:51.647Z"
+                        },
+                        {
+                          "_count": {
+                            "seat": 40
+                          },
+                          "aeroplane": {
+                            "code": "B777",
+                            "createdAt": "2024-12-14T03:57:51.624Z",
+                            "id": "0193c350-c888-7291-b521-e75bf4871fbe",
+                            "maxColumn": 5,
+                            "maxRow": 8,
+                            "name": "Boeing 777",
+                            "type": "Wide-body",
+                            "updatedAt": "2024-12-14T03:57:51.624Z"
+                          },
+                          "aeroplaneId": "0193c350-c888-7291-b521-e75bf4871fbe",
+                          "airline": {
+                            "code": "SQ",
+                            "createdAt": "2024-12-14T03:57:51.605Z",
+                            "id": "0193c350-c875-79e1-ae10-f409d590546a",
+                            "image": null,
+                            "name": "Singapore Airlines",
+                            "updatedAt": "2024-12-14T03:57:51.605Z"
+                          },
+                          "airlineId": "0193c350-c875-79e1-ae10-f409d590546a",
+                          "airportFrom": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-14T03:57:51.580Z",
+                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                          },
+                          "airportIdFrom": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportIdTo": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportTo": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-14T03:57:51.580Z",
+                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                          },
+                          "arrivalDate": "2025-01-13T03:57:51.639Z",
+                          "arrivalTime": "16:00",
+                          "class": "BUSINESS",
+                          "createdAt": "2024-12-14T03:57:51.647Z",
+                          "departureDate": "2025-01-12T03:57:51.639Z",
+                          "departureTime": "14:00",
+                          "description": "Flight from Jakarta to Destination 21",
+                          "duration": 120,
+                          "id": "0193c350-c8a2-7f23-b62e-4215482f6e7c",
+                          "price": 1500,
+                          "updatedAt": "2024-12-14T03:57:51.647Z"
+                        },
+                        {
+                          "_count": {
+                            "seat": 40
+                          },
+                          "aeroplane": {
+                            "code": "B777",
+                            "createdAt": "2024-12-14T03:57:51.624Z",
+                            "id": "0193c350-c888-7291-b521-e75bf4871fbe",
+                            "maxColumn": 5,
+                            "maxRow": 8,
+                            "name": "Boeing 777",
+                            "type": "Wide-body",
+                            "updatedAt": "2024-12-14T03:57:51.624Z"
+                          },
+                          "aeroplaneId": "0193c350-c888-7291-b521-e75bf4871fbe",
+                          "airline": {
+                            "code": "SQ",
+                            "createdAt": "2024-12-14T03:57:51.605Z",
+                            "id": "0193c350-c875-79e1-ae10-f409d590546a",
+                            "image": null,
+                            "name": "Singapore Airlines",
+                            "updatedAt": "2024-12-14T03:57:51.605Z"
+                          },
+                          "airlineId": "0193c350-c875-79e1-ae10-f409d590546a",
+                          "airportFrom": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-14T03:57:51.580Z",
+                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                          },
+                          "airportIdFrom": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportIdTo": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportTo": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-14T03:57:51.580Z",
+                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                          },
+                          "arrivalDate": "2025-01-15T03:57:51.639Z",
+                          "arrivalTime": "18:00",
+                          "class": "BUSINESS",
+                          "createdAt": "2024-12-14T03:57:51.647Z",
+                          "departureDate": "2025-01-14T03:57:51.639Z",
+                          "departureTime": "16:00",
+                          "description": "Return flight from Destination 21 to Jakarta",
+                          "duration": 120,
+                          "id": "0193c350-c8a2-7f23-b62e-42275591caab",
+                          "price": 1500,
+                          "updatedAt": "2024-12-14T03:57:51.647Z"
+                        },
+                        {
+                          "_count": {
+                            "seat": 54
+                          },
+                          "aeroplane": {
+                            "code": "A380",
+                            "createdAt": "2024-12-14T03:57:51.627Z",
+                            "id": "0193c350-c88b-73d0-b523-f7950eac4781",
+                            "maxColumn": 6,
+                            "maxRow": 9,
+                            "name": "Airbus A380",
+                            "type": "Wide-body",
+                            "updatedAt": "2024-12-14T03:57:51.627Z"
+                          },
+                          "aeroplaneId": "0193c350-c88b-73d0-b523-f7950eac4781",
+                          "airline": {
+                            "code": "SQ",
+                            "createdAt": "2024-12-14T03:57:51.605Z",
+                            "id": "0193c350-c875-79e1-ae10-f409d590546a",
+                            "image": null,
+                            "name": "Singapore Airlines",
+                            "updatedAt": "2024-12-14T03:57:51.605Z"
+                          },
+                          "airlineId": "0193c350-c875-79e1-ae10-f409d590546a",
+                          "airportFrom": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-14T03:57:51.580Z",
+                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                          },
+                          "airportIdFrom": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportIdTo": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportTo": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-14T03:57:51.580Z",
+                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                          },
+                          "arrivalDate": "2025-01-18T03:57:51.639Z",
+                          "arrivalTime": "16:00",
+                          "class": "BUSINESS",
+                          "createdAt": "2024-12-14T03:57:51.647Z",
+                          "departureDate": "2025-01-17T03:57:51.639Z",
+                          "departureTime": "14:00",
+                          "description": "Flight from Jakarta to Destination 26",
+                          "duration": 120,
+                          "id": "0193c350-c8a2-7f23-b62e-42b059591c0d",
+                          "price": 1750,
+                          "updatedAt": "2024-12-14T03:57:51.647Z"
+                        },
+                        {
+                          "_count": {
+                            "seat": 54
+                          },
+                          "aeroplane": {
+                            "code": "A380",
+                            "createdAt": "2024-12-14T03:57:51.627Z",
+                            "id": "0193c350-c88b-73d0-b523-f7950eac4781",
+                            "maxColumn": 6,
+                            "maxRow": 9,
+                            "name": "Airbus A380",
+                            "type": "Wide-body",
+                            "updatedAt": "2024-12-14T03:57:51.627Z"
+                          },
+                          "aeroplaneId": "0193c350-c88b-73d0-b523-f7950eac4781",
+                          "airline": {
+                            "code": "SQ",
+                            "createdAt": "2024-12-14T03:57:51.605Z",
+                            "id": "0193c350-c875-79e1-ae10-f409d590546a",
+                            "image": null,
+                            "name": "Singapore Airlines",
+                            "updatedAt": "2024-12-14T03:57:51.605Z"
+                          },
+                          "airlineId": "0193c350-c875-79e1-ae10-f409d590546a",
+                          "airportFrom": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-14T03:57:51.580Z",
+                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                          },
+                          "airportIdFrom": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportIdTo": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportTo": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-14T03:57:51.580Z",
+                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                          },
+                          "arrivalDate": "2025-01-20T03:57:51.639Z",
+                          "arrivalTime": "18:00",
+                          "class": "BUSINESS",
+                          "createdAt": "2024-12-14T03:57:51.647Z",
+                          "departureDate": "2025-01-19T03:57:51.639Z",
+                          "departureTime": "16:00",
+                          "description": "Return flight from Destination 26 to Jakarta",
+                          "duration": 120,
+                          "id": "0193c350-c8a2-7f23-b62e-42cdfb9ce50d",
+                          "price": 1750,
+                          "updatedAt": "2024-12-14T03:57:51.647Z"
+                        }
+                      ],
+                      "message": "Successfully get all flight",
+                      "meta": {
+                        "cursorId": "0193c350-c8a2-7f23-b62e-42cdfb9ce50d",
+                        "limit": 10
+                      }
+                    }
+                  },
                   "200 OK - Get all flight with filter and sort": {
                     "value": {
                       "data": [
