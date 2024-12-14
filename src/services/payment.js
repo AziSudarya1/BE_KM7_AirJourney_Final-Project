@@ -24,16 +24,11 @@ export async function createMidtransToken(transaction) {
 }
 
 export async function updateTransactionStatus(orderId, status, method) {
-  const transaction = await transactionRepository.checkTransactionById(orderId);
+  const transaction =
+    await transactionRepository.getTransactionWithPaymentById(orderId);
 
   if (!transaction) {
     throw new HttpError('Transaction not found', 404);
-  }
-
-  const validExpiredAt = transaction.payment.expiredAt > new Date();
-
-  if (!validExpiredAt) {
-    throw new HttpError('Transaction has expired', 400);
   }
 
   let newStatus;

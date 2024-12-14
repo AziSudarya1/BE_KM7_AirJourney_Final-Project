@@ -21,7 +21,7 @@ export async function createPayment(payload, transaction) {
       transactionId: payload.transactionId,
       status: 'PENDING',
       snapToken: payload.snapToken,
-      expiredAt: new Date(Date.now() + 3 * 60 * 60 * 1000)
+      expiredAt: new Date(Date.now() + 1 * 60 * 60 * 1000)
     }
   });
 }

@@ -26,6 +26,9 @@ export function getActiveTransaction(id) {
       payment: {
         status: {
           notIn: ['CANCELLED', 'SUCCESS']
+        },
+        expiredAt: {
+          gt: new Date()
         }
       }
     }
@@ -43,7 +46,7 @@ export function getTransactionWithUserById(id) {
   });
 }
 
-export function checkTransactionById(id) {
+export function getTransactionWithPaymentById(id) {
   return prisma.transaction.findUnique({
     where: {
       id

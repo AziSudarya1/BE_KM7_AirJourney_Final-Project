@@ -6,7 +6,7 @@ import { validatePassengers } from '../scripts/validatePassengers.js';
 import { calculateAmount } from '../utils/helper.js';
 import { HttpError } from '../utils/error.js';
 import * as paymentService from './payment.js';
-import * as paymentRepostiory from '../repositories/payment.js';
+import * as paymentRepository from '../repositories/payment.js';
 
 export async function createTransaction(payload) {
   const existingTransaction = await transactionRepository.getActiveTransaction(
@@ -107,7 +107,7 @@ export async function createTransaction(payload) {
 
     const midtrans = await paymentService.createMidtransToken(data);
 
-    const payment = await paymentRepostiory.createPayment(
+    const payment = await paymentRepository.createPayment(
       {
         transactionId: data.id,
         snapToken: midtrans.token
