@@ -110,8 +110,7 @@ export async function createTransaction(payload) {
     const payment = await paymentRepostiory.createPayment(
       {
         transactionId: data.id,
-        snapToken: midtrans.token,
-        snapRedirectUrl: midtrans.redirect_url
+        snapToken: midtrans.token
       },
       transaction
     );

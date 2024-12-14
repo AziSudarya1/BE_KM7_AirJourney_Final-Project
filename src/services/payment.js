@@ -1,10 +1,11 @@
 import { midtrans } from '../utils/midtrans.js';
+import * as paymentRepository from '../repositories/payment.js';
 import * as transactionRepository from '../repositories/transaction.js';
 import { HttpError } from '../utils/error.js';
 
 export async function createMidtransToken(transaction) {
   if (!transaction) {
-    throw new HttpError('Transaction not found');
+    throw new HttpError('Transaction not found', 404);
   }
 
   const paymentPayload = {
@@ -22,21 +23,31 @@ export async function createMidtransToken(transaction) {
   return paymentResponse;
 }
 
-export async function updateTransactionStatus(orderId, status) {
-  const transaction = await transactionRepository.getTransactionById(orderId);
+export async function updateTransactionStatus(orderId, status, method) {
+  const transaction = await transactionRepository.checkTransactionById(orderId);
 
   if (!transaction) {
-    throw new Error('Transaction not found');
+    throw new HttpError('Transaction not found', 404);
+  }
+
+  const validExpiredAt = transaction.payment.expiredAt > new Date();
+
+  if (!validExpiredAt) {
+    throw new HttpError('Transaction has expired', 400);
   }
 
   let newStatus;
   if (status === 'settlement') {
-    newStatus = 'PAID';
+    newStatus = 'SUCCESS';
   } else if (['cancel', 'expire'].includes(status)) {
-    newStatus = 'FAILED';
+    newStatus = 'CANCELLED';
   } else if (status === 'pending') {
     newStatus = 'PENDING';
   }
 
-  await transactionRepository.updateTransactionStatus(orderId, newStatus);
+  await paymentRepository.updatePaymentStatusAndMethod(
+    orderId,
+    newStatus,
+    method
+  );
 }

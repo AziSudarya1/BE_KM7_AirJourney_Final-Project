@@ -43,6 +43,17 @@ export function getTransactionWithUserById(id) {
   });
 }
 
+export function checkTransactionById(id) {
+  return prisma.transaction.findUnique({
+    where: {
+      id
+    },
+    include: {
+      payment: true
+    }
+  });
+}
+
 export function getTransactionById(id) {
   return prisma.transaction.findUnique({
     where: {
