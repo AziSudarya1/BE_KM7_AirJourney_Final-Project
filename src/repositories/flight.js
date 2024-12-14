@@ -32,7 +32,7 @@ export function getAllFlight(cursorId, filter) {
         gte: new Date()
       }
     },
-    take: 3,
+    take: 10,
     include: {
       airportFrom: true,
       airportTo: true,

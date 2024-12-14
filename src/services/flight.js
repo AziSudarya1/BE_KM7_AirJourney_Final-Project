@@ -50,7 +50,7 @@ export async function getAllFlight(filter, sort) {
   const flight = await flightRepository.getAllFlight(cursorId, restFilter);
 
   const meta = {
-    limit: 3,
+    limit: 10,
     cursorId: flight[flight.length - 1]?.id
   };
 
