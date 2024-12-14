@@ -5173,10 +5173,34 @@
           "required": true,
           "schema": {
             "type": "string",
-            "example": "0193b0e7-e095-7362-afd0-0d0e92a285f0"
+            "example": "0193c5f9-3bf2-7880-a577-8a69b41c07c8"
           }
         }
       ]
+    },
+    "/payments/notification": {
+      "post": {
+        "tags": ["Payments"],
+        "summary": "Payment Notification",
+        "description": "Payment Notification",
+        "operationId": "paymentNotification",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "Payment Notification": {
+                  "value": ""
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     },
     "/upload/image": {
       "post": {
