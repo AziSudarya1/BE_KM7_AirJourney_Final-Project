@@ -5,7 +5,7 @@ export async function checkTransactionIdExist(req, res, next) {
   const { id } = req.params;
   const userId = res.locals.user.id;
 
-  const transaction = await transactionService.getTransactionById(id);
+  const transaction = await transactionService.getTransactionWithUserById(id);
 
   if (!transaction) {
     throw new HttpError('Transaction not found', 404);

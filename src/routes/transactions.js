@@ -22,7 +22,7 @@ export default (app) => {
     authMiddleware.isAuthorized,
     commonValidationMiddleware.validateIdParams,
     transactionMiddleware.checkTransactionIdExist,
-    transactionController.getTransactionById
+    transactionController.getDetailTransactionById
   );
 
   router.get(

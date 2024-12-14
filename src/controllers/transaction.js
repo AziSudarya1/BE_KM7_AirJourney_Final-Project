@@ -17,10 +17,10 @@ export async function createTransaction(req, res) {
   });
 }
 
-export async function getTransactionById(req, res) {
+export async function getDetailTransactionById(req, res) {
   const { id } = req.params;
 
-  const data = await transactionService.getTransactionById(id);
+  const data = await transactionService.getDetailTransactionById(id);
 
   res.status(200).json({
     message: 'Successfully get detail transaction',
