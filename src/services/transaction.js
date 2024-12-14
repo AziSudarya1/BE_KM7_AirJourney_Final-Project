@@ -92,7 +92,11 @@ export async function createTransaction(payload) {
   const total = amount + tax;
 
   const transactionData = await prisma.$transaction(async (transaction) => {
-    await seatRepository.updateSeatStatusBySeats(seatIds, transaction);
+    await seatRepository.updateSeatStatusBySeats(
+      seatIds,
+      'PENDING',
+      transaction
+    );
 
     const data = await transactionRepository.createTransactionAndPassenger(
       {
