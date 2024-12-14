@@ -16,6 +16,10 @@ jobs:
     env:
       DIRECT_URL: '${{ secrets.DIRECT_URL }}'
       DATABASE_URL: '${{ secrets.DATABASE_URL }}'
+      EMAIL_ADDRESS_ADMIN: '${{ secrets.EMAIL_ADDRESS_ADMIN }}'
+      EMAIL_ADDRESS_USER: '${{ secrets.EMAIL_ADDRESS_USER }}'
+      PASSWORD_ADMIN: '${{ secrets.PASSWORD_ADMIN }}'
+      PASSWORD_USER: '${{ secrets.PASSWORD_USER }}'
 
     steps:
       - name: Checkout repo
