@@ -35,18 +35,28 @@ export async function updateTransactionStatus(orderId, status, method) {
     throw new HttpError('Transaction not found', 404);
   }
 
-  const seatIds = transaction.passenger.map(
-    (p) => p.departureSeatId,
+  const seatIds = transaction.passenger.flatMap((p) => [
+    p.departureSeatId,
     p.returnSeatId
-  );
+  ]);
+
+  const proccessedSeatIds = seatIds.filter((id) => id);
 
   await prisma.$transaction(async (tx) => {
     let newStatus;
     if (status === 'settlement') {
-      await seatRepository.updateSeatStatusBySeats(seatIds, 'BOOKED', tx);
+      await seatRepository.updateSeatStatusBySeats(
+        proccessedSeatIds,
+        'BOOKED',
+        tx
+      );
       newStatus = 'SUCCESS';
     } else if (['cancel', 'expire'].includes(status)) {
-      await seatRepository.updateSeatStatusBySeats(seatIds, 'AVAILABLE', tx);
+      await seatRepository.updateSeatStatusBySeats(
+        proccessedSeatIds,
+        'AVAILABLE',
+        tx
+      );
       newStatus = 'CANCELLED';
     } else if (status === 'pending') {
       newStatus = 'PENDING';
