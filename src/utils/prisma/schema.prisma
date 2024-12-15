@@ -183,10 +183,9 @@ model Airport {
 model Payment {
   id              String        @id @default(uuid(7)) @db.Uuid
   status          PaymentStatus
-  method          PaymentMethod?
-  snapToken       String?        @map("snap_token")
-  snapRedirectUrl String?        @map("snap_redirect_url")
-  paymentMethod   String?        @map("payment_method")
+  method          String?
+  snapToken       String        @map("snap_token")
+  expiredAt       DateTime       @map("expired_at")
 
   transactionId String      @unique @map("transaction_id") @db.Uuid
   transaction   Transaction @relation(fields: [transactionId], references: [id])
@@ -236,19 +235,6 @@ model Seat {
 enum Role {
   ADMIN
   USER
-}
-
-enum PaymentMethod {
-  BANK_TRANSFER
-  CREDIT_CARD
-  DEBIT_CARD
-  GOPAY
-  OVO
-  DANA
-  LINK_AJA
-  SHOPEE_PAY
-  QRIS
-  CASH
 }
 
 enum PaymentStatus {

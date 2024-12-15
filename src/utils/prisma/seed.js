@@ -3,6 +3,7 @@ import { prisma } from '../db.js';
 import bcrypt from 'bcrypt';
 import { appEnv } from '../env.js';
 import { generateSeats } from '../../scripts/generateSeats.js';
+import { ALLOWED_CLASS } from '../../middlewares/validation/flight.js';
 
 async function seedUsers() {
   const users = [
@@ -179,64 +180,48 @@ async function seedFlights() {
     return;
   }
 
-  const flights = [
-    {
-      departureDate: new Date(Date.now() + 1000 * 60 * 60 * 24),
-      arrivalDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
-      arrivalTime: '08:00',
-      departureTime: '06:00',
+  const flights = [];
+
+  for (let i = 0; i < 50; i++) {
+    const randomAirlinesId =
+      airlines[Math.floor(Math.random() * airlines.length)].id;
+    const randomAeroplanesId =
+      aeroplanes[Math.floor(Math.random() * aeroplanes.length)].id;
+    const randomAirportsId =
+      airports[Math.floor(Math.random() * airports.length)].id;
+    const randomClass =
+      ALLOWED_CLASS[Math.floor(Math.random() * ALLOWED_CLASS.length)];
+
+    flights.push({
+      departureDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * (i + 9)),
+      arrivalDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * (i + 10)),
+      arrivalTime: '16:00',
+      departureTime: '14:00',
       duration: 120,
-      price: 100,
-      class: 'ECONOMY',
-      description: 'Flight from Jakarta to Singapore',
-      airlineId: airlines[0].id,
+      price: 500 + i * 50,
+      class: randomClass,
+      description: `Flight from Jakarta to Destination ${i + 1}`,
+      airlineId: randomAirlinesId,
       airportIdFrom: airports[0].id,
-      airportIdTo: airports[1].id,
-      aeroplaneId: aeroplanes[0].id
-    },
-    {
-      departureDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 3),
-      arrivalDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 4),
-      arrivalTime: '10:00',
-      departureTime: '08:00',
+      airportIdTo: randomAirportsId,
+      aeroplaneId: randomAeroplanesId
+    });
+
+    flights.push({
+      departureDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * (i + 11)),
+      arrivalDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * (i + 12)),
+      arrivalTime: '18:00',
+      departureTime: '16:00',
       duration: 120,
-      price: 200,
-      class: 'BUSINESS',
-      description: 'Flight from Jakarta to London',
-      airlineId: airlines[0].id,
-      airportIdFrom: airports[0].id,
-      airportIdTo: airports[2].id,
-      aeroplaneId: aeroplanes[1].id
-    },
-    {
-      departureDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 5),
-      arrivalDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 6),
-      arrivalTime: '12:00',
-      departureTime: '10:00',
-      duration: 120,
-      price: 300,
-      class: 'PREMIUM_ECONOMY',
-      description: 'Flight from Jakarta to Los Angeles',
-      airlineId: airlines[0].id,
-      airportIdFrom: airports[0].id,
-      airportIdTo: airports[3].id,
-      aeroplaneId: aeroplanes[2].id
-    },
-    {
-      departureDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-      arrivalDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8),
-      arrivalTime: '14:00',
-      departureTime: '12:00',
-      duration: 120,
-      price: 400,
-      class: 'ECONOMY',
-      description: 'Flight from Jakarta to Sydney',
-      airlineId: airlines[0].id,
-      airportIdFrom: airports[0].id,
-      airportIdTo: airports[4].id,
-      aeroplaneId: aeroplanes[3].id
-    }
-  ];
+      price: 500 + i * 50,
+      class: randomClass,
+      description: `Return flight from Destination ${i + 1} to Jakarta`,
+      airlineId: randomAirlinesId,
+      airportIdFrom: randomAirportsId,
+      airportIdTo: airports[0].id,
+      aeroplaneId: randomAeroplanesId
+    });
+  }
 
   await prisma.flight.createMany({
     data: flights

@@ -1,7 +1,7 @@
 import { prisma } from '../utils/db.js';
 
-export function createTransactionAndPassenger(payload) {
-  return prisma.transaction.create({
+export function createTransactionAndPassenger(payload, tx) {
+  return tx.transaction.create({
     data: {
       amount: payload.amount,
       userId: payload.userId,
@@ -11,16 +11,10 @@ export function createTransactionAndPassenger(payload) {
         createMany: {
           data: payload.proccessedPassengers
         }
-      },
-      payment: {
-        create: {
-          status: 'PENDING'
-        }
       }
     },
     include: {
-      passenger: true,
-      payment: true
+      user: true
     }
   });
 }
@@ -32,6 +26,37 @@ export function getActiveTransaction(id) {
       payment: {
         status: {
           notIn: ['CANCELLED', 'SUCCESS']
+        },
+        expiredAt: {
+          gt: new Date()
+        }
+      }
+    }
+  });
+}
+
+export function getTransactionWithUserById(id) {
+  return prisma.transaction.findUnique({
+    where: {
+      id
+    },
+    include: {
+      user: true
+    }
+  });
+}
+
+export function getTransactionWithPaymentWithPassengerById(id) {
+  return prisma.transaction.findUnique({
+    where: {
+      id
+    },
+    include: {
+      payment: true,
+      passenger: {
+        select: {
+          departureSeatId: true,
+          returnSeatId: true
         }
       }
     }

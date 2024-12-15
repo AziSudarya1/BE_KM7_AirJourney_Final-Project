@@ -3,7 +3,12 @@ import { generateJoiError } from '../../utils/helper.js';
 import { HttpError } from '../../utils/error.js';
 import { ALLOWED_CONTINENTS } from './airport.js';
 
-const ALLOWED_CLASS = ['ECONOMY', 'PREMIUM_ECONOMY', 'BUSINESS', 'FIRST_CLASS'];
+export const ALLOWED_CLASS = [
+  'ECONOMY',
+  'PREMIUM_ECONOMY',
+  'BUSINESS',
+  'FIRST_CLASS'
+];
 
 const createFlightSchema = Joi.object({
   departureDate: Joi.date().required(),
@@ -63,6 +68,7 @@ const queryParamSchema = Joi.object({
   airportIdTo: Joi.string().uuid(),
   continent: Joi.string().valid(...ALLOWED_CONTINENTS),
   sortBy: Joi.string().valid(...ALLOWED_SORTING),
+  airlineIds: Joi.array().items(Joi.string().uuid()),
   sortOrder: Joi.string()
     .valid(...ALLOWED_ORDER)
     .when('sortBy', {
@@ -86,7 +92,14 @@ const generateDateFilter = (date) => {
 
 export async function validateFilterSortingAndCursorIdParams(req, res, next) {
   try {
-    await queryParamSchema.validateAsync(req.query, { abortEarly: false });
+    const airLinesArray = req.query.airlineIds
+      ? req.query.airlineIds.split(',')
+      : undefined;
+
+    await queryParamSchema.validateAsync(
+      { ...req.query, airlineIds: airLinesArray },
+      { abortEarly: false }
+    );
 
     const {
       departureDate,
@@ -94,6 +107,7 @@ export async function validateFilterSortingAndCursorIdParams(req, res, next) {
       continent,
       sortBy,
       sortOrder,
+      airlineIds,
       ...filterQuery
     } = req.query;
 
@@ -103,7 +117,8 @@ export async function validateFilterSortingAndCursorIdParams(req, res, next) {
         departureDate: generateDateFilter(departureDate)
       }),
       ...(arrivalDate && { arrivalDate: generateDateFilter(arrivalDate) }),
-      ...(continent && { airportTo: { continent: continent } })
+      ...(continent && { airportTo: { continent: continent } }),
+      ...(airlineIds && { airlineId: { in: airLinesArray } })
     };
 
     const sort = {
