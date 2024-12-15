@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "mjml:compile": "mjml ./src/utils/email/template/*.mjml -o ./src/utils/email/build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --max-warnings 0 .",
     "format": "prettier --write .",
