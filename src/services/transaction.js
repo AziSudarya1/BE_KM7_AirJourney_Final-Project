@@ -5,6 +5,8 @@ import { prisma } from '../utils/db.js';
 import { validatePassengers } from '../scripts/validatePassengers.js';
 import { calculateAmount } from '../utils/helper.js';
 import { HttpError } from '../utils/error.js';
+import * as paymentService from './payment.js';
+import * as paymentRepository from '../repositories/payment.js';
 
 export async function createTransaction(payload) {
   const existingTransaction = await transactionRepository.getActiveTransaction(
@@ -90,17 +92,37 @@ export async function createTransaction(payload) {
   const total = amount + tax;
 
   const transactionData = await prisma.$transaction(async (transaction) => {
-    await seatRepository.updateSeatStatusBySeats(seatIds, transaction);
+    await seatRepository.updateSeatStatusBySeats(
+      seatIds,
+      'PENDING',
+      transaction
+    );
 
-    const data = await transactionRepository.createTransactionAndPassenger({
-      amount: total,
-      userId: payload.userId,
-      departureFlightId: payload.departureFlightId,
-      returnFlightId: returnFlightId,
-      proccessedPassengers
-    });
+    const data = await transactionRepository.createTransactionAndPassenger(
+      {
+        amount: total,
+        userId: payload.userId,
+        departureFlightId: payload.departureFlightId,
+        returnFlightId: returnFlightId,
+        proccessedPassengers
+      },
+      transaction
+    );
 
-    return data;
+    const midtrans = await paymentService.createMidtransToken(data);
+
+    const payment = await paymentRepository.createPayment(
+      {
+        transactionId: data.id,
+        snapToken: midtrans.token
+      },
+      transaction
+    );
+
+    return {
+      ...data,
+      payment
+    };
   });
 
   return transactionData;

@@ -26,7 +26,8 @@ export async function getAllFlights(_req, res) {
 
   return res.json({
     message: 'Successfully get all flight',
-    data
+    meta: data.meta,
+    data: data.flight
   });
 }
 
