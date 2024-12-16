@@ -173,8 +173,7 @@ export async function getAllTransactions(userId, filter) {
 }
 
 export async function getTransactionWithFlightAndPassenger(id, userId, email) {
-  const transaction =
-    await transactionRepository.getTransactionWithFlightAndPassenger(id);
+  const transaction = await transactionRepository.getDetailTransactionById(id);
 
   if (!transaction) {
     throw new HttpError('Transaction not found', 404);
@@ -182,6 +181,10 @@ export async function getTransactionWithFlightAndPassenger(id, userId, email) {
 
   if (transaction.userId !== userId) {
     throw new HttpError('Unauthorized', 403);
+  }
+
+  if (transaction.payment.status !== 'SUCCESS') {
+    throw new HttpError('Cannot send E-Ticket', 400);
   }
 
   const { departureFlight, returnFlight } = transaction;

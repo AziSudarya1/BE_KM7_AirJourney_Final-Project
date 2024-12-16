@@ -146,30 +146,3 @@ export function getAllTransactions(userId, filter) {
 
   return prisma.transaction.findMany(query);
 }
-
-export function getTransactionWithFlightAndPassenger(id) {
-  return prisma.transaction.findUnique({
-    where: {
-      id
-    },
-    include: {
-      passenger: true,
-      departureFlight: {
-        include: {
-          airportFrom: true,
-          airportTo: true,
-          airline: true,
-          aeroplane: true
-        }
-      },
-      returnFlight: {
-        include: {
-          airportFrom: true,
-          airportTo: true,
-          airline: true,
-          aeroplane: true
-        }
-      }
-    }
-  });
-}
