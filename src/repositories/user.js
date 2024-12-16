@@ -14,9 +14,6 @@ export function createUser(payload) {
           expiredAt: payload.expiredAt
         }
       }
-    },
-    include: {
-      otp: true
     }
   });
 }
