@@ -131,6 +131,10 @@ export async function createTransaction(payload) {
 export async function getDetailTransactionById(id) {
   const data = await transactionRepository.getDetailTransactionById(id);
 
+  if (!data) {
+    throw new HttpError('Transaction not found', 404);
+  }
+
   const passengers = data?.passenger;
   const departurePrice = data.departureFlight.price;
   const returnPrice = data.returnFlight?.price || 0;

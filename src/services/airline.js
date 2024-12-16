@@ -24,6 +24,12 @@ export async function getAirlineByCode(code) {
   return data;
 }
 
+export async function getAllAirlines() {
+  const data = await airlineRepository.getAllAirlines();
+
+  return data;
+}
+
 export async function updateAirlineById(id, payload) {
   const data = await airlineRepository.updateAirline(id, payload);
 
