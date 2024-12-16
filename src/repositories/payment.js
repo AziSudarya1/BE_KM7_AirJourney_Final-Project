@@ -1,19 +1,12 @@
 import { prisma } from '../utils/db.js';
 
-export async function updatePaymentStatusAndMethod(
-  transactionId,
-  status,
-  method,
-  tx
-) {
+export async function updatePaymentStatusAndMethod(transactionId, payload, tx) {
   const db = tx ?? prisma;
 
   return db.payment.update({
     where: { transactionId },
     data: {
-      status,
-      method,
-      updatedAt: new Date()
+      ...payload
     }
   });
 }
