@@ -23,11 +23,9 @@ export async function createUser(name, email, phoneNumber, password) {
 
   const data = await userRepository.createUser(payload);
 
-  await sendEmail(
-    email,
-    'Your OTP Code',
-    `Your OTP code is: ${otp}. It will expire in 1 minute.`
-  );
+  await sendEmail(email, 'Your OTP Code', 'otp', {
+    otp
+  });
 
   return data;
 }
