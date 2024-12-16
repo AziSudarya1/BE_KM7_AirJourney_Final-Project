@@ -28,13 +28,11 @@ export async function sendResetPasswordEmail(email) {
       expiredAt
     );
 
-    const resetLink = `${appEnv.FRONTEND_URL}/reset-password?token=${token}`;
+    const url = `${appEnv.FRONTEND_URL}/reset-password?token=${token}`;
 
-    await sendEmail(
-      user.email,
-      'Reset Password',
-      `Click the link to reset your password: ${resetLink}`
-    );
+    await sendEmail(user.email, 'Reset Password Request', 'resetPassword', {
+      url
+    });
   }
 }
 
