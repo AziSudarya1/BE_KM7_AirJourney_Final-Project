@@ -40,3 +40,18 @@ export async function getAllTransactions(_req, res) {
     data
   });
 }
+
+export async function getTransactionWithFlightAndPassenger(req, res) {
+  const { id } = req.params;
+  const { id: userId, email } = res.locals.user;
+
+  await transactionService.getTransactionWithFlightAndPassenger(
+    id,
+    userId,
+    email
+  );
+
+  res.status(200).json({
+    message: 'Ticket send successfully'
+  });
+}

@@ -29,4 +29,10 @@ export default (app) => {
     transactionValidationMiddleware.getTransactionFilterValidation,
     transactionController.getAllTransactions
   );
+
+  router.post(
+    '/:id/ticket/send',
+    authMiddleware.isAuthorized,
+    transactionController.getTransactionWithFlightAndPassenger
+  );
 };
