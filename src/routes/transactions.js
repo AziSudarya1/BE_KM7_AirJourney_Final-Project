@@ -23,6 +23,13 @@ export default (app) => {
     transactionController.getDetailTransactionById
   );
 
+  router.put(
+    '/:id/cancel',
+    authMiddleware.isAuthorized,
+    commonValidationMiddleware.validateIdParams,
+    transactionController.cancelTransaction
+  );
+
   router.get(
     '/',
     authMiddleware.isAuthorized,

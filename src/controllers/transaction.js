@@ -41,6 +41,17 @@ export async function getAllTransactions(_req, res) {
   });
 }
 
+export async function cancelTransaction(req, res) {
+  const { id } = req.params;
+  const { id: userId } = res.locals.user;
+
+  await transactionService.cancelTransaction(id, userId);
+
+  res.status(200).json({
+    message: 'Transaction canceled successfully'
+  });
+}
+
 export async function getTransactionWithFlightAndPassenger(req, res) {
   const { id } = req.params;
   const { id: userId, email } = res.locals.user;

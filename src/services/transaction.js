@@ -238,3 +238,45 @@ export async function getTransactionWithFlightAndPassenger(id, userId, email) {
 
   return transaction;
 }
+
+export async function cancelTransaction(id, userId) {
+  const transaction =
+    await transactionRepository.getTransactionWithPassengerUserAndPaymentById(
+      id
+    );
+
+  if (!transaction) {
+    throw new HttpError('Transaction not found', 404);
+  }
+
+  if (transaction.userId !== userId) {
+    throw new HttpError('Unauthorized', 403);
+  }
+
+  if (transaction.payment.status !== 'PENDING') {
+    throw new HttpError('Transaction cannot be canceled', 400);
+  }
+
+  const seatIds = transaction.passenger.flatMap((p) => [
+    p.departureSeatId,
+    p.returnSeatId
+  ]);
+
+  const proccessedSeatIds = seatIds.filter((id) => id);
+
+  await prisma.$transaction(async (transaction) => {
+    await seatRepository.updateSeatStatusBySeats(
+      proccessedSeatIds,
+      'AVAILABLE',
+      transaction
+    );
+
+    await paymentRepository.updatePaymentStatusAndMethod(
+      id,
+      {
+        status: 'CANCELLED'
+      },
+      transaction
+    );
+  });
+}
