@@ -1,0 +1,167 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all padding="0px"></mj-all>
+      <mj-class
+        name="preheader"
+        color="#000000"
+        font-size="11px"
+        font-family="Ubuntu, Helvetica, Arial, sans-serif"
+        padding="0px"
+      ></mj-class>
+    </mj-attributes>
+    <mj-style inline="inline">
+      a { text-decoration: none; color: inherit; } p { margin: 0; }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#ffb300">
+    <!-- Header Section -->
+    <mj-section background-color="#a600ff" padding="10px 0">
+      <mj-column width="33%">
+        <mj-image
+          src="https://ik.imagekit.io/jfne1iwnd/05182fbe-5995-418b-a4a0-5fcb5bf4d393_jfz6m9s05.png"
+          alt="Logo"
+          width="100px"
+          padding="10px 0"
+        ></mj-image>
+      </mj-column>
+      <mj-column width="66%">
+        <mj-text
+          align="left"
+          color="#ffffff"
+          font-size="20px"
+          font-family="Lato, Helvetica, Arial, sans-serif"
+          padding="18px 0"
+          >The Only Way to Travel</mj-text
+        >
+      </mj-column>
+    </mj-section>
+
+    <!-- OTP Section -->
+    <mj-section background-color="#ffffff" padding-top="20px">
+      <mj-column width="100%">
+        <mj-text
+          align="center"
+          color="#360580"
+          font-size="25px"
+          font-family="Lato, Helvetica, Arial, sans-serif"
+          padding="10px 25px"
+        >
+          <strong
+            >Hey {{name}},<br /><br />Thank You for Choosing Terbangin!</strong
+          >
+        </mj-text>
+        <mj-text
+          align="center"
+          color="#EC652D"
+          font-size="18px"
+          font-family="Lato, Helvetica, Arial, sans-serif"
+          padding="10px 30px"
+        >
+          <strong>Here is your OTP code:</strong>
+        </mj-text>
+        <mj-text
+          font-size="24px"
+          font-family="Lato, Helvetica, Arial, sans-serif"
+          font-weight="bold"
+          align="center"
+          color="#EC652D"
+          background-color="#a600ff"
+          padding="20px 0"
+        >
+          {{otp}}
+        </mj-text>
+        <mj-text
+          align="center"
+          color="#EC652D"
+          font-size="12px"
+          font-family="Lato, Helvetica, Arial, sans-serif"
+          padding="10px 30px"
+        >
+          <strong
+            >This OTP is valid for the next 5 minutes. If you didn’t create an
+            account with us, please ignore this email.</strong
+          >
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Travel Destinations Section -->
+    <mj-section background-color="#ffffff" padding="20px 0">
+      <!-- Destination 1 -->
+      <mj-column>
+        <mj-image
+          src="https://images.pexels.com/photos/2129796/pexels-photo-2129796.png?auto=compress&cs=tinysrgb&w=600"
+          alt="New York"
+          width="184px"
+          padding="0 25px"
+        ></mj-image>
+        <mj-text
+          align="center"
+          color="#EC652D"
+          font-size="20px"
+          font-family="Lato, Helvetica, Arial, sans-serif"
+          padding="20px 25px"
+        >
+          <strong>New York</strong>
+          <p style="font-size: 15px; color: #000000">$399</p>
+        </mj-text>
+      </mj-column>
+
+      <!-- Destination 2 -->
+      <mj-column>
+        <mj-image
+          src="https://images.pexels.com/photos/13739807/pexels-photo-13739807.jpeg?auto=compress&cs=tinysrgb&w=600"
+          alt="London"
+          width="184px"
+          padding="0 25px"
+        ></mj-image>
+        <mj-text
+          align="center"
+          color="#EC652D"
+          font-size="20px"
+          font-family="Lato, Helvetica, Arial, sans-serif"
+          padding="20px 25px"
+        >
+          <strong>London</strong>
+          <p style="font-size: 15px; color: #000000">$399</p>
+        </mj-text>
+      </mj-column>
+
+      <!-- Destination 3 -->
+      <mj-column>
+        <mj-image
+          src="https://images.pexels.com/photos/12907890/pexels-photo-12907890.jpeg?auto=compress&cs=tinysrgb&w=600"
+          alt="Berlin"
+          width="184px"
+          padding="0 25px"
+        ></mj-image>
+        <mj-text
+          align="center"
+          color="#EC652D"
+          font-size="20px"
+          font-family="Lato, Helvetica, Arial, sans-serif"
+          padding="20px 25px"
+        >
+          <strong>Berlin</strong>
+          <p style="font-size: 15px; color: #000000">$399</p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer Section -->
+    <mj-section background-color="#a600ff" padding="10px">
+      <mj-column width="100%">
+        <mj-text
+          align="center"
+          color="#ffffff"
+          font-size="20px"
+          font-family="Lato, Helvetica, Arial, sans-serif"
+          padding="10px 25px"
+        >
+          Best Regards,<br /><br />The Terbangin Team
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
