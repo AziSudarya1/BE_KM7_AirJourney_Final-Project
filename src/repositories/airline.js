@@ -10,6 +10,10 @@ export function createAirline(payload) {
   });
 }
 
+export function getAllAirlines() {
+  return prisma.airline.findMany();
+}
+
 export function updateAirline(id, payload) {
   return prisma.airline.update({
     where: { id },

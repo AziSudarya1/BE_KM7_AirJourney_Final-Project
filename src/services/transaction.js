@@ -128,10 +128,18 @@ export async function createTransaction(payload) {
   return transactionData;
 }
 
-export async function getTransactionById(id) {
-  const data = await transactionRepository.getTransactionById(id);
+export async function getDetailTransactionById(id, userId) {
+  const data = await transactionRepository.getDetailTransactionById(id);
 
-  const passengers = data.passenger;
+  if (!data) {
+    throw new HttpError('Transaction not found', 404);
+  }
+
+  if (data.userId !== userId) {
+    throw new HttpError('Unauthorized', 403);
+  }
+
+  const passengers = data?.passenger;
   const departurePrice = data.departureFlight.price;
   const returnPrice = data.returnFlight?.price || 0;
   const returnFlightId = data.returnFlight?.id || null;
@@ -159,6 +167,12 @@ export async function getTransactionById(id) {
 
 export async function getAllTransactions(userId, filter) {
   const data = await transactionRepository.getAllTransactions(userId, filter);
+
+  return data;
+}
+
+export async function getTransactionWithUserById(id) {
+  const data = await transactionRepository.getTransactionWithUserById(id);
 
   return data;
 }
