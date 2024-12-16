@@ -106,8 +106,8 @@ model Transaction {
     originCountry   String  @map("origin_country")
     expiredAt       DateTime @map("expired_at")
 
-    departureSeatId String? @unique @map("departure_seat_id") @db.Uuid
-    returnSeatId    String? @unique @map("return_seat_id") @db.Uuid
+    departureSeatId String? @map("departure_seat_id") @db.Uuid
+    returnSeatId    String? @map("return_seat_id") @db.Uuid
 
     transaction   Transaction @relation(fields: [transactionId], references: [id])
     departureSeat Seat?       @relation("DepartureSeat", fields: [departureSeatId], references: [id])
@@ -223,8 +223,8 @@ model Seat {
 
   aeroplane          Aeroplane  @relation(fields: [aeroplaneId], references: [id])
   flight             Flight     @relation(fields: [flightId], references: [id])
-  passengerDeparture Passenger? @relation("DepartureSeat")
-  passengerReturn    Passenger? @relation("ReturnSeat")
+  passengerDeparture Passenger[] @relation("DepartureSeat")
+  passengerReturn    Passenger[] @relation("ReturnSeat")
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
