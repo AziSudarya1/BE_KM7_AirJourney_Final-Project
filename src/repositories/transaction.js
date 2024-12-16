@@ -69,6 +69,7 @@ export function getDetailTransactionById(id) {
       id
     },
     include: {
+      user: true,
       passenger: true,
       payment: true,
       departureFlight: {

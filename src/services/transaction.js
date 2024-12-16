@@ -128,11 +128,15 @@ export async function createTransaction(payload) {
   return transactionData;
 }
 
-export async function getDetailTransactionById(id) {
+export async function getDetailTransactionById(id, userId) {
   const data = await transactionRepository.getDetailTransactionById(id);
 
   if (!data) {
     throw new HttpError('Transaction not found', 404);
+  }
+
+  if (data.userId !== userId) {
+    throw new HttpError('Unauthorized', 403);
   }
 
   const passengers = data?.passenger;

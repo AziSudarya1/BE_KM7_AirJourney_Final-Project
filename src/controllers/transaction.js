@@ -19,8 +19,9 @@ export async function createTransaction(req, res) {
 
 export async function getDetailTransactionById(req, res) {
   const { id } = req.params;
+  const { id: userId } = res.locals.user;
 
-  const data = await transactionService.getDetailTransactionById(id);
+  const data = await transactionService.getDetailTransactionById(id, userId);
 
   res.status(200).json({
     message: 'Successfully get detail transaction',
