@@ -1,6 +1,9 @@
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {
+    ignores: ['coverage']
+  },
+  {
     rules: {
       semi: ['error', 'always'],
       quotes: ['error', 'single', { avoidEscape: true }],
