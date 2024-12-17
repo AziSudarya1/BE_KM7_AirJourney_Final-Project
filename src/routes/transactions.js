@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as transactionController from '../controllers/transaction.js';
+import * as transactionMiddleware from '../middlewares/transaction.js';
 import * as authMiddleware from '../middlewares/auth.js';
 import * as transactionValidationMiddleware from '../middlewares/validation/transaction.js';
 import * as commonValidationMiddleware from '../middlewares/validation/common.js';
@@ -34,6 +35,7 @@ export default (app) => {
     '/',
     authMiddleware.isAuthorized,
     transactionValidationMiddleware.getTransactionFilterValidation,
+    transactionMiddleware.getMaxTransactionDataAndCreateMeta,
     transactionController.getAllTransactions
   );
 };

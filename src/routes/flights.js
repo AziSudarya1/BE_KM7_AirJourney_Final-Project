@@ -30,7 +30,8 @@ export default (app) => {
 
   router.get(
     '/',
-    flightValidationMiddleware.validateFilterSortingAndCursorIdParams,
+    flightValidationMiddleware.validateFilterSortingAndPageParams,
+    flightMiddleware.getMaxFlightDataAndCreateMeta,
     flightController.getAllFlights
   );
 };
