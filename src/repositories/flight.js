@@ -25,48 +25,18 @@ export function createFlightAndSeat(payload) {
   });
 }
 
-export function getAllFlight(cursorId, filter) {
-  const query = {
+export function countFlightDataWithFilter(filter) {
+  return prisma.flight.count({
     where: {
+      ...filter,
       departureDate: {
         gte: new Date()
       }
-    },
-    take: 10,
-    include: {
-      airportFrom: true,
-      airportTo: true,
-      airline: true,
-      aeroplane: true,
-      _count: {
-        select: {
-          seat: {
-            where: {
-              status: 'AVAILABLE'
-            }
-          }
-        }
-      }
-    },
-    orderBy: {
-      id: 'asc'
     }
-  };
+  });
+}
 
-  if (cursorId) {
-    query.cursor = {
-      id: cursorId
-    };
-    query.skip = 1;
-  }
-
-  if (Object.keys(filter).length) {
-    query.where = {
-      ...query.where,
-      ...filter
-    };
-  }
-
+export function getAllFlight(query) {
   return prisma.flight.findMany(query);
 }
 

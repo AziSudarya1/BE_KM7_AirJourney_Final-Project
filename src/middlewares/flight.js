@@ -56,3 +56,17 @@ export async function checkFlightIdExist(req, res, next) {
 
   next();
 }
+
+export async function getMaxFlightDataAndCreateMeta(_req, res, next) {
+  const filter = res.locals.filter;
+  const page = res.locals.page;
+
+  const meta = await flightService.countFlightDataWithFilterAndCreateMeta(
+    filter,
+    page
+  );
+
+  res.locals.meta = meta;
+
+  next();
+}
