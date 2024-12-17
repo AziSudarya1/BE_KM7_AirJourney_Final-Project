@@ -38,7 +38,7 @@ export default (app) => {
   );
 
   router.post(
-    '/:id/ticket/send',
+    '/:id/ticket',
     authMiddleware.isAuthorized,
     transactionController.getTransactionWithFlightAndPassenger
   );
