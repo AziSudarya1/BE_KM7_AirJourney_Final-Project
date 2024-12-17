@@ -128,10 +128,18 @@ export async function createTransaction(payload) {
   return transactionData;
 }
 
-export async function getTransactionById(id) {
-  const data = await transactionRepository.getTransactionById(id);
+export async function getDetailTransactionById(id, userId) {
+  const data = await transactionRepository.getDetailTransactionById(id);
 
-  const passengers = data.passenger;
+  if (!data) {
+    throw new HttpError('Transaction not found', 404);
+  }
+
+  if (data.userId !== userId) {
+    throw new HttpError('Unauthorized', 403);
+  }
+
+  const passengers = data?.passenger;
   const departurePrice = data.departureFlight.price;
   const returnPrice = data.returnFlight?.price || 0;
   const returnFlightId = data.returnFlight?.id || null;
@@ -161,4 +169,52 @@ export async function getAllTransactions(userId, filter) {
   const data = await transactionRepository.getAllTransactions(userId, filter);
 
   return data;
+}
+
+export async function getTransactionWithUserById(id) {
+  const data = await transactionRepository.getTransactionWithUserById(id);
+
+  return data;
+}
+
+export async function cancelTransaction(id, userId) {
+  const transaction =
+    await transactionRepository.getTransactionWithPassengerUserAndPaymentById(
+      id
+    );
+
+  if (!transaction) {
+    throw new HttpError('Transaction not found', 404);
+  }
+
+  if (transaction.userId !== userId) {
+    throw new HttpError('Unauthorized', 403);
+  }
+
+  if (transaction.payment.status !== 'PENDING') {
+    throw new HttpError('Transaction cannot be canceled', 400);
+  }
+
+  const seatIds = transaction.passenger.flatMap((p) => [
+    p.departureSeatId,
+    p.returnSeatId
+  ]);
+
+  const proccessedSeatIds = seatIds.filter((id) => id);
+
+  await prisma.$transaction(async (transaction) => {
+    await seatRepository.updateSeatStatusBySeats(
+      proccessedSeatIds,
+      'AVAILABLE',
+      transaction
+    );
+
+    await paymentRepository.updatePaymentStatusAndMethod(
+      id,
+      {
+        status: 'CANCELLED'
+      },
+      transaction
+    );
+  });
 }

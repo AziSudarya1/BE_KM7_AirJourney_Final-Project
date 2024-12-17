@@ -4,6 +4,7 @@ const mockCreateAirline = jest.fn();
 const mockGetAirlineById = jest.fn();
 const mockGetAirlineByName = jest.fn();
 const mockGetAirlineByCode = jest.fn();
+const mockGetAllAirline = jest.fn();
 const mockUpdateAirlineById = jest.fn();
 const mockDeleteAirlineById = jest.fn();
 
@@ -12,6 +13,7 @@ jest.unstable_mockModule('../../repositories/airline.js', () => ({
   getAirlineById: mockGetAirlineById,
   getAirlineByName: mockGetAirlineByName,
   getAirlineByCode: mockGetAirlineByCode,
+  getAllAirlines: mockGetAllAirline,
   updateAirline: mockUpdateAirlineById,
   deleteAirline: mockDeleteAirlineById
 }));
@@ -96,6 +98,32 @@ describe('airlineServices', () => {
       const result = await airlineServices.getAirlineByCode(mockCode);
 
       expect(mockGetAirlineByCode).toHaveBeenCalledWith(mockCode);
+      expect(result).toEqual(mockData);
+    });
+  });
+
+  describe('getAllAirline', () => {
+    it('should get all airlines', async () => {
+      const mockData = [
+        {
+          id: 1,
+          code: 'code',
+          name: 'name',
+          image: 'image'
+        },
+        {
+          id: 2,
+          code: 'code',
+          name: 'name',
+          image: 'image'
+        }
+      ];
+
+      mockGetAllAirline.mockResolvedValue(mockData);
+
+      const result = await airlineServices.getAllAirlines();
+
+      expect(mockGetAllAirline).toHaveBeenCalled();
       expect(result).toEqual(mockData);
     });
   });

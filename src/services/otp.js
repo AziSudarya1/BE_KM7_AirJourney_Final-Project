@@ -26,11 +26,9 @@ export async function sendOtp(email) {
 
   const data = await otpRepository.createOtp(user.id, otp, expiredAt);
 
-  await sendEmail(
-    user.email,
-    'Your OTP Code',
-    `Your OTP code is: ${otp}. It will expire in 1 minute.`
-  );
+  await sendEmail(user.email, 'Your OTP Code', 'otp', {
+    otp
+  });
 
   return data;
 }

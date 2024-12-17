@@ -27,9 +27,7 @@ export async function createMidtransToken(transaction) {
 
 export async function updateTransactionStatus(orderId, status, method) {
   const transaction =
-    await transactionRepository.getTransactionWithPaymentWithPassengerById(
-      orderId
-    );
+    await transactionRepository.getTransactionWithPassengerById(orderId);
 
   if (!transaction) {
     throw new HttpError('Transaction not found', 404);
@@ -64,8 +62,10 @@ export async function updateTransactionStatus(orderId, status, method) {
 
     await paymentRepository.updatePaymentStatusAndMethod(
       orderId,
-      newStatus,
-      method,
+      {
+        status: newStatus,
+        method
+      },
       tx
     );
   });

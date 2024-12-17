@@ -17,10 +17,11 @@ export async function createTransaction(req, res) {
   });
 }
 
-export async function getTransactionById(req, res) {
+export async function getDetailTransactionById(req, res) {
   const { id } = req.params;
+  const { id: userId } = res.locals.user;
 
-  const data = await transactionService.getTransactionById(id);
+  const data = await transactionService.getDetailTransactionById(id, userId);
 
   res.status(200).json({
     message: 'Successfully get detail transaction',
@@ -37,5 +38,16 @@ export async function getAllTransactions(_req, res) {
   res.status(200).json({
     message: 'Successfully get all transactions',
     data
+  });
+}
+
+export async function cancelTransaction(req, res) {
+  const { id } = req.params;
+  const { id: userId } = res.locals.user;
+
+  await transactionService.cancelTransaction(id, userId);
+
+  res.status(200).json({
+    message: 'Transaction canceled successfully'
   });
 }
