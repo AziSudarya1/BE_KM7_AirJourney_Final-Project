@@ -1,15 +1,15 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
 const mockCreateTransaction = jest.fn();
-const mockGetTransactionById = jest.fn();
-const mockUpdateTransactionById = jest.fn();
+const mockGetDetailTransactionById = jest.fn();
 const mockGetAllTransactions = jest.fn();
+const mockCancleTransaction = jest.fn();
 
 jest.unstable_mockModule('../../services/transaction.js', () => ({
   createTransaction: mockCreateTransaction,
-  getTransactionById: mockGetTransactionById,
-  updateTransactionById: mockUpdateTransactionById,
-  getAllTransactions: mockGetAllTransactions
+  getDetailTransactionById: mockGetDetailTransactionById,
+  getAllTransactions: mockGetAllTransactions,
+  cancelTransaction: mockCancleTransaction
 }));
 
 const transactionController = await import('../transaction.js');
@@ -52,23 +52,29 @@ describe('Transaction Controller', () => {
     });
   });
 
-  describe('getTransactionById', () => {
-    it('should call getTransactionById service', async () => {
+  describe('getDetailTransactionById', () => {
+    it('should call getDetailTransactionById service', async () => {
       const mockRequest = {
         params: {
-          id: '1'
+          id: 'u1'
         }
       };
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
-        json: jest.fn()
+        json: jest.fn(),
+        locals: {
+          user: {
+            id: 'u1'
+          }
+        }
       };
 
-      const data = await transactionController.getTransactionById(
+      const data = await transactionController.getDetailTransactionById(
         mockRequest,
         mockResponse
       );
-      expect(mockGetTransactionById).toHaveBeenCalledWith(
+      expect(mockGetDetailTransactionById).toHaveBeenCalledWith(
+        mockResponse.locals.user.id,
         mockRequest.params.id
       );
       expect(mockResponse.status).toHaveBeenCalledWith(200);
@@ -122,6 +128,36 @@ describe('Transaction Controller', () => {
       expect(mockResponse.json).toHaveBeenCalledWith({
         message: 'Successfully get all transactions',
         data: mockData
+      });
+    });
+  });
+
+  describe('cancelTransaction', () => {
+    it('should call cancelTransaction service', async () => {
+      const mockRequest = {
+        params: {
+          id: 'u1'
+        }
+      };
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+        locals: {
+          user: {
+            id: 'u1'
+          }
+        }
+      };
+
+      await transactionController.cancelTransaction(mockRequest, mockResponse);
+
+      expect(mockCancleTransaction).toHaveBeenCalledWith(
+        mockRequest.params.id,
+        mockResponse.locals.user.id
+      );
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: 'Transaction canceled successfully'
       });
     });
   });

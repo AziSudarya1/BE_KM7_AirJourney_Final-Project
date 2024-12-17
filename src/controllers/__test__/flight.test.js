@@ -72,28 +72,35 @@ describe('flightController', () => {
 
   describe('getAllFlights', () => {
     it('should get all flights', async () => {
-      const mockRequest = {
-        query: {
-          filter: 'filter1',
-          sort: 'sort1'
-        }
-      };
+      const mockRequest = {};
       const mockResponse = {
         json: jest.fn(),
         locals: {
-          filter: 'filter1',
-          sort: 'sort1'
+          filter: {
+            startDate: '2023-01-01',
+            endDate: '2023-01-31'
+          },
+          sort: {
+            createdAt: 'asc'
+          }
         }
       };
 
-      mockGetAllFlights.mockResolvedValueOnce([
-        {
-          id: 'flight1',
-          airportIdFrom: 'from1',
-          airportIdTo: 'to2',
-          airlineId: 'airline3'
+      const data = {
+        flight: [
+          {
+            id: 'flight1',
+            airportIdFrom: 'from1',
+            airportIdTo: 'to2',
+            airlineId: 'airline3'
+          }
+        ],
+        meta: {
+          total: 1
         }
-      ]);
+      };
+
+      mockGetAllFlights.mockResolvedValueOnce(data);
 
       await flightController.getAllFlights(mockRequest, mockResponse);
 
@@ -103,14 +110,8 @@ describe('flightController', () => {
       );
       expect(mockResponse.json).toHaveBeenCalledWith({
         message: 'Successfully get all flight',
-        data: [
-          {
-            id: 'flight1',
-            airportIdFrom: 'from1',
-            airportIdTo: 'to2',
-            airlineId: 'airline3'
-          }
-        ]
+        meta: data.meta,
+        data: data.flight
       });
     });
   });
