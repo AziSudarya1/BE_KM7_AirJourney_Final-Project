@@ -37,7 +37,7 @@ export async function updateAeroplane(req, res) {
 export async function deleteAeroplane(req, res) {
   const { id } = req.params;
 
-  await aeroplaneServices.deleteAeroplaneById(id, req.body);
+  await aeroplaneServices.deleteAeroplaneById(id);
 
   res.status(200).json({
     message: 'Aeroplane deleted succesfully'
