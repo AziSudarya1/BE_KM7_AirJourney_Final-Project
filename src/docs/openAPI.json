@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Tiketku APIs",
-    "description": "Terbangin documentation api",
+    "description": "This template contains a boilerplate for documentation that you can quickly customize and reuse.\n\n### How to use this template:\n\n- Replace the content given brackets (()) with your API's details.\n    \n- Tips are formatted in `codespan` - feel free to read and remove them.\n    \n\n---\n\n`Start with a brief overview of what your API offers.`\n\nThe ((product name)) provides many API products, tools, and resources that enable you to ((add product value here)).\n\n`You can also list the APIs you offer, link to the relevant pages, or do both in this section.`\n\n## **Getting started guide**\n\n`List the steps or points required to start using your APIs. Make sure to cover everything required to reach success with your API as quickly as possible.`\n\nTo start using the ((add APIs here)), you need to -\n\n`The points given below are from The Postman API's documentation. You can reference it to write your own getting started guide.`\n\n- You must use a valid API Key to send requests to the API endpoints. You can get your API key from Postman's [integrations dashboard](https://go.postman.co/settings/me/api-keys).\n    \n- The API has [rate and usage limits](https://postman.postman.co/workspace/Collection-Templates~6311738d-2e70-441f-ae12-78caf078c5b7/collection/22517504-e9c28f47-1253-44af-a2f3-20dce4da1f18?ctx=documentation#rate-and-usage-limits).\n    \n- The API only responds to HTTPS-secured communications. Any requests sent via HTTP return an HTTP 301 redirect to the corresponding HTTPS resources.\n    \n- The API returns request responses in JSON format. When an API request returns an error, it is sent in the JSON response as an error key.\n    \n\n## Authentication\n\n`Add details on the authorization keys/tokens required, steps that cover how to get them, and the relevant error codes.`\n\nThe ((product name)) API uses ((add your API's authorization type)) for authentication.\n\n`The details given below are from the Postman API's documentation. You can reference it to write your own authentication section.`\n\nPostman uses API keys for authentication. You can generate a Postman API key in the [API keys](https://postman.postman.co/settings/me/api-keys) section of your Postman account settings.\n\nYou must include an API key in each request to the Postman API with the X-Api-Key request header.\n\n### Authentication error response\n\nIf an API key is missing, malformed, or invalid, you will receive an HTTP 401 Unauthorized response code.\n\n## Rate and usage limits\n\n`Use this section to cover your APIs' terms of use. Include API limits, constraints, and relevant error codes, so consumers understand the permitted API usage and practices.`\n\n`The example given below is from The Postman API's documentation. Use it as a reference to write your APIs' terms of use.`\n\nAPI access rate limits apply at a per-API key basis in unit time. The limit is 300 requests per minute. Also, depending on your plan, you may have usage limits. If you exceed either limit, your request will return an HTTP 429 Too Many Requests status code.\n\nEach API response returns the following set of headers to help you identify your use status:\n\n| Header | Description |\n| --- | --- |\n| `X-RateLimit-Limit` | The maximum number of requests that the consumer is permitted to make per minute. |\n| `X-RateLimit-Remaining` | The number of requests remaining in the current rate limit window. |\n| `X-RateLimit-Reset` | The time at which the current rate limit window resets in UTC epoch seconds. |\n\n### 503 response\n\nAn HTTP `503` response from our servers indicates there is an unexpected spike in API access traffic. The server is usually operational within the next five minutes. If the outage persists or you receive any other form of an HTTP `5XX` error, [contact support](https://support.postman.com/hc/en-us/requests/new/).\n\n### **Need some help?**\n\n`Add links that customers can refer to whenever they need help.`\n\nIn case you have questions, go through our tutorials ((link to your video or help documentation here)). Or visit our FAQ page ((link to the relevant page)).\n\nOr you can check out our community forum, there’s a good chance our community has an answer for you. Visit our developer forum ((link to developer forum)) to review topics, ask questions, and learn from others.\n\n`You can also document or add links to libraries, code examples, and other resources needed to make a request.`",
     "version": "1.0.0",
     "contact": {}
   },
@@ -19,7 +19,7 @@
   "paths": {
     "/auth/login": {
       "post": {
-        "tags": ["Login"],
+        "tags": ["Auth", "Login"],
         "summary": "Login user with email",
         "description": "Login user with email",
         "operationId": "loginUserWithEmail",
@@ -31,7 +31,7 @@
                 "properties": {
                   "email": {
                     "type": "string",
-                    "example": "terbangin@terbangin.com"
+                    "example": "tiketku@sorapos.com"
                   },
                   "password": {
                     "type": "string",
@@ -42,7 +42,7 @@
               "examples": {
                 "Login admin with email": {
                   "value": {
-                    "email": "terbangin@terbangin.com",
+                    "email": "tiketku@sorapos.com",
                     "password": "test"
                   }
                 },
@@ -574,7 +574,7 @@
     },
     "/auth/register": {
       "post": {
-        "tags": ["Register"],
+        "tags": ["Auth", "Register"],
         "summary": "Register user",
         "description": "Register user",
         "operationId": "registerUser",
@@ -995,7 +995,7 @@
     },
     "/auth/otp": {
       "post": {
-        "tags": ["Register"],
+        "tags": ["Auth", "Register"],
         "summary": "Send OTP to email",
         "description": "Send OTP to email",
         "operationId": "sendOtpToEmail",
@@ -1184,7 +1184,7 @@
     },
     "/auth/otp/verify": {
       "post": {
-        "tags": ["Register"],
+        "tags": ["Auth", "Register"],
         "summary": "Verify user with email and OTP",
         "description": "Verify user with email and OTP",
         "operationId": "verifyUserWithEmailAndOtp",
@@ -1349,7 +1349,7 @@
     },
     "/auth/google/callback": {
       "get": {
-        "tags": ["Oauth"],
+        "tags": ["Auth", "Oauth"],
         "summary": "Get Google Link Redirect",
         "description": "Get Google Link Redirect",
         "operationId": "getGoogleLinkRedirect",
@@ -1396,7 +1396,7 @@
     },
     "/auth/google": {
       "get": {
-        "tags": ["Oauth"],
+        "tags": ["Auth", "Oauth"],
         "summary": "Google login",
         "description": "Google login",
         "operationId": "googleLogin",
@@ -1409,7 +1409,7 @@
     },
     "/auth/reset-password/request": {
       "post": {
-        "tags": ["Reset Password"],
+        "tags": ["Auth", "Reset Password"],
         "summary": "Request Reset Password Email",
         "description": "Request Reset Password Email",
         "operationId": "requestResetPasswordEmail",
@@ -1552,7 +1552,7 @@
     },
     "/auth/reset-password/validate/{token}": {
       "get": {
-        "tags": ["Reset Password"],
+        "tags": ["Auth", "Reset Password"],
         "summary": "Validate Reset Password Token",
         "description": "Validate Reset Password Token",
         "operationId": "validateResetPasswordToken",
@@ -1676,7 +1676,7 @@
     },
     "/auth/reset-password": {
       "post": {
-        "tags": ["Reset Password"],
+        "tags": ["Auth", "Reset Password"],
         "summary": "Reset Password",
         "description": "Reset Password",
         "operationId": "resetPassword",
@@ -2522,7 +2522,7 @@
         ],
         "responses": {
           "200": {
-            "description": "200 OK - Success / 200 OK - Get All Transactions With Filter Successfully",
+            "description": "200 OK - Get all transaction with date and pagination",
             "headers": {
               "Access-Control-Allow-Credentials": {
                 "schema": {
@@ -2539,19 +2539,19 @@
               "Content-Length": {
                 "schema": {
                   "type": "string",
-                  "example": "1096"
+                  "example": "5160"
                 }
               },
               "Date": {
                 "schema": {
                   "type": "string",
-                  "example": "Mon, 09 Dec 2024 15:04:10 GMT"
+                  "example": "Tue, 17 Dec 2024 14:45:28 GMT"
                 }
               },
               "ETag": {
                 "schema": {
                   "type": "string",
-                  "example": "W/\"448-1qZzD0m4c7NOiWgk9WaJ1VtJYFQ\""
+                  "example": "W/\"1428-kwB3Xs18Ip/18R6qy26Rb1txDlA\""
                 }
               },
               "Keep-Alive": {
@@ -2583,135 +2583,183 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "Passenger": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "birthday": {
-                                  "type": "string",
-                                  "example": "1990-01-15T00:00:00.000Z"
-                                },
-                                "createdAt": {
-                                  "type": "string",
-                                  "example": "2024-12-08T09:55:55.188Z"
-                                },
-                                "departureSeatId": {
-                                  "type": "string",
-                                  "example": "0193a5b1-1218-7530-98c2-643a6e664ea2"
-                                },
-                                "expiredAt": {
-                                  "type": "string",
-                                  "example": "2030-01-15T00:00:00.000Z"
-                                },
-                                "familyName": {
-                                  "type": "string",
-                                  "example": "Doe"
-                                },
-                                "firstName": {
-                                  "type": "string",
-                                  "example": "John"
-                                },
-                                "id": {
-                                  "type": "string",
-                                  "example": "0193a5b2-70f1-7180-bda1-b415d0108ff8"
-                                },
-                                "nationality": {
-                                  "type": "string",
-                                  "example": "Indonesia"
-                                },
-                                "nikKtp": {
-                                  "type": "string",
-                                  "example": "3174012345678901"
-                                },
-                                "nikPaspor": {
-                                  "type": "string",
-                                  "example": "P12345672"
-                                },
-                                "returnSeatId": {
-                                  "nullable": true,
-                                  "example": null
-                                },
-                                "title": {
-                                  "type": "string",
-                                  "example": "Mr"
-                                },
-                                "transactionId": {
-                                  "type": "string",
-                                  "example": "0193a5b2-70f0-7bf2-9c75-667c21233964"
-                                },
-                                "type": {
-                                  "type": "string",
-                                  "example": "ADULT"
-                                },
-                                "updatedAt": {
-                                  "type": "string",
-                                  "example": "2024-12-08T09:55:55.188Z"
-                                }
-                              }
-                            },
-                            "example": [
-                              {
-                                "birthday": "1990-01-15T00:00:00.000Z",
-                                "createdAt": "2024-12-08T09:55:55.188Z",
-                                "departureSeatId": "0193a5b1-1218-7530-98c2-643a6e664ea2",
-                                "expiredAt": "2030-01-15T00:00:00.000Z",
-                                "familyName": "Doe",
-                                "firstName": "John",
-                                "id": "0193a5b2-70f1-7180-bda1-b415d0108ff8",
-                                "nationality": "Indonesia",
-                                "nikKtp": "3174012345678901",
-                                "nikPaspor": "P12345672",
-                                "returnSeatId": null,
-                                "title": "Mr",
-                                "transactionId": "0193a5b2-70f0-7bf2-9c75-667c21233964",
-                                "type": "ADULT",
-                                "updatedAt": "2024-12-08T09:55:55.188Z"
-                              }
-                            ]
-                          },
                           "amount": {
                             "type": "number",
-                            "example": 100
+                            "example": 550
                           },
                           "createdAt": {
                             "type": "string",
-                            "example": "2024-12-08T09:55:55.188Z"
+                            "example": "2024-12-16T05:17:05.256Z"
+                          },
+                          "departureFlight": {
+                            "type": "object",
+                            "properties": {
+                              "aeroplaneId": {
+                                "type": "string",
+                                "example": "0193cdcf-a197-74e1-8104-ebdc894ac65b"
+                              },
+                              "airlineId": {
+                                "type": "string",
+                                "example": "0193cdcf-a18c-72f3-ac87-d2a0b9761caf"
+                              },
+                              "airportFrom": {
+                                "type": "object",
+                                "properties": {
+                                  "city": {
+                                    "type": "string",
+                                    "example": "Tangerang"
+                                  },
+                                  "code": {
+                                    "type": "string",
+                                    "example": "CGK"
+                                  },
+                                  "continent": {
+                                    "type": "string",
+                                    "example": "ASIA"
+                                  },
+                                  "country": {
+                                    "type": "string",
+                                    "example": "Indonesia"
+                                  },
+                                  "createdAt": {
+                                    "type": "string",
+                                    "example": "2024-12-16T04:52:36.856Z"
+                                  },
+                                  "id": {
+                                    "type": "string",
+                                    "example": "0193cdcf-a177-7c41-b424-6da90cc8e7b7"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "example": "Soekarno-Hatta International Airport"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string",
+                                    "example": "2024-12-16T04:52:36.856Z"
+                                  }
+                                }
+                              },
+                              "airportIdFrom": {
+                                "type": "string",
+                                "example": "0193cdcf-a177-7c41-b424-6da90cc8e7b7"
+                              },
+                              "airportIdTo": {
+                                "type": "string",
+                                "example": "0193cdcf-a17e-7df2-b881-58ddafd856d8"
+                              },
+                              "airportTo": {
+                                "type": "object",
+                                "properties": {
+                                  "city": {
+                                    "type": "string",
+                                    "example": "Singapore"
+                                  },
+                                  "code": {
+                                    "type": "string",
+                                    "example": "SIN"
+                                  },
+                                  "continent": {
+                                    "type": "string",
+                                    "example": "ASIA"
+                                  },
+                                  "country": {
+                                    "type": "string",
+                                    "example": "Singapore"
+                                  },
+                                  "createdAt": {
+                                    "type": "string",
+                                    "example": "2024-12-16T04:52:36.862Z"
+                                  },
+                                  "id": {
+                                    "type": "string",
+                                    "example": "0193cdcf-a17e-7df2-b881-58ddafd856d8"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "example": "Changi Airport"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string",
+                                    "example": "2024-12-16T04:52:36.862Z"
+                                  }
+                                }
+                              },
+                              "arrivalDate": {
+                                "type": "string",
+                                "example": "2024-12-26T04:52:36.897Z"
+                              },
+                              "arrivalTime": {
+                                "type": "string",
+                                "example": "16:00"
+                              },
+                              "class": {
+                                "type": "string",
+                                "example": "PREMIUM_ECONOMY"
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "example": "2024-12-16T04:52:36.903Z"
+                              },
+                              "departureDate": {
+                                "type": "string",
+                                "example": "2024-12-25T04:52:36.897Z"
+                              },
+                              "departureTime": {
+                                "type": "string",
+                                "example": "14:00"
+                              },
+                              "description": {
+                                "type": "string",
+                                "example": "Flight from Jakarta to Destination 1"
+                              },
+                              "duration": {
+                                "type": "number",
+                                "example": 120
+                              },
+                              "id": {
+                                "type": "string",
+                                "example": "0193cdcf-a1a7-7330-9a91-9b4329845d7b"
+                              },
+                              "price": {
+                                "type": "number",
+                                "example": 500
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "example": "2024-12-16T04:52:36.903Z"
+                              }
+                            }
                           },
                           "departureFlightId": {
                             "type": "string",
-                            "example": "0193a5b1-1211-7241-a6da-4f8b3d952c21"
+                            "example": "0193cdcf-a1a7-7330-9a91-9b4329845d7b"
                           },
                           "id": {
                             "type": "string",
-                            "example": "0193a5b2-70f0-7bf2-9c75-667c21233964"
+                            "example": "0193cde6-0968-7f61-9c33-6e40613bc09f"
                           },
                           "payment": {
                             "type": "object",
                             "properties": {
                               "createdAt": {
                                 "type": "string",
-                                "example": "2024-12-08T09:55:55.188Z"
+                                "example": "2024-12-16T05:17:05.782Z"
+                              },
+                              "expiredAt": {
+                                "type": "string",
+                                "example": "2024-12-16T06:17:05.780Z"
                               },
                               "id": {
                                 "type": "string",
-                                "example": "0193a5b2-70f1-7180-bda1-b42a478b00e0"
+                                "example": "0193cde6-0b75-7821-ac5e-671ca37a0f60"
                               },
                               "method": {
                                 "nullable": true,
                                 "example": null
                               },
-                              "paymentMethod": {
-                                "nullable": true,
-                                "example": null
-                              },
-                              "snapRedirectUrl": {
-                                "nullable": true,
-                                "example": null
-                              },
                               "snapToken": {
-                                "nullable": true,
-                                "example": null
+                                "type": "string",
+                                "example": "941cc0a8-1011-4e64-8c7b-b1c6a8e0945b"
                               },
                               "status": {
                                 "type": "string",
@@ -2719,13 +2767,17 @@
                               },
                               "transactionId": {
                                 "type": "string",
-                                "example": "0193a5b2-70f0-7bf2-9c75-667c21233964"
+                                "example": "0193cde6-0968-7f61-9c33-6e40613bc09f"
                               },
                               "updatedAt": {
                                 "type": "string",
-                                "example": "2024-12-08T09:55:55.188Z"
+                                "example": "2024-12-16T05:17:05.782Z"
                               }
                             }
+                          },
+                          "returnFlight": {
+                            "nullable": true,
+                            "example": null
                           },
                           "returnFlightId": {
                             "nullable": true,
@@ -2733,153 +2785,553 @@
                           },
                           "updatedAt": {
                             "type": "string",
-                            "example": "2024-12-08T09:55:55.188Z"
+                            "example": "2024-12-16T05:17:05.256Z"
                           },
                           "userId": {
                             "type": "string",
-                            "example": "0193a5b1-11e7-7bc3-b0fa-0985386bae8c"
+                            "example": "0193cdcf-a168-7e10-b470-240f51b3f27c"
                           }
                         }
                       },
                       "example": [
                         {
-                          "Passenger": [
-                            {
-                              "birthday": "1990-01-15T00:00:00.000Z",
-                              "createdAt": "2024-12-08T09:55:55.188Z",
-                              "departureSeatId": "0193a5b1-1218-7530-98c2-643a6e664ea2",
-                              "expiredAt": "2030-01-15T00:00:00.000Z",
-                              "familyName": "Doe",
-                              "firstName": "John",
-                              "id": "0193a5b2-70f1-7180-bda1-b415d0108ff8",
-                              "nationality": "Indonesia",
-                              "nikKtp": "3174012345678901",
-                              "nikPaspor": "P12345672",
-                              "returnSeatId": null,
-                              "title": "Mr",
-                              "transactionId": "0193a5b2-70f0-7bf2-9c75-667c21233964",
-                              "type": "ADULT",
-                              "updatedAt": "2024-12-08T09:55:55.188Z"
-                            }
-                          ],
-                          "amount": 100,
-                          "createdAt": "2024-12-08T09:55:55.188Z",
-                          "departureFlightId": "0193a5b1-1211-7241-a6da-4f8b3d952c21",
-                          "id": "0193a5b2-70f0-7bf2-9c75-667c21233964",
-                          "payment": {
-                            "createdAt": "2024-12-08T09:55:55.188Z",
-                            "id": "0193a5b2-70f1-7180-bda1-b42a478b00e0",
-                            "method": null,
-                            "paymentMethod": null,
-                            "snapRedirectUrl": null,
-                            "snapToken": null,
-                            "status": "PENDING",
-                            "transactionId": "0193a5b2-70f0-7bf2-9c75-667c21233964",
-                            "updatedAt": "2024-12-08T09:55:55.188Z"
+                          "amount": 550,
+                          "createdAt": "2024-12-16T05:17:05.256Z",
+                          "departureFlight": {
+                            "aeroplaneId": "0193cdcf-a197-74e1-8104-ebdc894ac65b",
+                            "airlineId": "0193cdcf-a18c-72f3-ac87-d2a0b9761caf",
+                            "airportFrom": {
+                              "city": "Tangerang",
+                              "code": "CGK",
+                              "continent": "ASIA",
+                              "country": "Indonesia",
+                              "createdAt": "2024-12-16T04:52:36.856Z",
+                              "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                              "name": "Soekarno-Hatta International Airport",
+                              "updatedAt": "2024-12-16T04:52:36.856Z"
+                            },
+                            "airportIdFrom": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                            "airportIdTo": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                            "airportTo": {
+                              "city": "Singapore",
+                              "code": "SIN",
+                              "continent": "ASIA",
+                              "country": "Singapore",
+                              "createdAt": "2024-12-16T04:52:36.862Z",
+                              "id": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                              "name": "Changi Airport",
+                              "updatedAt": "2024-12-16T04:52:36.862Z"
+                            },
+                            "arrivalDate": "2024-12-26T04:52:36.897Z",
+                            "arrivalTime": "16:00",
+                            "class": "PREMIUM_ECONOMY",
+                            "createdAt": "2024-12-16T04:52:36.903Z",
+                            "departureDate": "2024-12-25T04:52:36.897Z",
+                            "departureTime": "14:00",
+                            "description": "Flight from Jakarta to Destination 1",
+                            "duration": 120,
+                            "id": "0193cdcf-a1a7-7330-9a91-9b4329845d7b",
+                            "price": 500,
+                            "updatedAt": "2024-12-16T04:52:36.903Z"
                           },
+                          "departureFlightId": "0193cdcf-a1a7-7330-9a91-9b4329845d7b",
+                          "id": "0193cde6-0968-7f61-9c33-6e40613bc09f",
+                          "payment": {
+                            "createdAt": "2024-12-16T05:17:05.782Z",
+                            "expiredAt": "2024-12-16T06:17:05.780Z",
+                            "id": "0193cde6-0b75-7821-ac5e-671ca37a0f60",
+                            "method": null,
+                            "snapToken": "941cc0a8-1011-4e64-8c7b-b1c6a8e0945b",
+                            "status": "PENDING",
+                            "transactionId": "0193cde6-0968-7f61-9c33-6e40613bc09f",
+                            "updatedAt": "2024-12-16T05:17:05.782Z"
+                          },
+                          "returnFlight": null,
                           "returnFlightId": null,
-                          "updatedAt": "2024-12-08T09:55:55.188Z",
-                          "userId": "0193a5b1-11e7-7bc3-b0fa-0985386bae8c"
+                          "updatedAt": "2024-12-16T05:17:05.256Z",
+                          "userId": "0193cdcf-a168-7e10-b470-240f51b3f27c"
+                        },
+                        {
+                          "amount": 550,
+                          "createdAt": "2024-12-16T13:16:15.920Z",
+                          "departureFlight": {
+                            "aeroplaneId": "0193cdcf-a197-74e1-8104-ebdc894ac65b",
+                            "airlineId": "0193cdcf-a18c-72f3-ac87-d2a0b9761caf",
+                            "airportFrom": {
+                              "city": "Tangerang",
+                              "code": "CGK",
+                              "continent": "ASIA",
+                              "country": "Indonesia",
+                              "createdAt": "2024-12-16T04:52:36.856Z",
+                              "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                              "name": "Soekarno-Hatta International Airport",
+                              "updatedAt": "2024-12-16T04:52:36.856Z"
+                            },
+                            "airportIdFrom": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                            "airportIdTo": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                            "airportTo": {
+                              "city": "Singapore",
+                              "code": "SIN",
+                              "continent": "ASIA",
+                              "country": "Singapore",
+                              "createdAt": "2024-12-16T04:52:36.862Z",
+                              "id": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                              "name": "Changi Airport",
+                              "updatedAt": "2024-12-16T04:52:36.862Z"
+                            },
+                            "arrivalDate": "2024-12-26T04:52:36.897Z",
+                            "arrivalTime": "16:00",
+                            "class": "PREMIUM_ECONOMY",
+                            "createdAt": "2024-12-16T04:52:36.903Z",
+                            "departureDate": "2024-12-25T04:52:36.897Z",
+                            "departureTime": "14:00",
+                            "description": "Flight from Jakarta to Destination 1",
+                            "duration": 120,
+                            "id": "0193cdcf-a1a7-7330-9a91-9b4329845d7b",
+                            "price": 500,
+                            "updatedAt": "2024-12-16T04:52:36.903Z"
+                          },
+                          "departureFlightId": "0193cdcf-a1a7-7330-9a91-9b4329845d7b",
+                          "id": "0193cf9c-bcb0-72d0-8119-0f9968187142",
+                          "payment": {
+                            "createdAt": "2024-12-16T13:16:16.392Z",
+                            "expiredAt": "2024-12-16T14:16:16.390Z",
+                            "id": "0193cf9c-be87-7ea3-b23d-566407701526",
+                            "method": null,
+                            "snapToken": "aa37322d-1f2b-4dc2-b09e-a1be67d2f468",
+                            "status": "CANCELLED",
+                            "transactionId": "0193cf9c-bcb0-72d0-8119-0f9968187142",
+                            "updatedAt": "2024-12-16T13:21:39.033Z"
+                          },
+                          "returnFlight": null,
+                          "returnFlightId": null,
+                          "updatedAt": "2024-12-16T13:16:15.920Z",
+                          "userId": "0193cdcf-a168-7e10-b470-240f51b3f27c"
+                        },
+                        {
+                          "amount": 550,
+                          "createdAt": "2024-12-16T13:29:45.826Z",
+                          "departureFlight": {
+                            "aeroplaneId": "0193cdcf-a197-74e1-8104-ebdc894ac65b",
+                            "airlineId": "0193cdcf-a18c-72f3-ac87-d2a0b9761caf",
+                            "airportFrom": {
+                              "city": "Tangerang",
+                              "code": "CGK",
+                              "continent": "ASIA",
+                              "country": "Indonesia",
+                              "createdAt": "2024-12-16T04:52:36.856Z",
+                              "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                              "name": "Soekarno-Hatta International Airport",
+                              "updatedAt": "2024-12-16T04:52:36.856Z"
+                            },
+                            "airportIdFrom": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                            "airportIdTo": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                            "airportTo": {
+                              "city": "Singapore",
+                              "code": "SIN",
+                              "continent": "ASIA",
+                              "country": "Singapore",
+                              "createdAt": "2024-12-16T04:52:36.862Z",
+                              "id": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                              "name": "Changi Airport",
+                              "updatedAt": "2024-12-16T04:52:36.862Z"
+                            },
+                            "arrivalDate": "2024-12-26T04:52:36.897Z",
+                            "arrivalTime": "16:00",
+                            "class": "PREMIUM_ECONOMY",
+                            "createdAt": "2024-12-16T04:52:36.903Z",
+                            "departureDate": "2024-12-25T04:52:36.897Z",
+                            "departureTime": "14:00",
+                            "description": "Flight from Jakarta to Destination 1",
+                            "duration": 120,
+                            "id": "0193cdcf-a1a7-7330-9a91-9b4329845d7b",
+                            "price": 500,
+                            "updatedAt": "2024-12-16T04:52:36.903Z"
+                          },
+                          "departureFlightId": "0193cdcf-a1a7-7330-9a91-9b4329845d7b",
+                          "id": "0193cfa9-1862-75f2-9c33-fcde96a2b479",
+                          "payment": {
+                            "createdAt": "2024-12-16T13:29:46.021Z",
+                            "expiredAt": "2024-12-16T14:29:46.019Z",
+                            "id": "0193cfa9-1924-7fd3-a597-2f700d1c872f",
+                            "method": null,
+                            "snapToken": "11c3d8f2-cc21-49ab-b662-33b3e4a92f70",
+                            "status": "CANCELLED",
+                            "transactionId": "0193cfa9-1862-75f2-9c33-fcde96a2b479",
+                            "updatedAt": "2024-12-16T13:30:51.449Z"
+                          },
+                          "returnFlight": null,
+                          "returnFlightId": null,
+                          "updatedAt": "2024-12-16T13:29:45.826Z",
+                          "userId": "0193cdcf-a168-7e10-b470-240f51b3f27c"
                         }
                       ]
                     },
                     "message": {
                       "type": "string",
                       "example": "Successfully get all transactions"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "limit": {
+                          "type": "number",
+                          "example": 10
+                        },
+                        "page": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "skip": {
+                          "type": "number",
+                          "example": 0
+                        },
+                        "totalData": {
+                          "type": "number",
+                          "example": 3
+                        },
+                        "totalPage": {
+                          "type": "number",
+                          "example": 1
+                        }
+                      }
                     }
                   }
                 },
                 "examples": {
-                  "200 OK - Get All Transactions With Filter Successfully": {
+                  "200 OK - Get all transaction with date and pagination": {
                     "value": {
                       "data": [
                         {
-                          "amount": 100,
-                          "createdAt": "2024-12-09T15:02:24.393Z",
-                          "departureFlightId": "0193a6ce-52d0-7460-a992-b56538742180",
-                          "id": "0193abf1-65b2-7f21-a7cb-6a4661e44961",
-                          "passenger": [
-                            {
-                              "birthday": "1990-01-15T00:00:00.000Z",
-                              "createdAt": "2024-12-09T15:02:24.393Z",
-                              "departureSeatId": "0193a6ce-52e0-7700-903b-b62fe3dce3b7",
-                              "expiredAt": "2030-01-15T00:00:00.000Z",
-                              "familyName": "Doe",
-                              "firstName": "John",
-                              "id": "0193abf1-65b2-7f21-a7cb-6a54797a1781",
-                              "nationality": "Indonesia",
-                              "nikKtp": "3174012345678901",
-                              "nikPaspor": "P12345672",
-                              "returnSeatId": null,
-                              "title": "Mr",
-                              "transactionId": "0193abf1-65b2-7f21-a7cb-6a4661e44961",
-                              "type": "ADULT",
-                              "updatedAt": "2024-12-09T15:02:24.393Z"
-                            }
-                          ],
-                          "payment": {
-                            "createdAt": "2024-12-09T15:02:24.393Z",
-                            "id": "0193abf1-65b2-7f21-a7cb-6a63eee95271",
-                            "method": null,
-                            "paymentMethod": null,
-                            "snapRedirectUrl": null,
-                            "snapToken": null,
-                            "status": "PENDING",
-                            "transactionId": "0193abf1-65b2-7f21-a7cb-6a4661e44961",
-                            "updatedAt": "2024-12-09T15:02:24.393Z"
+                          "amount": 550,
+                          "createdAt": "2024-12-16T05:17:05.256Z",
+                          "departureFlight": {
+                            "aeroplaneId": "0193cdcf-a197-74e1-8104-ebdc894ac65b",
+                            "airlineId": "0193cdcf-a18c-72f3-ac87-d2a0b9761caf",
+                            "airportFrom": {
+                              "city": "Tangerang",
+                              "code": "CGK",
+                              "continent": "ASIA",
+                              "country": "Indonesia",
+                              "createdAt": "2024-12-16T04:52:36.856Z",
+                              "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                              "name": "Soekarno-Hatta International Airport",
+                              "updatedAt": "2024-12-16T04:52:36.856Z"
+                            },
+                            "airportIdFrom": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                            "airportIdTo": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                            "airportTo": {
+                              "city": "Singapore",
+                              "code": "SIN",
+                              "continent": "ASIA",
+                              "country": "Singapore",
+                              "createdAt": "2024-12-16T04:52:36.862Z",
+                              "id": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                              "name": "Changi Airport",
+                              "updatedAt": "2024-12-16T04:52:36.862Z"
+                            },
+                            "arrivalDate": "2024-12-26T04:52:36.897Z",
+                            "arrivalTime": "16:00",
+                            "class": "PREMIUM_ECONOMY",
+                            "createdAt": "2024-12-16T04:52:36.903Z",
+                            "departureDate": "2024-12-25T04:52:36.897Z",
+                            "departureTime": "14:00",
+                            "description": "Flight from Jakarta to Destination 1",
+                            "duration": 120,
+                            "id": "0193cdcf-a1a7-7330-9a91-9b4329845d7b",
+                            "price": 500,
+                            "updatedAt": "2024-12-16T04:52:36.903Z"
                           },
+                          "departureFlightId": "0193cdcf-a1a7-7330-9a91-9b4329845d7b",
+                          "id": "0193cde6-0968-7f61-9c33-6e40613bc09f",
+                          "payment": {
+                            "createdAt": "2024-12-16T05:17:05.782Z",
+                            "expiredAt": "2024-12-16T06:17:05.780Z",
+                            "id": "0193cde6-0b75-7821-ac5e-671ca37a0f60",
+                            "method": null,
+                            "snapToken": "941cc0a8-1011-4e64-8c7b-b1c6a8e0945b",
+                            "status": "PENDING",
+                            "transactionId": "0193cde6-0968-7f61-9c33-6e40613bc09f",
+                            "updatedAt": "2024-12-16T05:17:05.782Z"
+                          },
+                          "returnFlight": null,
                           "returnFlightId": null,
-                          "updatedAt": "2024-12-09T15:02:24.393Z",
-                          "userId": "0193a6ce-5262-78b0-922b-f9c3f508606e"
+                          "updatedAt": "2024-12-16T05:17:05.256Z",
+                          "userId": "0193cdcf-a168-7e10-b470-240f51b3f27c"
+                        },
+                        {
+                          "amount": 550,
+                          "createdAt": "2024-12-16T13:16:15.920Z",
+                          "departureFlight": {
+                            "aeroplaneId": "0193cdcf-a197-74e1-8104-ebdc894ac65b",
+                            "airlineId": "0193cdcf-a18c-72f3-ac87-d2a0b9761caf",
+                            "airportFrom": {
+                              "city": "Tangerang",
+                              "code": "CGK",
+                              "continent": "ASIA",
+                              "country": "Indonesia",
+                              "createdAt": "2024-12-16T04:52:36.856Z",
+                              "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                              "name": "Soekarno-Hatta International Airport",
+                              "updatedAt": "2024-12-16T04:52:36.856Z"
+                            },
+                            "airportIdFrom": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                            "airportIdTo": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                            "airportTo": {
+                              "city": "Singapore",
+                              "code": "SIN",
+                              "continent": "ASIA",
+                              "country": "Singapore",
+                              "createdAt": "2024-12-16T04:52:36.862Z",
+                              "id": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                              "name": "Changi Airport",
+                              "updatedAt": "2024-12-16T04:52:36.862Z"
+                            },
+                            "arrivalDate": "2024-12-26T04:52:36.897Z",
+                            "arrivalTime": "16:00",
+                            "class": "PREMIUM_ECONOMY",
+                            "createdAt": "2024-12-16T04:52:36.903Z",
+                            "departureDate": "2024-12-25T04:52:36.897Z",
+                            "departureTime": "14:00",
+                            "description": "Flight from Jakarta to Destination 1",
+                            "duration": 120,
+                            "id": "0193cdcf-a1a7-7330-9a91-9b4329845d7b",
+                            "price": 500,
+                            "updatedAt": "2024-12-16T04:52:36.903Z"
+                          },
+                          "departureFlightId": "0193cdcf-a1a7-7330-9a91-9b4329845d7b",
+                          "id": "0193cf9c-bcb0-72d0-8119-0f9968187142",
+                          "payment": {
+                            "createdAt": "2024-12-16T13:16:16.392Z",
+                            "expiredAt": "2024-12-16T14:16:16.390Z",
+                            "id": "0193cf9c-be87-7ea3-b23d-566407701526",
+                            "method": null,
+                            "snapToken": "aa37322d-1f2b-4dc2-b09e-a1be67d2f468",
+                            "status": "CANCELLED",
+                            "transactionId": "0193cf9c-bcb0-72d0-8119-0f9968187142",
+                            "updatedAt": "2024-12-16T13:21:39.033Z"
+                          },
+                          "returnFlight": null,
+                          "returnFlightId": null,
+                          "updatedAt": "2024-12-16T13:16:15.920Z",
+                          "userId": "0193cdcf-a168-7e10-b470-240f51b3f27c"
+                        },
+                        {
+                          "amount": 550,
+                          "createdAt": "2024-12-16T13:29:45.826Z",
+                          "departureFlight": {
+                            "aeroplaneId": "0193cdcf-a197-74e1-8104-ebdc894ac65b",
+                            "airlineId": "0193cdcf-a18c-72f3-ac87-d2a0b9761caf",
+                            "airportFrom": {
+                              "city": "Tangerang",
+                              "code": "CGK",
+                              "continent": "ASIA",
+                              "country": "Indonesia",
+                              "createdAt": "2024-12-16T04:52:36.856Z",
+                              "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                              "name": "Soekarno-Hatta International Airport",
+                              "updatedAt": "2024-12-16T04:52:36.856Z"
+                            },
+                            "airportIdFrom": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                            "airportIdTo": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                            "airportTo": {
+                              "city": "Singapore",
+                              "code": "SIN",
+                              "continent": "ASIA",
+                              "country": "Singapore",
+                              "createdAt": "2024-12-16T04:52:36.862Z",
+                              "id": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                              "name": "Changi Airport",
+                              "updatedAt": "2024-12-16T04:52:36.862Z"
+                            },
+                            "arrivalDate": "2024-12-26T04:52:36.897Z",
+                            "arrivalTime": "16:00",
+                            "class": "PREMIUM_ECONOMY",
+                            "createdAt": "2024-12-16T04:52:36.903Z",
+                            "departureDate": "2024-12-25T04:52:36.897Z",
+                            "departureTime": "14:00",
+                            "description": "Flight from Jakarta to Destination 1",
+                            "duration": 120,
+                            "id": "0193cdcf-a1a7-7330-9a91-9b4329845d7b",
+                            "price": 500,
+                            "updatedAt": "2024-12-16T04:52:36.903Z"
+                          },
+                          "departureFlightId": "0193cdcf-a1a7-7330-9a91-9b4329845d7b",
+                          "id": "0193cfa9-1862-75f2-9c33-fcde96a2b479",
+                          "payment": {
+                            "createdAt": "2024-12-16T13:29:46.021Z",
+                            "expiredAt": "2024-12-16T14:29:46.019Z",
+                            "id": "0193cfa9-1924-7fd3-a597-2f700d1c872f",
+                            "method": null,
+                            "snapToken": "11c3d8f2-cc21-49ab-b662-33b3e4a92f70",
+                            "status": "CANCELLED",
+                            "transactionId": "0193cfa9-1862-75f2-9c33-fcde96a2b479",
+                            "updatedAt": "2024-12-16T13:30:51.449Z"
+                          },
+                          "returnFlight": null,
+                          "returnFlightId": null,
+                          "updatedAt": "2024-12-16T13:29:45.826Z",
+                          "userId": "0193cdcf-a168-7e10-b470-240f51b3f27c"
                         }
                       ],
-                      "message": "Successfully get all transactions"
+                      "message": "Successfully get all transactions",
+                      "meta": {
+                        "limit": 10,
+                        "page": 1,
+                        "skip": 0,
+                        "totalData": 3,
+                        "totalPage": 1
+                      }
                     }
-                  },
-                  "200 OK - Success": {
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400 Bad Request - Invalid query params",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "38"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Tue, 17 Dec 2024 14:47:33 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"26-dBhfUj0JmmzSKdmZf5DYUvZWJSI\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "\"pag\" is not allowed"
+                      },
+                      "example": ["\"pag\" is not allowed"]
+                    }
+                  }
+                },
+                "examples": {
+                  "400 Bad Request - Invalid query params": {
                     "value": {
-                      "data": [
-                        {
-                          "Passenger": [
-                            {
-                              "birthday": "1990-01-15T00:00:00.000Z",
-                              "createdAt": "2024-12-08T09:55:55.188Z",
-                              "departureSeatId": "0193a5b1-1218-7530-98c2-643a6e664ea2",
-                              "expiredAt": "2030-01-15T00:00:00.000Z",
-                              "familyName": "Doe",
-                              "firstName": "John",
-                              "id": "0193a5b2-70f1-7180-bda1-b415d0108ff8",
-                              "nationality": "Indonesia",
-                              "nikKtp": "3174012345678901",
-                              "nikPaspor": "P12345672",
-                              "returnSeatId": null,
-                              "title": "Mr",
-                              "transactionId": "0193a5b2-70f0-7bf2-9c75-667c21233964",
-                              "type": "ADULT",
-                              "updatedAt": "2024-12-08T09:55:55.188Z"
-                            }
-                          ],
-                          "amount": 100,
-                          "createdAt": "2024-12-08T09:55:55.188Z",
-                          "departureFlightId": "0193a5b1-1211-7241-a6da-4f8b3d952c21",
-                          "id": "0193a5b2-70f0-7bf2-9c75-667c21233964",
-                          "payment": {
-                            "createdAt": "2024-12-08T09:55:55.188Z",
-                            "id": "0193a5b2-70f1-7180-bda1-b42a478b00e0",
-                            "method": null,
-                            "paymentMethod": null,
-                            "snapRedirectUrl": null,
-                            "snapToken": null,
-                            "status": "PENDING",
-                            "transactionId": "0193a5b2-70f0-7bf2-9c75-667c21233964",
-                            "updatedAt": "2024-12-08T09:55:55.188Z"
-                          },
-                          "returnFlightId": null,
-                          "updatedAt": "2024-12-08T09:55:55.188Z",
-                          "userId": "0193a5b1-11e7-7bc3-b0fa-0985386bae8c"
-                        }
-                      ],
-                      "message": "Successfully get all transactions"
+                      "message": ["\"pag\" is not allowed"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 Not Found - Page not found",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "28"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Tue, 17 Dec 2024 14:46:31 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"1c-MOxLziJPE3pYclichFPQin1Cisg\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Page not found"
+                    }
+                  }
+                },
+                "examples": {
+                  "404 Not Found - Page not found": {
+                    "value": {
+                      "message": "Page not found"
                     }
                   }
                 }
@@ -4497,6 +4949,79 @@
               }
             }
           },
+          "400": {
+            "description": "400 Bad Request - Cannot send E-Ticket",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "34"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Tue, 17 Dec 2024 05:37:36 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"22-lnu/135f70XB0Si7pGl1DQB63do\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Cannot send E-Ticket"
+                    }
+                  }
+                },
+                "examples": {
+                  "400 Bad Request - Cannot send E-Ticket": {
+                    "value": {
+                      "message": "Cannot send E-Ticket"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "403": {
             "description": "403 Forbidden - Unauthorized",
             "headers": {
@@ -4657,7 +5182,7 @@
           "required": true,
           "schema": {
             "type": "string",
-            "example": "0193d0cd-cf9f-7250-85e6-4fc75e4f7c29"
+            "example": "0193d0bd-139a-7223-b8ba-d51e2b0873f4"
           }
         }
       ]
@@ -8603,6 +9128,16 @@
         "summary": "Get Airlines by ID",
         "description": "Get Airlines by ID",
         "operationId": "getAirlinesById",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "200 OK - Successful Response",
@@ -9100,6 +9635,17 @@
         "summary": "Delete Airline",
         "description": "Delete Airline",
         "operationId": "deleteAirline",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "Delete Airline": {
+                  "value": ""
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "200 OK - Successful Response",
@@ -9274,7 +9820,7 @@
         "operationId": "getAllFlights",
         "responses": {
           "200": {
-            "description": "200 OK - Get all flight with filter and sort / 200 OK - Get flight with cursorId / 200 OK - Get Flight with airlines array filter",
+            "description": "200 OK - Succesfully get all flight with filter sort and pagination",
             "headers": {
               "Access-Control-Allow-Credentials": {
                 "schema": {
@@ -9291,19 +9837,19 @@
               "Content-Length": {
                 "schema": {
                   "type": "string",
-                  "example": "15079"
+                  "example": "9027"
                 }
               },
               "Date": {
                 "schema": {
                   "type": "string",
-                  "example": "Sat, 14 Dec 2024 04:05:56 GMT"
+                  "example": "Tue, 17 Dec 2024 14:06:39 GMT"
                 }
               },
               "ETag": {
                 "schema": {
                   "type": "string",
-                  "example": "W/\"3ae7-Moyagn+fYrz27pneti700gnZ3V0\""
+                  "example": "W/\"2343-h8p6NuYtZxVkWu4OTCYPdRjY6o8\""
                 }
               },
               "Keep-Alive": {
@@ -9335,46 +9881,55 @@
                       "items": {
                         "type": "object",
                         "properties": {
+                          "_count": {
+                            "type": "object",
+                            "properties": {
+                              "seat": {
+                                "type": "number",
+                                "example": 24
+                              }
+                            }
+                          },
                           "aeroplane": {
                             "type": "object",
                             "properties": {
                               "code": {
                                 "type": "string",
-                                "example": "B737"
+                                "example": "A350"
                               },
                               "createdAt": {
                                 "type": "string",
-                                "example": "2024-12-08T15:05:59.734Z"
+                                "example": "2024-12-16T04:52:36.886Z"
                               },
                               "id": {
                                 "type": "string",
-                                "example": "0193a6ce-52b6-7ba0-9ce1-ea4e846f4246"
+                                "example": "0193cdcf-a195-77c0-9536-fc5f9fa1e761"
                               },
                               "maxColumn": {
                                 "type": "number",
-                                "example": 6
+                                "example": 4
                               },
                               "maxRow": {
                                 "type": "number",
-                                "example": 30
+                                "example": 6
                               },
                               "name": {
                                 "type": "string",
-                                "example": "Boeing 737"
+                                "example": "Airbus A350"
                               },
                               "type": {
                                 "type": "string",
-                                "example": "Narrow-body"
+                                "example": "Wide-body"
                               },
                               "updatedAt": {
                                 "type": "string",
-                                "example": "2024-12-08T15:05:59.734Z"
+                                "example": "2024-12-16T04:52:36.886Z"
                               }
                             }
                           },
                           "aeroplaneId": {
                             "type": "string",
-                            "example": "0193a6ce-52b6-7ba0-9ce1-ea4e846f4246"
+                            "example": "0193cdcf-a195-77c0-9536-fc5f9fa1e761"
                           },
                           "airline": {
                             "type": "object",
@@ -9385,11 +9940,11 @@
                               },
                               "createdAt": {
                                 "type": "string",
-                                "example": "2024-12-08T15:05:59.697Z"
+                                "example": "2024-12-16T04:52:36.871Z"
                               },
                               "id": {
                                 "type": "string",
-                                "example": "0193a6ce-5291-7f90-87a2-45867abba3d3"
+                                "example": "0193cdcf-a186-7343-b103-04454fc61ef1"
                               },
                               "image": {
                                 "nullable": true,
@@ -9401,13 +9956,13 @@
                               },
                               "updatedAt": {
                                 "type": "string",
-                                "example": "2024-12-08T15:05:59.697Z"
+                                "example": "2024-12-16T04:52:36.871Z"
                               }
                             }
                           },
                           "airlineId": {
                             "type": "string",
-                            "example": "0193a6ce-5291-7f90-87a2-45867abba3d3"
+                            "example": "0193cdcf-a186-7343-b103-04454fc61ef1"
                           },
                           "airportFrom": {
                             "type": "object",
@@ -9430,11 +9985,11 @@
                               },
                               "createdAt": {
                                 "type": "string",
-                                "example": "2024-12-08T15:05:59.668Z"
+                                "example": "2024-12-16T04:52:36.856Z"
                               },
                               "id": {
                                 "type": "string",
-                                "example": "0193a6ce-5274-7af1-a705-577f3840ad4b"
+                                "example": "0193cdcf-a177-7c41-b424-6da90cc8e7b7"
                               },
                               "name": {
                                 "type": "string",
@@ -9442,62 +9997,62 @@
                               },
                               "updatedAt": {
                                 "type": "string",
-                                "example": "2024-12-08T15:05:59.668Z"
+                                "example": "2024-12-16T04:52:36.856Z"
                               }
                             }
                           },
                           "airportIdFrom": {
                             "type": "string",
-                            "example": "0193a6ce-5274-7af1-a705-577f3840ad4b"
+                            "example": "0193cdcf-a177-7c41-b424-6da90cc8e7b7"
                           },
                           "airportIdTo": {
                             "type": "string",
-                            "example": "0193a6ce-527d-77d3-91c4-0eb1419d3a83"
+                            "example": "0193cdcf-a184-7802-829d-ba1f7ad3a348"
                           },
                           "airportTo": {
                             "type": "object",
                             "properties": {
                               "city": {
                                 "type": "string",
-                                "example": "Singapore"
+                                "example": "Sydney"
                               },
                               "code": {
                                 "type": "string",
-                                "example": "SIN"
+                                "example": "SYD"
                               },
                               "continent": {
                                 "type": "string",
-                                "example": "ASIA"
+                                "example": "AUSTRALIA"
                               },
                               "country": {
                                 "type": "string",
-                                "example": "Singapore"
+                                "example": "Australia"
                               },
                               "createdAt": {
                                 "type": "string",
-                                "example": "2024-12-08T15:05:59.678Z"
+                                "example": "2024-12-16T04:52:36.868Z"
                               },
                               "id": {
                                 "type": "string",
-                                "example": "0193a6ce-527d-77d3-91c4-0eb1419d3a83"
+                                "example": "0193cdcf-a184-7802-829d-ba1f7ad3a348"
                               },
                               "name": {
                                 "type": "string",
-                                "example": "Changi Airport"
+                                "example": "Sydney Airport"
                               },
                               "updatedAt": {
                                 "type": "string",
-                                "example": "2024-12-08T15:05:59.678Z"
+                                "example": "2024-12-16T04:52:36.868Z"
                               }
                             }
                           },
                           "arrivalDate": {
                             "type": "string",
-                            "example": "2024-12-10T15:05:59.757Z"
+                            "example": "2025-01-24T04:52:36.897Z"
                           },
                           "arrivalTime": {
                             "type": "string",
-                            "example": "08:00"
+                            "example": "16:00"
                           },
                           "class": {
                             "type": "string",
@@ -9505,19 +10060,19 @@
                           },
                           "createdAt": {
                             "type": "string",
-                            "example": "2024-12-08T15:05:59.760Z"
+                            "example": "2024-12-16T04:52:36.903Z"
                           },
                           "departureDate": {
                             "type": "string",
-                            "example": "2024-12-09T15:05:59.757Z"
+                            "example": "2025-01-23T04:52:36.897Z"
                           },
                           "departureTime": {
                             "type": "string",
-                            "example": "06:00"
+                            "example": "14:00"
                           },
                           "description": {
                             "type": "string",
-                            "example": "Flight from Jakarta to Singapore"
+                            "example": "Flight from Jakarta to Destination 30"
                           },
                           "duration": {
                             "type": "number",
@@ -9525,128 +10080,366 @@
                           },
                           "id": {
                             "type": "string",
-                            "example": "0193a6ce-52d0-7460-a992-b56538742180"
+                            "example": "0193cdcf-a1a9-7f90-9fdd-71714f8507e0"
                           },
                           "price": {
                             "type": "number",
-                            "example": 100
+                            "example": 1950
                           },
                           "updatedAt": {
                             "type": "string",
-                            "example": "2024-12-08T15:05:59.760Z"
+                            "example": "2024-12-16T04:52:36.903Z"
                           }
                         }
                       },
                       "example": [
                         {
+                          "_count": {
+                            "seat": 24
+                          },
                           "aeroplane": {
-                            "code": "B737",
-                            "createdAt": "2024-12-08T15:05:59.734Z",
-                            "id": "0193a6ce-52b6-7ba0-9ce1-ea4e846f4246",
-                            "maxColumn": 6,
-                            "maxRow": 30,
-                            "name": "Boeing 737",
-                            "type": "Narrow-body",
-                            "updatedAt": "2024-12-08T15:05:59.734Z"
-                          },
-                          "aeroplaneId": "0193a6ce-52b6-7ba0-9ce1-ea4e846f4246",
-                          "airline": {
-                            "code": "GA",
-                            "createdAt": "2024-12-08T15:05:59.697Z",
-                            "id": "0193a6ce-5291-7f90-87a2-45867abba3d3",
-                            "image": null,
-                            "name": "Garuda Indonesia",
-                            "updatedAt": "2024-12-08T15:05:59.697Z"
-                          },
-                          "airlineId": "0193a6ce-5291-7f90-87a2-45867abba3d3",
-                          "airportFrom": {
-                            "city": "Tangerang",
-                            "code": "CGK",
-                            "continent": "ASIA",
-                            "country": "Indonesia",
-                            "createdAt": "2024-12-08T15:05:59.668Z",
-                            "id": "0193a6ce-5274-7af1-a705-577f3840ad4b",
-                            "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-08T15:05:59.668Z"
-                          },
-                          "airportIdFrom": "0193a6ce-5274-7af1-a705-577f3840ad4b",
-                          "airportIdTo": "0193a6ce-527d-77d3-91c4-0eb1419d3a83",
-                          "airportTo": {
-                            "city": "Singapore",
-                            "code": "SIN",
-                            "continent": "ASIA",
-                            "country": "Singapore",
-                            "createdAt": "2024-12-08T15:05:59.678Z",
-                            "id": "0193a6ce-527d-77d3-91c4-0eb1419d3a83",
-                            "name": "Changi Airport",
-                            "updatedAt": "2024-12-08T15:05:59.678Z"
-                          },
-                          "arrivalDate": "2024-12-10T15:05:59.757Z",
-                          "arrivalTime": "08:00",
-                          "class": "ECONOMY",
-                          "createdAt": "2024-12-08T15:05:59.760Z",
-                          "departureDate": "2024-12-09T15:05:59.757Z",
-                          "departureTime": "06:00",
-                          "description": "Flight from Jakarta to Singapore",
-                          "duration": 120,
-                          "id": "0193a6ce-52d0-7460-a992-b56538742180",
-                          "price": 100,
-                          "updatedAt": "2024-12-08T15:05:59.760Z"
-                        },
-                        {
-                          "aeroplane": {
-                            "code": "A380",
-                            "createdAt": "2024-12-08T15:05:59.746Z",
-                            "id": "0193a6ce-52c1-7b33-b91c-365c2ab7ca4c",
-                            "maxColumn": 10,
-                            "maxRow": 50,
-                            "name": "Airbus A380",
+                            "code": "A350",
+                            "createdAt": "2024-12-16T04:52:36.886Z",
+                            "id": "0193cdcf-a195-77c0-9536-fc5f9fa1e761",
+                            "maxColumn": 4,
+                            "maxRow": 6,
+                            "name": "Airbus A350",
                             "type": "Wide-body",
-                            "updatedAt": "2024-12-08T15:05:59.746Z"
+                            "updatedAt": "2024-12-16T04:52:36.886Z"
                           },
-                          "aeroplaneId": "0193a6ce-52c1-7b33-b91c-365c2ab7ca4c",
+                          "aeroplaneId": "0193cdcf-a195-77c0-9536-fc5f9fa1e761",
                           "airline": {
                             "code": "GA",
-                            "createdAt": "2024-12-08T15:05:59.697Z",
-                            "id": "0193a6ce-5291-7f90-87a2-45867abba3d3",
+                            "createdAt": "2024-12-16T04:52:36.871Z",
+                            "id": "0193cdcf-a186-7343-b103-04454fc61ef1",
                             "image": null,
                             "name": "Garuda Indonesia",
-                            "updatedAt": "2024-12-08T15:05:59.697Z"
+                            "updatedAt": "2024-12-16T04:52:36.871Z"
                           },
-                          "airlineId": "0193a6ce-5291-7f90-87a2-45867abba3d3",
+                          "airlineId": "0193cdcf-a186-7343-b103-04454fc61ef1",
                           "airportFrom": {
                             "city": "Tangerang",
                             "code": "CGK",
                             "continent": "ASIA",
                             "country": "Indonesia",
-                            "createdAt": "2024-12-08T15:05:59.668Z",
-                            "id": "0193a6ce-5274-7af1-a705-577f3840ad4b",
+                            "createdAt": "2024-12-16T04:52:36.856Z",
+                            "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
                             "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-08T15:05:59.668Z"
+                            "updatedAt": "2024-12-16T04:52:36.856Z"
                           },
-                          "airportIdFrom": "0193a6ce-5274-7af1-a705-577f3840ad4b",
-                          "airportIdTo": "0193a6ce-528c-7f63-bd0c-2af616846293",
+                          "airportIdFrom": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                          "airportIdTo": "0193cdcf-a184-7802-829d-ba1f7ad3a348",
                           "airportTo": {
                             "city": "Sydney",
                             "code": "SYD",
                             "continent": "AUSTRALIA",
                             "country": "Australia",
-                            "createdAt": "2024-12-08T15:05:59.692Z",
-                            "id": "0193a6ce-528c-7f63-bd0c-2af616846293",
+                            "createdAt": "2024-12-16T04:52:36.868Z",
+                            "id": "0193cdcf-a184-7802-829d-ba1f7ad3a348",
                             "name": "Sydney Airport",
-                            "updatedAt": "2024-12-08T15:05:59.692Z"
+                            "updatedAt": "2024-12-16T04:52:36.868Z"
                           },
-                          "arrivalDate": "2024-12-16T15:05:59.757Z",
-                          "arrivalTime": "14:00",
+                          "arrivalDate": "2025-01-24T04:52:36.897Z",
+                          "arrivalTime": "16:00",
                           "class": "ECONOMY",
-                          "createdAt": "2024-12-08T15:05:59.760Z",
-                          "departureDate": "2024-12-15T15:05:59.757Z",
-                          "departureTime": "12:00",
-                          "description": "Flight from Jakarta to Sydney",
+                          "createdAt": "2024-12-16T04:52:36.903Z",
+                          "departureDate": "2025-01-23T04:52:36.897Z",
+                          "departureTime": "14:00",
+                          "description": "Flight from Jakarta to Destination 30",
                           "duration": 120,
-                          "id": "0193a6ce-52d0-7460-a992-b594ab95d6d2",
-                          "price": 400,
-                          "updatedAt": "2024-12-08T15:05:59.760Z"
+                          "id": "0193cdcf-a1a9-7f90-9fdd-71714f8507e0",
+                          "price": 1950,
+                          "updatedAt": "2024-12-16T04:52:36.903Z"
+                        },
+                        {
+                          "_count": {
+                            "seat": 24
+                          },
+                          "aeroplane": {
+                            "code": "A350",
+                            "createdAt": "2024-12-16T04:52:36.886Z",
+                            "id": "0193cdcf-a195-77c0-9536-fc5f9fa1e761",
+                            "maxColumn": 4,
+                            "maxRow": 6,
+                            "name": "Airbus A350",
+                            "type": "Wide-body",
+                            "updatedAt": "2024-12-16T04:52:36.886Z"
+                          },
+                          "aeroplaneId": "0193cdcf-a195-77c0-9536-fc5f9fa1e761",
+                          "airline": {
+                            "code": "GA",
+                            "createdAt": "2024-12-16T04:52:36.871Z",
+                            "id": "0193cdcf-a186-7343-b103-04454fc61ef1",
+                            "image": null,
+                            "name": "Garuda Indonesia",
+                            "updatedAt": "2024-12-16T04:52:36.871Z"
+                          },
+                          "airlineId": "0193cdcf-a186-7343-b103-04454fc61ef1",
+                          "airportFrom": {
+                            "city": "Sydney",
+                            "code": "SYD",
+                            "continent": "AUSTRALIA",
+                            "country": "Australia",
+                            "createdAt": "2024-12-16T04:52:36.868Z",
+                            "id": "0193cdcf-a184-7802-829d-ba1f7ad3a348",
+                            "name": "Sydney Airport",
+                            "updatedAt": "2024-12-16T04:52:36.868Z"
+                          },
+                          "airportIdFrom": "0193cdcf-a184-7802-829d-ba1f7ad3a348",
+                          "airportIdTo": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                          "airportTo": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-16T04:52:36.856Z",
+                            "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-16T04:52:36.856Z"
+                          },
+                          "arrivalDate": "2025-01-26T04:52:36.897Z",
+                          "arrivalTime": "18:00",
+                          "class": "ECONOMY",
+                          "createdAt": "2024-12-16T04:52:36.903Z",
+                          "departureDate": "2025-01-25T04:52:36.897Z",
+                          "departureTime": "16:00",
+                          "description": "Return flight from Destination 30 to Jakarta",
+                          "duration": 120,
+                          "id": "0193cdcf-a1a9-7f90-9fdd-7181f8f525d2",
+                          "price": 1950,
+                          "updatedAt": "2024-12-16T04:52:36.903Z"
+                        },
+                        {
+                          "_count": {
+                            "seat": 48
+                          },
+                          "aeroplane": {
+                            "code": "B787",
+                            "createdAt": "2024-12-16T04:52:36.892Z",
+                            "id": "0193cdcf-a19b-7df1-b0c9-a1eef83030db",
+                            "maxColumn": 4,
+                            "maxRow": 12,
+                            "name": "Boeing 787",
+                            "type": "Wide-body",
+                            "updatedAt": "2024-12-16T04:52:36.892Z"
+                          },
+                          "aeroplaneId": "0193cdcf-a19b-7df1-b0c9-a1eef83030db",
+                          "airline": {
+                            "code": "GA",
+                            "createdAt": "2024-12-16T04:52:36.871Z",
+                            "id": "0193cdcf-a186-7343-b103-04454fc61ef1",
+                            "image": null,
+                            "name": "Garuda Indonesia",
+                            "updatedAt": "2024-12-16T04:52:36.871Z"
+                          },
+                          "airlineId": "0193cdcf-a186-7343-b103-04454fc61ef1",
+                          "airportFrom": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-16T04:52:36.856Z",
+                            "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-16T04:52:36.856Z"
+                          },
+                          "airportIdFrom": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                          "airportIdTo": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                          "airportTo": {
+                            "city": "Singapore",
+                            "code": "SIN",
+                            "continent": "ASIA",
+                            "country": "Singapore",
+                            "createdAt": "2024-12-16T04:52:36.862Z",
+                            "id": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                            "name": "Changi Airport",
+                            "updatedAt": "2024-12-16T04:52:36.862Z"
+                          },
+                          "arrivalDate": "2025-01-30T04:52:36.897Z",
+                          "arrivalTime": "16:00",
+                          "class": "ECONOMY",
+                          "createdAt": "2024-12-16T04:52:36.903Z",
+                          "departureDate": "2025-01-29T04:52:36.897Z",
+                          "departureTime": "14:00",
+                          "description": "Flight from Jakarta to Destination 36",
+                          "duration": 120,
+                          "id": "0193cdcf-a1a9-7f90-9fdd-72306cbec169",
+                          "price": 2250,
+                          "updatedAt": "2024-12-16T04:52:36.903Z"
+                        },
+                        {
+                          "_count": {
+                            "seat": 48
+                          },
+                          "aeroplane": {
+                            "code": "B787",
+                            "createdAt": "2024-12-16T04:52:36.892Z",
+                            "id": "0193cdcf-a19b-7df1-b0c9-a1eef83030db",
+                            "maxColumn": 4,
+                            "maxRow": 12,
+                            "name": "Boeing 787",
+                            "type": "Wide-body",
+                            "updatedAt": "2024-12-16T04:52:36.892Z"
+                          },
+                          "aeroplaneId": "0193cdcf-a19b-7df1-b0c9-a1eef83030db",
+                          "airline": {
+                            "code": "GA",
+                            "createdAt": "2024-12-16T04:52:36.871Z",
+                            "id": "0193cdcf-a186-7343-b103-04454fc61ef1",
+                            "image": null,
+                            "name": "Garuda Indonesia",
+                            "updatedAt": "2024-12-16T04:52:36.871Z"
+                          },
+                          "airlineId": "0193cdcf-a186-7343-b103-04454fc61ef1",
+                          "airportFrom": {
+                            "city": "Singapore",
+                            "code": "SIN",
+                            "continent": "ASIA",
+                            "country": "Singapore",
+                            "createdAt": "2024-12-16T04:52:36.862Z",
+                            "id": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                            "name": "Changi Airport",
+                            "updatedAt": "2024-12-16T04:52:36.862Z"
+                          },
+                          "airportIdFrom": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                          "airportIdTo": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                          "airportTo": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-16T04:52:36.856Z",
+                            "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-16T04:52:36.856Z"
+                          },
+                          "arrivalDate": "2025-02-01T04:52:36.897Z",
+                          "arrivalTime": "18:00",
+                          "class": "ECONOMY",
+                          "createdAt": "2024-12-16T04:52:36.903Z",
+                          "departureDate": "2025-01-31T04:52:36.897Z",
+                          "departureTime": "16:00",
+                          "description": "Return flight from Destination 36 to Jakarta",
+                          "duration": 120,
+                          "id": "0193cdcf-a1a9-7f90-9fdd-7246e4e3e39d",
+                          "price": 2250,
+                          "updatedAt": "2024-12-16T04:52:36.903Z"
+                        },
+                        {
+                          "_count": {
+                            "seat": 40
+                          },
+                          "aeroplane": {
+                            "code": "B777",
+                            "createdAt": "2024-12-16T04:52:36.888Z",
+                            "id": "0193cdcf-a197-74e1-8104-ebdc894ac65b",
+                            "maxColumn": 5,
+                            "maxRow": 8,
+                            "name": "Boeing 777",
+                            "type": "Wide-body",
+                            "updatedAt": "2024-12-16T04:52:36.888Z"
+                          },
+                          "aeroplaneId": "0193cdcf-a197-74e1-8104-ebdc894ac65b",
+                          "airline": {
+                            "code": "QF",
+                            "createdAt": "2024-12-16T04:52:36.880Z",
+                            "id": "0193cdcf-a18f-71f3-ba84-3fa6b0c2d9bb",
+                            "image": null,
+                            "name": "Qantas",
+                            "updatedAt": "2024-12-16T04:52:36.880Z"
+                          },
+                          "airlineId": "0193cdcf-a18f-71f3-ba84-3fa6b0c2d9bb",
+                          "airportFrom": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-16T04:52:36.856Z",
+                            "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-16T04:52:36.856Z"
+                          },
+                          "airportIdFrom": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                          "airportIdTo": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                          "airportTo": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-16T04:52:36.856Z",
+                            "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-16T04:52:36.856Z"
+                          },
+                          "arrivalDate": "2025-02-12T04:52:36.897Z",
+                          "arrivalTime": "16:00",
+                          "class": "ECONOMY",
+                          "createdAt": "2024-12-16T04:52:36.903Z",
+                          "departureDate": "2025-02-11T04:52:36.897Z",
+                          "departureTime": "14:00",
+                          "description": "Flight from Jakarta to Destination 49",
+                          "duration": 120,
+                          "id": "0193cdcf-a1a9-7f90-9fdd-73d43a321c36",
+                          "price": 2900,
+                          "updatedAt": "2024-12-16T04:52:36.903Z"
+                        },
+                        {
+                          "_count": {
+                            "seat": 40
+                          },
+                          "aeroplane": {
+                            "code": "B777",
+                            "createdAt": "2024-12-16T04:52:36.888Z",
+                            "id": "0193cdcf-a197-74e1-8104-ebdc894ac65b",
+                            "maxColumn": 5,
+                            "maxRow": 8,
+                            "name": "Boeing 777",
+                            "type": "Wide-body",
+                            "updatedAt": "2024-12-16T04:52:36.888Z"
+                          },
+                          "aeroplaneId": "0193cdcf-a197-74e1-8104-ebdc894ac65b",
+                          "airline": {
+                            "code": "QF",
+                            "createdAt": "2024-12-16T04:52:36.880Z",
+                            "id": "0193cdcf-a18f-71f3-ba84-3fa6b0c2d9bb",
+                            "image": null,
+                            "name": "Qantas",
+                            "updatedAt": "2024-12-16T04:52:36.880Z"
+                          },
+                          "airlineId": "0193cdcf-a18f-71f3-ba84-3fa6b0c2d9bb",
+                          "airportFrom": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-16T04:52:36.856Z",
+                            "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-16T04:52:36.856Z"
+                          },
+                          "airportIdFrom": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                          "airportIdTo": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                          "airportTo": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-16T04:52:36.856Z",
+                            "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-16T04:52:36.856Z"
+                          },
+                          "arrivalDate": "2025-02-14T04:52:36.897Z",
+                          "arrivalTime": "18:00",
+                          "class": "ECONOMY",
+                          "createdAt": "2024-12-16T04:52:36.903Z",
+                          "departureDate": "2025-02-13T04:52:36.897Z",
+                          "departureTime": "16:00",
+                          "description": "Return flight from Destination 49 to Jakarta",
+                          "duration": 120,
+                          "id": "0193cdcf-a1a9-7f90-9fdd-73e28e6cd2a3",
+                          "price": 2900,
+                          "updatedAt": "2024-12-16T04:52:36.903Z"
                         }
                       ]
                     },
@@ -9657,79 +10450,207 @@
                     "meta": {
                       "type": "object",
                       "properties": {
-                        "cursorId": {
-                          "type": "string",
-                          "example": "0193a6ce-52d0-7460-a992-b594ab95d6d2"
-                        },
                         "limit": {
                           "type": "number",
-                          "example": 3
+                          "example": 10
+                        },
+                        "page": {
+                          "type": "number",
+                          "example": 2
+                        },
+                        "skip": {
+                          "type": "number",
+                          "example": 10
+                        },
+                        "totalData": {
+                          "type": "number",
+                          "example": 16
+                        },
+                        "totalPage": {
+                          "type": "number",
+                          "example": 2
                         }
                       }
                     }
                   }
                 },
                 "examples": {
-                  "200 OK - Get Flight with airlines array filter": {
+                  "200 OK - Succesfully get all flight with filter sort and pagination": {
                     "value": {
                       "data": [
+                        {
+                          "_count": {
+                            "seat": 24
+                          },
+                          "aeroplane": {
+                            "code": "A350",
+                            "createdAt": "2024-12-16T04:52:36.886Z",
+                            "id": "0193cdcf-a195-77c0-9536-fc5f9fa1e761",
+                            "maxColumn": 4,
+                            "maxRow": 6,
+                            "name": "Airbus A350",
+                            "type": "Wide-body",
+                            "updatedAt": "2024-12-16T04:52:36.886Z"
+                          },
+                          "aeroplaneId": "0193cdcf-a195-77c0-9536-fc5f9fa1e761",
+                          "airline": {
+                            "code": "GA",
+                            "createdAt": "2024-12-16T04:52:36.871Z",
+                            "id": "0193cdcf-a186-7343-b103-04454fc61ef1",
+                            "image": null,
+                            "name": "Garuda Indonesia",
+                            "updatedAt": "2024-12-16T04:52:36.871Z"
+                          },
+                          "airlineId": "0193cdcf-a186-7343-b103-04454fc61ef1",
+                          "airportFrom": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-16T04:52:36.856Z",
+                            "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-16T04:52:36.856Z"
+                          },
+                          "airportIdFrom": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                          "airportIdTo": "0193cdcf-a184-7802-829d-ba1f7ad3a348",
+                          "airportTo": {
+                            "city": "Sydney",
+                            "code": "SYD",
+                            "continent": "AUSTRALIA",
+                            "country": "Australia",
+                            "createdAt": "2024-12-16T04:52:36.868Z",
+                            "id": "0193cdcf-a184-7802-829d-ba1f7ad3a348",
+                            "name": "Sydney Airport",
+                            "updatedAt": "2024-12-16T04:52:36.868Z"
+                          },
+                          "arrivalDate": "2025-01-24T04:52:36.897Z",
+                          "arrivalTime": "16:00",
+                          "class": "ECONOMY",
+                          "createdAt": "2024-12-16T04:52:36.903Z",
+                          "departureDate": "2025-01-23T04:52:36.897Z",
+                          "departureTime": "14:00",
+                          "description": "Flight from Jakarta to Destination 30",
+                          "duration": 120,
+                          "id": "0193cdcf-a1a9-7f90-9fdd-71714f8507e0",
+                          "price": 1950,
+                          "updatedAt": "2024-12-16T04:52:36.903Z"
+                        },
+                        {
+                          "_count": {
+                            "seat": 24
+                          },
+                          "aeroplane": {
+                            "code": "A350",
+                            "createdAt": "2024-12-16T04:52:36.886Z",
+                            "id": "0193cdcf-a195-77c0-9536-fc5f9fa1e761",
+                            "maxColumn": 4,
+                            "maxRow": 6,
+                            "name": "Airbus A350",
+                            "type": "Wide-body",
+                            "updatedAt": "2024-12-16T04:52:36.886Z"
+                          },
+                          "aeroplaneId": "0193cdcf-a195-77c0-9536-fc5f9fa1e761",
+                          "airline": {
+                            "code": "GA",
+                            "createdAt": "2024-12-16T04:52:36.871Z",
+                            "id": "0193cdcf-a186-7343-b103-04454fc61ef1",
+                            "image": null,
+                            "name": "Garuda Indonesia",
+                            "updatedAt": "2024-12-16T04:52:36.871Z"
+                          },
+                          "airlineId": "0193cdcf-a186-7343-b103-04454fc61ef1",
+                          "airportFrom": {
+                            "city": "Sydney",
+                            "code": "SYD",
+                            "continent": "AUSTRALIA",
+                            "country": "Australia",
+                            "createdAt": "2024-12-16T04:52:36.868Z",
+                            "id": "0193cdcf-a184-7802-829d-ba1f7ad3a348",
+                            "name": "Sydney Airport",
+                            "updatedAt": "2024-12-16T04:52:36.868Z"
+                          },
+                          "airportIdFrom": "0193cdcf-a184-7802-829d-ba1f7ad3a348",
+                          "airportIdTo": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                          "airportTo": {
+                            "city": "Tangerang",
+                            "code": "CGK",
+                            "continent": "ASIA",
+                            "country": "Indonesia",
+                            "createdAt": "2024-12-16T04:52:36.856Z",
+                            "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                            "name": "Soekarno-Hatta International Airport",
+                            "updatedAt": "2024-12-16T04:52:36.856Z"
+                          },
+                          "arrivalDate": "2025-01-26T04:52:36.897Z",
+                          "arrivalTime": "18:00",
+                          "class": "ECONOMY",
+                          "createdAt": "2024-12-16T04:52:36.903Z",
+                          "departureDate": "2025-01-25T04:52:36.897Z",
+                          "departureTime": "16:00",
+                          "description": "Return flight from Destination 30 to Jakarta",
+                          "duration": 120,
+                          "id": "0193cdcf-a1a9-7f90-9fdd-7181f8f525d2",
+                          "price": 1950,
+                          "updatedAt": "2024-12-16T04:52:36.903Z"
+                        },
                         {
                           "_count": {
                             "seat": 48
                           },
                           "aeroplane": {
                             "code": "B787",
-                            "createdAt": "2024-12-14T03:57:51.630Z",
-                            "id": "0193c350-c88d-7231-83f6-7235d46928a6",
+                            "createdAt": "2024-12-16T04:52:36.892Z",
+                            "id": "0193cdcf-a19b-7df1-b0c9-a1eef83030db",
                             "maxColumn": 4,
                             "maxRow": 12,
                             "name": "Boeing 787",
                             "type": "Wide-body",
-                            "updatedAt": "2024-12-14T03:57:51.630Z"
+                            "updatedAt": "2024-12-16T04:52:36.892Z"
                           },
-                          "aeroplaneId": "0193c350-c88d-7231-83f6-7235d46928a6",
+                          "aeroplaneId": "0193cdcf-a19b-7df1-b0c9-a1eef83030db",
                           "airline": {
-                            "code": "BA",
-                            "createdAt": "2024-12-14T03:57:51.609Z",
-                            "id": "0193c350-c878-73a1-8929-733b622abaa2",
+                            "code": "GA",
+                            "createdAt": "2024-12-16T04:52:36.871Z",
+                            "id": "0193cdcf-a186-7343-b103-04454fc61ef1",
                             "image": null,
-                            "name": "British Airways",
-                            "updatedAt": "2024-12-14T03:57:51.609Z"
+                            "name": "Garuda Indonesia",
+                            "updatedAt": "2024-12-16T04:52:36.871Z"
                           },
-                          "airlineId": "0193c350-c878-73a1-8929-733b622abaa2",
+                          "airlineId": "0193cdcf-a186-7343-b103-04454fc61ef1",
                           "airportFrom": {
                             "city": "Tangerang",
                             "code": "CGK",
                             "continent": "ASIA",
                             "country": "Indonesia",
-                            "createdAt": "2024-12-14T03:57:51.580Z",
-                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "createdAt": "2024-12-16T04:52:36.856Z",
+                            "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
                             "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                            "updatedAt": "2024-12-16T04:52:36.856Z"
                           },
-                          "airportIdFrom": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                          "airportIdTo": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportIdFrom": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                          "airportIdTo": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
                           "airportTo": {
-                            "city": "Tangerang",
-                            "code": "CGK",
+                            "city": "Singapore",
+                            "code": "SIN",
                             "continent": "ASIA",
-                            "country": "Indonesia",
-                            "createdAt": "2024-12-14T03:57:51.580Z",
-                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                            "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                            "country": "Singapore",
+                            "createdAt": "2024-12-16T04:52:36.862Z",
+                            "id": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                            "name": "Changi Airport",
+                            "updatedAt": "2024-12-16T04:52:36.862Z"
                           },
-                          "arrivalDate": "2025-01-06T03:57:51.639Z",
+                          "arrivalDate": "2025-01-30T04:52:36.897Z",
                           "arrivalTime": "16:00",
-                          "class": "FIRST_CLASS",
-                          "createdAt": "2024-12-14T03:57:51.647Z",
-                          "departureDate": "2025-01-05T03:57:51.639Z",
+                          "class": "ECONOMY",
+                          "createdAt": "2024-12-16T04:52:36.903Z",
+                          "departureDate": "2025-01-29T04:52:36.897Z",
                           "departureTime": "14:00",
-                          "description": "Flight from Jakarta to Destination 14",
+                          "description": "Flight from Jakarta to Destination 36",
                           "duration": 120,
-                          "id": "0193c350-c8a1-73b0-894e-27a06c6f46f8",
-                          "price": 1150,
-                          "updatedAt": "2024-12-14T03:57:51.647Z"
+                          "id": "0193cdcf-a1a9-7f90-9fdd-72306cbec169",
+                          "price": 2250,
+                          "updatedAt": "2024-12-16T04:52:36.903Z"
                         },
                         {
                           "_count": {
@@ -9737,289 +10658,57 @@
                           },
                           "aeroplane": {
                             "code": "B787",
-                            "createdAt": "2024-12-14T03:57:51.630Z",
-                            "id": "0193c350-c88d-7231-83f6-7235d46928a6",
+                            "createdAt": "2024-12-16T04:52:36.892Z",
+                            "id": "0193cdcf-a19b-7df1-b0c9-a1eef83030db",
                             "maxColumn": 4,
                             "maxRow": 12,
                             "name": "Boeing 787",
                             "type": "Wide-body",
-                            "updatedAt": "2024-12-14T03:57:51.630Z"
+                            "updatedAt": "2024-12-16T04:52:36.892Z"
                           },
-                          "aeroplaneId": "0193c350-c88d-7231-83f6-7235d46928a6",
+                          "aeroplaneId": "0193cdcf-a19b-7df1-b0c9-a1eef83030db",
                           "airline": {
-                            "code": "BA",
-                            "createdAt": "2024-12-14T03:57:51.609Z",
-                            "id": "0193c350-c878-73a1-8929-733b622abaa2",
+                            "code": "GA",
+                            "createdAt": "2024-12-16T04:52:36.871Z",
+                            "id": "0193cdcf-a186-7343-b103-04454fc61ef1",
                             "image": null,
-                            "name": "British Airways",
-                            "updatedAt": "2024-12-14T03:57:51.609Z"
+                            "name": "Garuda Indonesia",
+                            "updatedAt": "2024-12-16T04:52:36.871Z"
                           },
-                          "airlineId": "0193c350-c878-73a1-8929-733b622abaa2",
-                          "airportFrom": {
-                            "city": "Tangerang",
-                            "code": "CGK",
-                            "continent": "ASIA",
-                            "country": "Indonesia",
-                            "createdAt": "2024-12-14T03:57:51.580Z",
-                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                            "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-14T03:57:51.580Z"
-                          },
-                          "airportIdFrom": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                          "airportIdTo": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                          "airportTo": {
-                            "city": "Tangerang",
-                            "code": "CGK",
-                            "continent": "ASIA",
-                            "country": "Indonesia",
-                            "createdAt": "2024-12-14T03:57:51.580Z",
-                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                            "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-14T03:57:51.580Z"
-                          },
-                          "arrivalDate": "2025-01-08T03:57:51.639Z",
-                          "arrivalTime": "18:00",
-                          "class": "FIRST_CLASS",
-                          "createdAt": "2024-12-14T03:57:51.647Z",
-                          "departureDate": "2025-01-07T03:57:51.639Z",
-                          "departureTime": "16:00",
-                          "description": "Return flight from Destination 14 to Jakarta",
-                          "duration": 120,
-                          "id": "0193c350-c8a1-73b0-894e-27b16115b81e",
-                          "price": 1150,
-                          "updatedAt": "2024-12-14T03:57:51.647Z"
-                        },
-                        {
-                          "_count": {
-                            "seat": 40
-                          },
-                          "aeroplane": {
-                            "code": "B777",
-                            "createdAt": "2024-12-14T03:57:51.624Z",
-                            "id": "0193c350-c888-7291-b521-e75bf4871fbe",
-                            "maxColumn": 5,
-                            "maxRow": 8,
-                            "name": "Boeing 777",
-                            "type": "Wide-body",
-                            "updatedAt": "2024-12-14T03:57:51.624Z"
-                          },
-                          "aeroplaneId": "0193c350-c888-7291-b521-e75bf4871fbe",
-                          "airline": {
-                            "code": "BA",
-                            "createdAt": "2024-12-14T03:57:51.609Z",
-                            "id": "0193c350-c878-73a1-8929-733b622abaa2",
-                            "image": null,
-                            "name": "British Airways",
-                            "updatedAt": "2024-12-14T03:57:51.609Z"
-                          },
-                          "airlineId": "0193c350-c878-73a1-8929-733b622abaa2",
-                          "airportFrom": {
-                            "city": "Tangerang",
-                            "code": "CGK",
-                            "continent": "ASIA",
-                            "country": "Indonesia",
-                            "createdAt": "2024-12-14T03:57:51.580Z",
-                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                            "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-14T03:57:51.580Z"
-                          },
-                          "airportIdFrom": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                          "airportIdTo": "0193c350-c863-78f0-82a8-2052abf1a750",
-                          "airportTo": {
-                            "city": "Singapore",
-                            "code": "SIN",
-                            "continent": "ASIA",
-                            "country": "Singapore",
-                            "createdAt": "2024-12-14T03:57:51.587Z",
-                            "id": "0193c350-c863-78f0-82a8-2052abf1a750",
-                            "name": "Changi Airport",
-                            "updatedAt": "2024-12-14T03:57:51.587Z"
-                          },
-                          "arrivalDate": "2025-01-07T03:57:51.639Z",
-                          "arrivalTime": "16:00",
-                          "class": "ECONOMY",
-                          "createdAt": "2024-12-14T03:57:51.647Z",
-                          "departureDate": "2025-01-06T03:57:51.639Z",
-                          "departureTime": "14:00",
-                          "description": "Flight from Jakarta to Destination 15",
-                          "duration": 120,
-                          "id": "0193c350-c8a1-73b0-894e-27cb3fc66653",
-                          "price": 1200,
-                          "updatedAt": "2024-12-14T03:57:51.647Z"
-                        },
-                        {
-                          "_count": {
-                            "seat": 40
-                          },
-                          "aeroplane": {
-                            "code": "B777",
-                            "createdAt": "2024-12-14T03:57:51.624Z",
-                            "id": "0193c350-c888-7291-b521-e75bf4871fbe",
-                            "maxColumn": 5,
-                            "maxRow": 8,
-                            "name": "Boeing 777",
-                            "type": "Wide-body",
-                            "updatedAt": "2024-12-14T03:57:51.624Z"
-                          },
-                          "aeroplaneId": "0193c350-c888-7291-b521-e75bf4871fbe",
-                          "airline": {
-                            "code": "BA",
-                            "createdAt": "2024-12-14T03:57:51.609Z",
-                            "id": "0193c350-c878-73a1-8929-733b622abaa2",
-                            "image": null,
-                            "name": "British Airways",
-                            "updatedAt": "2024-12-14T03:57:51.609Z"
-                          },
-                          "airlineId": "0193c350-c878-73a1-8929-733b622abaa2",
+                          "airlineId": "0193cdcf-a186-7343-b103-04454fc61ef1",
                           "airportFrom": {
                             "city": "Singapore",
                             "code": "SIN",
                             "continent": "ASIA",
                             "country": "Singapore",
-                            "createdAt": "2024-12-14T03:57:51.587Z",
-                            "id": "0193c350-c863-78f0-82a8-2052abf1a750",
+                            "createdAt": "2024-12-16T04:52:36.862Z",
+                            "id": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
                             "name": "Changi Airport",
-                            "updatedAt": "2024-12-14T03:57:51.587Z"
+                            "updatedAt": "2024-12-16T04:52:36.862Z"
                           },
-                          "airportIdFrom": "0193c350-c863-78f0-82a8-2052abf1a750",
-                          "airportIdTo": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportIdFrom": "0193cdcf-a17e-7df2-b881-58ddafd856d8",
+                          "airportIdTo": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
                           "airportTo": {
                             "city": "Tangerang",
                             "code": "CGK",
                             "continent": "ASIA",
                             "country": "Indonesia",
-                            "createdAt": "2024-12-14T03:57:51.580Z",
-                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "createdAt": "2024-12-16T04:52:36.856Z",
+                            "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
                             "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                            "updatedAt": "2024-12-16T04:52:36.856Z"
                           },
-                          "arrivalDate": "2025-01-09T03:57:51.639Z",
+                          "arrivalDate": "2025-02-01T04:52:36.897Z",
                           "arrivalTime": "18:00",
                           "class": "ECONOMY",
-                          "createdAt": "2024-12-14T03:57:51.647Z",
-                          "departureDate": "2025-01-08T03:57:51.639Z",
+                          "createdAt": "2024-12-16T04:52:36.903Z",
+                          "departureDate": "2025-01-31T04:52:36.897Z",
                           "departureTime": "16:00",
-                          "description": "Return flight from Destination 15 to Jakarta",
+                          "description": "Return flight from Destination 36 to Jakarta",
                           "duration": 120,
-                          "id": "0193c350-c8a1-73b0-894e-27d5f46278c9",
-                          "price": 1200,
-                          "updatedAt": "2024-12-14T03:57:51.647Z"
-                        },
-                        {
-                          "_count": {
-                            "seat": 72
-                          },
-                          "aeroplane": {
-                            "code": "B737",
-                            "createdAt": "2024-12-14T03:57:51.617Z",
-                            "id": "0193c350-c880-7a50-98f7-a542c202e8dc",
-                            "maxColumn": 6,
-                            "maxRow": 12,
-                            "name": "Boeing 737",
-                            "type": "Narrow-body",
-                            "updatedAt": "2024-12-14T03:57:51.617Z"
-                          },
-                          "aeroplaneId": "0193c350-c880-7a50-98f7-a542c202e8dc",
-                          "airline": {
-                            "code": "BA",
-                            "createdAt": "2024-12-14T03:57:51.609Z",
-                            "id": "0193c350-c878-73a1-8929-733b622abaa2",
-                            "image": null,
-                            "name": "British Airways",
-                            "updatedAt": "2024-12-14T03:57:51.609Z"
-                          },
-                          "airlineId": "0193c350-c878-73a1-8929-733b622abaa2",
-                          "airportFrom": {
-                            "city": "Tangerang",
-                            "code": "CGK",
-                            "continent": "ASIA",
-                            "country": "Indonesia",
-                            "createdAt": "2024-12-14T03:57:51.580Z",
-                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                            "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-14T03:57:51.580Z"
-                          },
-                          "airportIdFrom": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                          "airportIdTo": "0193c350-c863-78f0-82a8-2052abf1a750",
-                          "airportTo": {
-                            "city": "Singapore",
-                            "code": "SIN",
-                            "continent": "ASIA",
-                            "country": "Singapore",
-                            "createdAt": "2024-12-14T03:57:51.587Z",
-                            "id": "0193c350-c863-78f0-82a8-2052abf1a750",
-                            "name": "Changi Airport",
-                            "updatedAt": "2024-12-14T03:57:51.587Z"
-                          },
-                          "arrivalDate": "2025-01-09T03:57:51.639Z",
-                          "arrivalTime": "16:00",
-                          "class": "FIRST_CLASS",
-                          "createdAt": "2024-12-14T03:57:51.647Z",
-                          "departureDate": "2025-01-08T03:57:51.639Z",
-                          "departureTime": "14:00",
-                          "description": "Flight from Jakarta to Destination 17",
-                          "duration": 120,
-                          "id": "0193c350-c8a1-73b0-894e-280efaad4af0",
-                          "price": 1300,
-                          "updatedAt": "2024-12-14T03:57:51.647Z"
-                        },
-                        {
-                          "_count": {
-                            "seat": 72
-                          },
-                          "aeroplane": {
-                            "code": "B737",
-                            "createdAt": "2024-12-14T03:57:51.617Z",
-                            "id": "0193c350-c880-7a50-98f7-a542c202e8dc",
-                            "maxColumn": 6,
-                            "maxRow": 12,
-                            "name": "Boeing 737",
-                            "type": "Narrow-body",
-                            "updatedAt": "2024-12-14T03:57:51.617Z"
-                          },
-                          "aeroplaneId": "0193c350-c880-7a50-98f7-a542c202e8dc",
-                          "airline": {
-                            "code": "BA",
-                            "createdAt": "2024-12-14T03:57:51.609Z",
-                            "id": "0193c350-c878-73a1-8929-733b622abaa2",
-                            "image": null,
-                            "name": "British Airways",
-                            "updatedAt": "2024-12-14T03:57:51.609Z"
-                          },
-                          "airlineId": "0193c350-c878-73a1-8929-733b622abaa2",
-                          "airportFrom": {
-                            "city": "Singapore",
-                            "code": "SIN",
-                            "continent": "ASIA",
-                            "country": "Singapore",
-                            "createdAt": "2024-12-14T03:57:51.587Z",
-                            "id": "0193c350-c863-78f0-82a8-2052abf1a750",
-                            "name": "Changi Airport",
-                            "updatedAt": "2024-12-14T03:57:51.587Z"
-                          },
-                          "airportIdFrom": "0193c350-c863-78f0-82a8-2052abf1a750",
-                          "airportIdTo": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                          "airportTo": {
-                            "city": "Tangerang",
-                            "code": "CGK",
-                            "continent": "ASIA",
-                            "country": "Indonesia",
-                            "createdAt": "2024-12-14T03:57:51.580Z",
-                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                            "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-14T03:57:51.580Z"
-                          },
-                          "arrivalDate": "2025-01-11T03:57:51.639Z",
-                          "arrivalTime": "18:00",
-                          "class": "FIRST_CLASS",
-                          "createdAt": "2024-12-14T03:57:51.647Z",
-                          "departureDate": "2025-01-10T03:57:51.639Z",
-                          "departureTime": "16:00",
-                          "description": "Return flight from Destination 17 to Jakarta",
-                          "duration": 120,
-                          "id": "0193c350-c8a1-73b0-894e-2816ce1b0342",
-                          "price": 1300,
-                          "updatedAt": "2024-12-14T03:57:51.647Z"
+                          "id": "0193cdcf-a1a9-7f90-9fdd-7246e4e3e39d",
+                          "price": 2250,
+                          "updatedAt": "2024-12-16T04:52:36.903Z"
                         },
                         {
                           "_count": {
@@ -10027,57 +10716,57 @@
                           },
                           "aeroplane": {
                             "code": "B777",
-                            "createdAt": "2024-12-14T03:57:51.624Z",
-                            "id": "0193c350-c888-7291-b521-e75bf4871fbe",
+                            "createdAt": "2024-12-16T04:52:36.888Z",
+                            "id": "0193cdcf-a197-74e1-8104-ebdc894ac65b",
                             "maxColumn": 5,
                             "maxRow": 8,
                             "name": "Boeing 777",
                             "type": "Wide-body",
-                            "updatedAt": "2024-12-14T03:57:51.624Z"
+                            "updatedAt": "2024-12-16T04:52:36.888Z"
                           },
-                          "aeroplaneId": "0193c350-c888-7291-b521-e75bf4871fbe",
+                          "aeroplaneId": "0193cdcf-a197-74e1-8104-ebdc894ac65b",
                           "airline": {
-                            "code": "SQ",
-                            "createdAt": "2024-12-14T03:57:51.605Z",
-                            "id": "0193c350-c875-79e1-ae10-f409d590546a",
+                            "code": "QF",
+                            "createdAt": "2024-12-16T04:52:36.880Z",
+                            "id": "0193cdcf-a18f-71f3-ba84-3fa6b0c2d9bb",
                             "image": null,
-                            "name": "Singapore Airlines",
-                            "updatedAt": "2024-12-14T03:57:51.605Z"
+                            "name": "Qantas",
+                            "updatedAt": "2024-12-16T04:52:36.880Z"
                           },
-                          "airlineId": "0193c350-c875-79e1-ae10-f409d590546a",
+                          "airlineId": "0193cdcf-a18f-71f3-ba84-3fa6b0c2d9bb",
                           "airportFrom": {
                             "city": "Tangerang",
                             "code": "CGK",
                             "continent": "ASIA",
                             "country": "Indonesia",
-                            "createdAt": "2024-12-14T03:57:51.580Z",
-                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "createdAt": "2024-12-16T04:52:36.856Z",
+                            "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
                             "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                            "updatedAt": "2024-12-16T04:52:36.856Z"
                           },
-                          "airportIdFrom": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                          "airportIdTo": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportIdFrom": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                          "airportIdTo": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
                           "airportTo": {
                             "city": "Tangerang",
                             "code": "CGK",
                             "continent": "ASIA",
                             "country": "Indonesia",
-                            "createdAt": "2024-12-14T03:57:51.580Z",
-                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "createdAt": "2024-12-16T04:52:36.856Z",
+                            "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
                             "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                            "updatedAt": "2024-12-16T04:52:36.856Z"
                           },
-                          "arrivalDate": "2025-01-13T03:57:51.639Z",
+                          "arrivalDate": "2025-02-12T04:52:36.897Z",
                           "arrivalTime": "16:00",
-                          "class": "BUSINESS",
-                          "createdAt": "2024-12-14T03:57:51.647Z",
-                          "departureDate": "2025-01-12T03:57:51.639Z",
+                          "class": "ECONOMY",
+                          "createdAt": "2024-12-16T04:52:36.903Z",
+                          "departureDate": "2025-02-11T04:52:36.897Z",
                           "departureTime": "14:00",
-                          "description": "Flight from Jakarta to Destination 21",
+                          "description": "Flight from Jakarta to Destination 49",
                           "duration": 120,
-                          "id": "0193c350-c8a2-7f23-b62e-4215482f6e7c",
-                          "price": 1500,
-                          "updatedAt": "2024-12-14T03:57:51.647Z"
+                          "id": "0193cdcf-a1a9-7f90-9fdd-73d43a321c36",
+                          "price": 2900,
+                          "updatedAt": "2024-12-16T04:52:36.903Z"
                         },
                         {
                           "_count": {
@@ -10085,427 +10774,66 @@
                           },
                           "aeroplane": {
                             "code": "B777",
-                            "createdAt": "2024-12-14T03:57:51.624Z",
-                            "id": "0193c350-c888-7291-b521-e75bf4871fbe",
+                            "createdAt": "2024-12-16T04:52:36.888Z",
+                            "id": "0193cdcf-a197-74e1-8104-ebdc894ac65b",
                             "maxColumn": 5,
                             "maxRow": 8,
                             "name": "Boeing 777",
                             "type": "Wide-body",
-                            "updatedAt": "2024-12-14T03:57:51.624Z"
+                            "updatedAt": "2024-12-16T04:52:36.888Z"
                           },
-                          "aeroplaneId": "0193c350-c888-7291-b521-e75bf4871fbe",
+                          "aeroplaneId": "0193cdcf-a197-74e1-8104-ebdc894ac65b",
                           "airline": {
-                            "code": "SQ",
-                            "createdAt": "2024-12-14T03:57:51.605Z",
-                            "id": "0193c350-c875-79e1-ae10-f409d590546a",
+                            "code": "QF",
+                            "createdAt": "2024-12-16T04:52:36.880Z",
+                            "id": "0193cdcf-a18f-71f3-ba84-3fa6b0c2d9bb",
                             "image": null,
-                            "name": "Singapore Airlines",
-                            "updatedAt": "2024-12-14T03:57:51.605Z"
+                            "name": "Qantas",
+                            "updatedAt": "2024-12-16T04:52:36.880Z"
                           },
-                          "airlineId": "0193c350-c875-79e1-ae10-f409d590546a",
+                          "airlineId": "0193cdcf-a18f-71f3-ba84-3fa6b0c2d9bb",
                           "airportFrom": {
                             "city": "Tangerang",
                             "code": "CGK",
                             "continent": "ASIA",
                             "country": "Indonesia",
-                            "createdAt": "2024-12-14T03:57:51.580Z",
-                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "createdAt": "2024-12-16T04:52:36.856Z",
+                            "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
                             "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                            "updatedAt": "2024-12-16T04:52:36.856Z"
                           },
-                          "airportIdFrom": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                          "airportIdTo": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                          "airportIdFrom": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
+                          "airportIdTo": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
                           "airportTo": {
                             "city": "Tangerang",
                             "code": "CGK",
                             "continent": "ASIA",
                             "country": "Indonesia",
-                            "createdAt": "2024-12-14T03:57:51.580Z",
-                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
+                            "createdAt": "2024-12-16T04:52:36.856Z",
+                            "id": "0193cdcf-a177-7c41-b424-6da90cc8e7b7",
                             "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-14T03:57:51.580Z"
+                            "updatedAt": "2024-12-16T04:52:36.856Z"
                           },
-                          "arrivalDate": "2025-01-15T03:57:51.639Z",
+                          "arrivalDate": "2025-02-14T04:52:36.897Z",
                           "arrivalTime": "18:00",
-                          "class": "BUSINESS",
-                          "createdAt": "2024-12-14T03:57:51.647Z",
-                          "departureDate": "2025-01-14T03:57:51.639Z",
+                          "class": "ECONOMY",
+                          "createdAt": "2024-12-16T04:52:36.903Z",
+                          "departureDate": "2025-02-13T04:52:36.897Z",
                           "departureTime": "16:00",
-                          "description": "Return flight from Destination 21 to Jakarta",
+                          "description": "Return flight from Destination 49 to Jakarta",
                           "duration": 120,
-                          "id": "0193c350-c8a2-7f23-b62e-42275591caab",
-                          "price": 1500,
-                          "updatedAt": "2024-12-14T03:57:51.647Z"
-                        },
-                        {
-                          "_count": {
-                            "seat": 54
-                          },
-                          "aeroplane": {
-                            "code": "A380",
-                            "createdAt": "2024-12-14T03:57:51.627Z",
-                            "id": "0193c350-c88b-73d0-b523-f7950eac4781",
-                            "maxColumn": 6,
-                            "maxRow": 9,
-                            "name": "Airbus A380",
-                            "type": "Wide-body",
-                            "updatedAt": "2024-12-14T03:57:51.627Z"
-                          },
-                          "aeroplaneId": "0193c350-c88b-73d0-b523-f7950eac4781",
-                          "airline": {
-                            "code": "SQ",
-                            "createdAt": "2024-12-14T03:57:51.605Z",
-                            "id": "0193c350-c875-79e1-ae10-f409d590546a",
-                            "image": null,
-                            "name": "Singapore Airlines",
-                            "updatedAt": "2024-12-14T03:57:51.605Z"
-                          },
-                          "airlineId": "0193c350-c875-79e1-ae10-f409d590546a",
-                          "airportFrom": {
-                            "city": "Tangerang",
-                            "code": "CGK",
-                            "continent": "ASIA",
-                            "country": "Indonesia",
-                            "createdAt": "2024-12-14T03:57:51.580Z",
-                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                            "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-14T03:57:51.580Z"
-                          },
-                          "airportIdFrom": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                          "airportIdTo": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                          "airportTo": {
-                            "city": "Tangerang",
-                            "code": "CGK",
-                            "continent": "ASIA",
-                            "country": "Indonesia",
-                            "createdAt": "2024-12-14T03:57:51.580Z",
-                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                            "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-14T03:57:51.580Z"
-                          },
-                          "arrivalDate": "2025-01-18T03:57:51.639Z",
-                          "arrivalTime": "16:00",
-                          "class": "BUSINESS",
-                          "createdAt": "2024-12-14T03:57:51.647Z",
-                          "departureDate": "2025-01-17T03:57:51.639Z",
-                          "departureTime": "14:00",
-                          "description": "Flight from Jakarta to Destination 26",
-                          "duration": 120,
-                          "id": "0193c350-c8a2-7f23-b62e-42b059591c0d",
-                          "price": 1750,
-                          "updatedAt": "2024-12-14T03:57:51.647Z"
-                        },
-                        {
-                          "_count": {
-                            "seat": 54
-                          },
-                          "aeroplane": {
-                            "code": "A380",
-                            "createdAt": "2024-12-14T03:57:51.627Z",
-                            "id": "0193c350-c88b-73d0-b523-f7950eac4781",
-                            "maxColumn": 6,
-                            "maxRow": 9,
-                            "name": "Airbus A380",
-                            "type": "Wide-body",
-                            "updatedAt": "2024-12-14T03:57:51.627Z"
-                          },
-                          "aeroplaneId": "0193c350-c88b-73d0-b523-f7950eac4781",
-                          "airline": {
-                            "code": "SQ",
-                            "createdAt": "2024-12-14T03:57:51.605Z",
-                            "id": "0193c350-c875-79e1-ae10-f409d590546a",
-                            "image": null,
-                            "name": "Singapore Airlines",
-                            "updatedAt": "2024-12-14T03:57:51.605Z"
-                          },
-                          "airlineId": "0193c350-c875-79e1-ae10-f409d590546a",
-                          "airportFrom": {
-                            "city": "Tangerang",
-                            "code": "CGK",
-                            "continent": "ASIA",
-                            "country": "Indonesia",
-                            "createdAt": "2024-12-14T03:57:51.580Z",
-                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                            "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-14T03:57:51.580Z"
-                          },
-                          "airportIdFrom": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                          "airportIdTo": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                          "airportTo": {
-                            "city": "Tangerang",
-                            "code": "CGK",
-                            "continent": "ASIA",
-                            "country": "Indonesia",
-                            "createdAt": "2024-12-14T03:57:51.580Z",
-                            "id": "0193c350-c85b-76a2-b0de-04bcbc3cd5e9",
-                            "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-14T03:57:51.580Z"
-                          },
-                          "arrivalDate": "2025-01-20T03:57:51.639Z",
-                          "arrivalTime": "18:00",
-                          "class": "BUSINESS",
-                          "createdAt": "2024-12-14T03:57:51.647Z",
-                          "departureDate": "2025-01-19T03:57:51.639Z",
-                          "departureTime": "16:00",
-                          "description": "Return flight from Destination 26 to Jakarta",
-                          "duration": 120,
-                          "id": "0193c350-c8a2-7f23-b62e-42cdfb9ce50d",
-                          "price": 1750,
-                          "updatedAt": "2024-12-14T03:57:51.647Z"
+                          "id": "0193cdcf-a1a9-7f90-9fdd-73e28e6cd2a3",
+                          "price": 2900,
+                          "updatedAt": "2024-12-16T04:52:36.903Z"
                         }
                       ],
                       "message": "Successfully get all flight",
                       "meta": {
-                        "cursorId": "0193c350-c8a2-7f23-b62e-42cdfb9ce50d",
-                        "limit": 10
-                      }
-                    }
-                  },
-                  "200 OK - Get all flight with filter and sort": {
-                    "value": {
-                      "data": [
-                        {
-                          "aeroplane": {
-                            "code": "B737",
-                            "createdAt": "2024-12-08T15:05:59.734Z",
-                            "id": "0193a6ce-52b6-7ba0-9ce1-ea4e846f4246",
-                            "maxColumn": 6,
-                            "maxRow": 30,
-                            "name": "Boeing 737",
-                            "type": "Narrow-body",
-                            "updatedAt": "2024-12-08T15:05:59.734Z"
-                          },
-                          "aeroplaneId": "0193a6ce-52b6-7ba0-9ce1-ea4e846f4246",
-                          "airline": {
-                            "code": "GA",
-                            "createdAt": "2024-12-08T15:05:59.697Z",
-                            "id": "0193a6ce-5291-7f90-87a2-45867abba3d3",
-                            "image": null,
-                            "name": "Garuda Indonesia",
-                            "updatedAt": "2024-12-08T15:05:59.697Z"
-                          },
-                          "airlineId": "0193a6ce-5291-7f90-87a2-45867abba3d3",
-                          "airportFrom": {
-                            "city": "Tangerang",
-                            "code": "CGK",
-                            "continent": "ASIA",
-                            "country": "Indonesia",
-                            "createdAt": "2024-12-08T15:05:59.668Z",
-                            "id": "0193a6ce-5274-7af1-a705-577f3840ad4b",
-                            "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-08T15:05:59.668Z"
-                          },
-                          "airportIdFrom": "0193a6ce-5274-7af1-a705-577f3840ad4b",
-                          "airportIdTo": "0193a6ce-527d-77d3-91c4-0eb1419d3a83",
-                          "airportTo": {
-                            "city": "Singapore",
-                            "code": "SIN",
-                            "continent": "ASIA",
-                            "country": "Singapore",
-                            "createdAt": "2024-12-08T15:05:59.678Z",
-                            "id": "0193a6ce-527d-77d3-91c4-0eb1419d3a83",
-                            "name": "Changi Airport",
-                            "updatedAt": "2024-12-08T15:05:59.678Z"
-                          },
-                          "arrivalDate": "2024-12-10T15:05:59.757Z",
-                          "arrivalTime": "08:00",
-                          "class": "ECONOMY",
-                          "createdAt": "2024-12-08T15:05:59.760Z",
-                          "departureDate": "2024-12-09T15:05:59.757Z",
-                          "departureTime": "06:00",
-                          "description": "Flight from Jakarta to Singapore",
-                          "duration": 120,
-                          "id": "0193a6ce-52d0-7460-a992-b56538742180",
-                          "price": 100,
-                          "updatedAt": "2024-12-08T15:05:59.760Z"
-                        },
-                        {
-                          "aeroplane": {
-                            "code": "A380",
-                            "createdAt": "2024-12-08T15:05:59.746Z",
-                            "id": "0193a6ce-52c1-7b33-b91c-365c2ab7ca4c",
-                            "maxColumn": 10,
-                            "maxRow": 50,
-                            "name": "Airbus A380",
-                            "type": "Wide-body",
-                            "updatedAt": "2024-12-08T15:05:59.746Z"
-                          },
-                          "aeroplaneId": "0193a6ce-52c1-7b33-b91c-365c2ab7ca4c",
-                          "airline": {
-                            "code": "GA",
-                            "createdAt": "2024-12-08T15:05:59.697Z",
-                            "id": "0193a6ce-5291-7f90-87a2-45867abba3d3",
-                            "image": null,
-                            "name": "Garuda Indonesia",
-                            "updatedAt": "2024-12-08T15:05:59.697Z"
-                          },
-                          "airlineId": "0193a6ce-5291-7f90-87a2-45867abba3d3",
-                          "airportFrom": {
-                            "city": "Tangerang",
-                            "code": "CGK",
-                            "continent": "ASIA",
-                            "country": "Indonesia",
-                            "createdAt": "2024-12-08T15:05:59.668Z",
-                            "id": "0193a6ce-5274-7af1-a705-577f3840ad4b",
-                            "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-08T15:05:59.668Z"
-                          },
-                          "airportIdFrom": "0193a6ce-5274-7af1-a705-577f3840ad4b",
-                          "airportIdTo": "0193a6ce-528c-7f63-bd0c-2af616846293",
-                          "airportTo": {
-                            "city": "Sydney",
-                            "code": "SYD",
-                            "continent": "AUSTRALIA",
-                            "country": "Australia",
-                            "createdAt": "2024-12-08T15:05:59.692Z",
-                            "id": "0193a6ce-528c-7f63-bd0c-2af616846293",
-                            "name": "Sydney Airport",
-                            "updatedAt": "2024-12-08T15:05:59.692Z"
-                          },
-                          "arrivalDate": "2024-12-16T15:05:59.757Z",
-                          "arrivalTime": "14:00",
-                          "class": "ECONOMY",
-                          "createdAt": "2024-12-08T15:05:59.760Z",
-                          "departureDate": "2024-12-15T15:05:59.757Z",
-                          "departureTime": "12:00",
-                          "description": "Flight from Jakarta to Sydney",
-                          "duration": 120,
-                          "id": "0193a6ce-52d0-7460-a992-b594ab95d6d2",
-                          "price": 400,
-                          "updatedAt": "2024-12-08T15:05:59.760Z"
-                        }
-                      ],
-                      "message": "Successfully get all flight",
-                      "meta": {
-                        "cursorId": "0193a6ce-52d0-7460-a992-b594ab95d6d2",
-                        "limit": 3
-                      }
-                    }
-                  },
-                  "200 OK - Get flight with cursorId": {
-                    "value": {
-                      "data": [
-                        {
-                          "_count": {
-                            "seat": 40
-                          },
-                          "aeroplane": {
-                            "code": "B777",
-                            "createdAt": "2024-12-12T15:07:19.708Z",
-                            "id": "0193bb68-fb1c-7692-a093-d8a946d9a51b",
-                            "maxColumn": 5,
-                            "maxRow": 8,
-                            "name": "Boeing 777",
-                            "type": "Wide-body",
-                            "updatedAt": "2024-12-12T15:07:19.708Z"
-                          },
-                          "aeroplaneId": "0193bb68-fb1c-7692-a093-d8a946d9a51b",
-                          "airline": {
-                            "code": "GA",
-                            "createdAt": "2024-12-12T15:07:19.675Z",
-                            "id": "0193bb68-fafa-7162-a471-77bc4a7b705b",
-                            "image": null,
-                            "name": "Garuda Indonesia",
-                            "updatedAt": "2024-12-12T15:07:19.675Z"
-                          },
-                          "airlineId": "0193bb68-fafa-7162-a471-77bc4a7b705b",
-                          "airportFrom": {
-                            "city": "Tangerang",
-                            "code": "CGK",
-                            "continent": "ASIA",
-                            "country": "Indonesia",
-                            "createdAt": "2024-12-12T15:07:19.644Z",
-                            "id": "0193bb68-fadc-75d1-8074-afbb806eebad",
-                            "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-12T15:07:19.644Z"
-                          },
-                          "airportIdFrom": "0193bb68-fadc-75d1-8074-afbb806eebad",
-                          "airportIdTo": "0193bb68-faf2-7633-b1a4-7381c0858f88",
-                          "airportTo": {
-                            "city": "Los Angeles",
-                            "code": "LAX",
-                            "continent": "NORTH_AMERICA",
-                            "country": "United States",
-                            "createdAt": "2024-12-12T15:07:19.666Z",
-                            "id": "0193bb68-faf2-7633-b1a4-7381c0858f88",
-                            "name": "Los Angeles International Airport",
-                            "updatedAt": "2024-12-12T15:07:19.666Z"
-                          },
-                          "arrivalDate": "2024-12-18T15:07:19.721Z",
-                          "arrivalTime": "12:00",
-                          "class": "PREMIUM_ECONOMY",
-                          "createdAt": "2024-12-12T15:07:19.725Z",
-                          "departureDate": "2024-12-17T15:07:19.721Z",
-                          "departureTime": "10:00",
-                          "description": "Flight from Jakarta to Los Angeles",
-                          "duration": 120,
-                          "id": "0193bb68-fb2c-7323-9dbb-d0d1c9fe1448",
-                          "price": 300,
-                          "updatedAt": "2024-12-12T15:07:19.725Z"
-                        },
-                        {
-                          "_count": {
-                            "seat": 54
-                          },
-                          "aeroplane": {
-                            "code": "A380",
-                            "createdAt": "2024-12-12T15:07:19.710Z",
-                            "id": "0193bb68-fb1e-7681-881c-fc040508c2a9",
-                            "maxColumn": 6,
-                            "maxRow": 9,
-                            "name": "Airbus A380",
-                            "type": "Wide-body",
-                            "updatedAt": "2024-12-12T15:07:19.710Z"
-                          },
-                          "aeroplaneId": "0193bb68-fb1e-7681-881c-fc040508c2a9",
-                          "airline": {
-                            "code": "GA",
-                            "createdAt": "2024-12-12T15:07:19.675Z",
-                            "id": "0193bb68-fafa-7162-a471-77bc4a7b705b",
-                            "image": null,
-                            "name": "Garuda Indonesia",
-                            "updatedAt": "2024-12-12T15:07:19.675Z"
-                          },
-                          "airlineId": "0193bb68-fafa-7162-a471-77bc4a7b705b",
-                          "airportFrom": {
-                            "city": "Tangerang",
-                            "code": "CGK",
-                            "continent": "ASIA",
-                            "country": "Indonesia",
-                            "createdAt": "2024-12-12T15:07:19.644Z",
-                            "id": "0193bb68-fadc-75d1-8074-afbb806eebad",
-                            "name": "Soekarno-Hatta International Airport",
-                            "updatedAt": "2024-12-12T15:07:19.644Z"
-                          },
-                          "airportIdFrom": "0193bb68-fadc-75d1-8074-afbb806eebad",
-                          "airportIdTo": "0193bb68-faf5-7183-a764-a26ea255d9df",
-                          "airportTo": {
-                            "city": "Sydney",
-                            "code": "SYD",
-                            "continent": "AUSTRALIA",
-                            "country": "Australia",
-                            "createdAt": "2024-12-12T15:07:19.669Z",
-                            "id": "0193bb68-faf5-7183-a764-a26ea255d9df",
-                            "name": "Sydney Airport",
-                            "updatedAt": "2024-12-12T15:07:19.669Z"
-                          },
-                          "arrivalDate": "2024-12-20T15:07:19.721Z",
-                          "arrivalTime": "14:00",
-                          "class": "ECONOMY",
-                          "createdAt": "2024-12-12T15:07:19.725Z",
-                          "departureDate": "2024-12-19T15:07:19.721Z",
-                          "departureTime": "12:00",
-                          "description": "Flight from Jakarta to Sydney",
-                          "duration": 120,
-                          "id": "0193bb68-fb2c-7323-9dbb-d0e93c018d66",
-                          "price": 400,
-                          "updatedAt": "2024-12-12T15:07:19.725Z"
-                        }
-                      ],
-                      "message": "Successfully get all flight",
-                      "meta": {
-                        "cursorId": "0193bb68-fb2c-7323-9dbb-d0e93c018d66",
-                        "limit": 3
+                        "limit": 10,
+                        "page": 2,
+                        "skip": 10,
+                        "totalData": 16,
+                        "totalPage": 2
                       }
                     }
                   }
@@ -10514,7 +10842,7 @@
             }
           },
           "400": {
-            "description": "400 -Bad Request - Invalid Params Filter",
+            "description": "400 Bad Request - Invalid query params",
             "headers": {
               "Access-Control-Allow-Credentials": {
                 "schema": {
@@ -10531,19 +10859,19 @@
               "Content-Length": {
                 "schema": {
                   "type": "string",
-                  "example": "343"
+                  "example": "56"
                 }
               },
               "Date": {
                 "schema": {
                   "type": "string",
-                  "example": "Thu, 05 Dec 2024 17:50:42 GMT"
+                  "example": "Tue, 17 Dec 2024 14:07:04 GMT"
                 }
               },
               "ETag": {
                 "schema": {
                   "type": "string",
-                  "example": "W/\"157-BqOdRkyQNLy0UBD5oOr2dNiqOGw\""
+                  "example": "W/\"38-n2r9QbADEcnMTkm9yNy7MVxpVL0\""
                 }
               },
               "Keep-Alive": {
@@ -10574,32 +10902,89 @@
                       "type": "array",
                       "items": {
                         "type": "string",
-                        "example": "\"cursorId\" is not allowed to be empty"
+                        "example": "\"sortOrder\" must be one of [asc, desc]"
                       },
-                      "example": [
-                        "\"cursorId\" is not allowed to be empty",
-                        "\"class\" must be one of [ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST_CLASS]",
-                        "\"class\" is not allowed to be empty",
-                        "\"departureDate\" must be a valid date",
-                        "\"arrivalDate\" must be a valid date",
-                        "\"airportIdFrom\" is not allowed to be empty",
-                        "\"airportIdTo\" is not allowed to be empty"
-                      ]
+                      "example": ["\"sortOrder\" must be one of [asc, desc]"]
                     }
                   }
                 },
                 "examples": {
-                  "400 -Bad Request - Invalid Params Filter": {
+                  "400 Bad Request - Invalid query params": {
                     "value": {
-                      "message": [
-                        "\"cursorId\" is not allowed to be empty",
-                        "\"class\" must be one of [ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST_CLASS]",
-                        "\"class\" is not allowed to be empty",
-                        "\"departureDate\" must be a valid date",
-                        "\"arrivalDate\" must be a valid date",
-                        "\"airportIdFrom\" is not allowed to be empty",
-                        "\"airportIdTo\" is not allowed to be empty"
-                      ]
+                      "message": ["\"sortOrder\" must be one of [asc, desc]"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 Not Found - Page not found",
+            "headers": {
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "28"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Tue, 17 Dec 2024 14:06:17 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"1c-MOxLziJPE3pYclichFPQin1Cisg\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string",
+                  "example": "Origin"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Page not found"
+                    }
+                  }
+                },
+                "examples": {
+                  "404 Not Found - Page not found": {
+                    "value": {
+                      "message": "Page not found"
                     }
                   }
                 }
@@ -28121,6 +28506,10 @@
     }
   ],
   "tags": [
+    {
+      "name": "Auth",
+      "description": "Endpoint to manage everything about authentication."
+    },
     {
       "name": "Login"
     },
