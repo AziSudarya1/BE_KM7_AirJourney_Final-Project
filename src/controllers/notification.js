@@ -5,7 +5,7 @@ export async function createNotification(req, res) {
 
   const data = await notificationServices.createNotification(payload);
 
-  res.status(200).json({
+  res.status(201).json({
     message: 'notification created succesfully',
     data
   });
