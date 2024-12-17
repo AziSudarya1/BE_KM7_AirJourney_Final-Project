@@ -119,12 +119,20 @@ export async function getFlightById(id) {
 
 export async function countFlightDataWithFilterAndCreateMeta(filter, page) {
   const totalData = await flightRepository.countFlightDataWithFilter(filter);
-  const limit = 10;
-  const totalPage = Math.ceil(totalData / limit);
-  const skip = (page - 1) * limit;
 
-  if (page > totalPage) {
-    throw new HttpError('Page not found', 404);
+  const limit = 10;
+
+  let totalPage = 1;
+  let skip = 0;
+
+  if (totalData) {
+    totalPage = Math.ceil(totalData / limit);
+
+    if (page > totalPage) {
+      throw new HttpError('Page not found', 404);
+    }
+
+    skip = (page - 1) * limit;
   }
 
   return {

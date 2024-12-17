@@ -32,11 +32,17 @@ export async function getDetailTransactionById(req, res) {
 export async function getAllTransactions(_req, res) {
   const userId = res.locals.user.id;
   const filter = res.locals.filter;
+  const meta = res.locals.meta;
 
-  const data = await transactionService.getAllTransactions(userId, filter);
+  const data = await transactionService.getAllTransactions(
+    userId,
+    filter,
+    meta
+  );
 
   res.status(200).json({
     message: 'Successfully get all transactions',
+    meta,
     data
   });
 }
