@@ -81,19 +81,43 @@ describe('flightController', () => {
       const mockResponse = {
         json: jest.fn(),
         locals: {
-          filter: 'filter1',
-          sort: 'sort1'
+          filter: {
+            departure: 'jakarta',
+            arrival: 'bandung',
+            departureDate: '2024-12-20'
+          },
+          sort: {
+            by: 'price',
+            order: 'asc'
+          }
         }
       };
 
-      mockGetAllFlights.mockResolvedValueOnce([
-        {
-          id: 'flight1',
-          airportIdFrom: 'from1',
-          airportIdTo: 'to2',
-          airlineId: 'airline3'
-        }
-      ]);
+      const mockData = {
+        meta: {
+          total: 10,
+          page: 1,
+          limit: 10
+        },
+        flight: [
+          {
+            id: 'flight1',
+            departure: 'jakarta',
+            arrival: 'bandung',
+            departureDate: '2024-12-20',
+            price: 100000
+          },
+          {
+            id: 'flight2',
+            departure: 'jakarta',
+            arrival: 'bandung',
+            departureDate: '2024-12-22',
+            price: 200000
+          }
+        ]
+      };
+
+      mockGetAllFlights.mockResolvedValueOnce(mockData);
 
       await flightController.getAllFlights(mockRequest, mockResponse);
 
@@ -103,14 +127,8 @@ describe('flightController', () => {
       );
       expect(mockResponse.json).toHaveBeenCalledWith({
         message: 'Successfully get all flight',
-        data: [
-          {
-            id: 'flight1',
-            airportIdFrom: 'from1',
-            airportIdTo: 'to2',
-            airlineId: 'airline3'
-          }
-        ]
+        meta: mockData.meta,
+        data: mockData.flight
       });
     });
   });
