@@ -166,8 +166,38 @@ export async function getDetailTransactionById(id, userId) {
   };
 }
 
-export async function getAllTransactions(userId, filter) {
-  const data = await transactionRepository.getAllTransactions(userId, filter);
+export async function getAllTransactions(userId, filter, meta) {
+  const query = {
+    skip: meta.skip,
+    take: meta.limit,
+    where: {
+      userId
+    },
+    include: {
+      payment: true,
+      departureFlight: {
+        include: {
+          airportFrom: true,
+          airportTo: true
+        }
+      },
+      returnFlight: {
+        include: {
+          airportFrom: true,
+          airportTo: true
+        }
+      }
+    }
+  };
+
+  if (Object.keys(filter).length) {
+    query.where = {
+      ...query.where,
+      ...filter
+    };
+  }
+
+  const data = await transactionRepository.getAllTransactions(query);
 
   return data;
 }
@@ -282,4 +312,35 @@ export async function cancelTransaction(id, userId) {
       transaction
     );
   });
+}
+
+export async function countTransactionDataWithFilterAndCreateMeta(
+  filter,
+  page
+) {
+  const totalData =
+    await transactionRepository.countTransactionDataWithFilter(filter);
+
+  const limit = 10;
+
+  let totalPage = 1;
+  let skip = 0;
+
+  if (totalData) {
+    totalPage = Math.ceil(totalData / limit);
+
+    if (page > totalPage) {
+      throw new HttpError('Page not found', 404);
+    }
+
+    skip = (page - 1) * limit;
+  }
+
+  return {
+    page,
+    limit,
+    totalPage,
+    totalData,
+    skip
+  };
 }

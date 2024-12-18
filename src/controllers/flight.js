@@ -21,13 +21,14 @@ export async function createFlight(req, res) {
 export async function getAllFlights(_req, res) {
   const filter = res.locals.filter;
   const sort = res.locals.sort;
+  const meta = res.locals.meta;
 
-  const data = await flightService.getAllFlight(filter, sort);
+  const data = await flightService.getAllFlight(filter, sort, meta);
 
   return res.json({
     message: 'Successfully get all flight',
-    meta: data.meta,
-    data: data.flight
+    meta,
+    data
   });
 }
 

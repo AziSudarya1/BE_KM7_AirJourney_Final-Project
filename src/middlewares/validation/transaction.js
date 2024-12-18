@@ -60,7 +60,8 @@ const queryParamSchema = Joi.object({
   endDate: Joi.date().when('startDate', {
     is: Joi.exist(),
     then: Joi.required()
-  })
+  }),
+  page: Joi.string().pattern(/^\d+$/).min(1)
 });
 
 export async function getTransactionFilterValidation(req, res, next) {
@@ -77,6 +78,7 @@ export async function getTransactionFilterValidation(req, res, next) {
     };
 
     res.locals.filter = filter;
+    res.locals.page = Number(req?.query?.page) || 1;
 
     next();
   } catch (error) {
