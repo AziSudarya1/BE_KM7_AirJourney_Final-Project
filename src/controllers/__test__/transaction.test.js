@@ -4,12 +4,14 @@ const mockCreateTransaction = jest.fn();
 const mockGetDetailTransactionById = jest.fn();
 const mockGetAllTransactions = jest.fn();
 const mockCancelTransaction = jest.fn();
+const mockGetTransactionWithFlightAndPassenger = jest.fn();
 
 jest.unstable_mockModule('../../services/transaction.js', () => ({
   createTransaction: mockCreateTransaction,
   getDetailTransactionById: mockGetDetailTransactionById,
   getAllTransactions: mockGetAllTransactions,
-  cancelTransaction: mockCancelTransaction
+  cancelTransaction: mockCancelTransaction,
+  getTransactionWithFlightAndPassenger: mockGetTransactionWithFlightAndPassenger
 }));
 
 const transactionController = await import('../transaction.js');
@@ -144,6 +146,34 @@ describe('Transaction Controller', () => {
       expect(mockResponse.status).toHaveBeenCalledWith(200);
       expect(mockResponse.json).toHaveBeenCalledWith({
         message: 'Transaction canceled successfully'
+      });
+    });
+  });
+
+  describe('getTransactionWithFlightAndPassenger', () => {
+    it('should call getTransactionWithFlightAndPassenger service', async () => {
+      const mockRequest = { params: { id: 'transaction1' } };
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+        locals: {
+          user: { id: '1', email: 'user@example.com' }
+        }
+      };
+
+      await transactionController.getTransactionWithFlightAndPassenger(
+        mockRequest,
+        mockResponse
+      );
+
+      expect(mockGetTransactionWithFlightAndPassenger).toHaveBeenCalledWith(
+        'transaction1',
+        '1',
+        'user@example.com'
+      );
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: 'Ticket send successfully'
       });
     });
   });
