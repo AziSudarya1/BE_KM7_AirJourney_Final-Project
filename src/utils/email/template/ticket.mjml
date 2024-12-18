@@ -102,18 +102,20 @@
           {{ticket.departureAirportFromCity}} - {{ticket.arrivalAirportToCity}}
         </mj-text>
       </mj-column>
+      <mj-column width="100%">
+        <mj-divider
+          border-color="#cccccc"
+          border-width="1px"
+          padding-top="20px"
+          padding-bottom="10px"
+          padding="0"
+        />
+      </mj-column>
     </mj-section>
-
-    <mj-divider
-      border-color="#cccccc"
-      border-width="1px"
-      padding="20px 0"
-      width="50%"
-    />
 
     <!-- Return Flight (Conditional Rendering) -->
     {{#if ticket.returnFlight}}
-    <mj-section padding="20px">
+    <mj-section padding-top="0" padding-left="20px">
       <mj-column width="100%">
         <mj-text
           font-size="18px"
@@ -186,18 +188,20 @@
           {{ticket.returnFlight.returnairportToCity}}
         </mj-text>
       </mj-column>
+      <mj-column width="100%">
+        <mj-divider
+          border-color="#cccccc"
+          border-width="1px"
+          padding-top="20px"
+          padding-bottom="10px"
+          padding="0"
+        />
+      </mj-column>
     </mj-section>
-
-    <mj-divider
-      border-color="#cccccc"
-      border-width="1px"
-      padding="20px 0"
-      width="50%"
-    />
     {{/if}}
 
     <!-- Passenger Information -->
-    <mj-section padding="20px">
+    <mj-section padding-top="0" padding-left="20px">
       <mj-column>
         <mj-text
           font-size="18px"
