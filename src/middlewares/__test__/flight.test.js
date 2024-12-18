@@ -1,15 +1,18 @@
 import { afterEach, describe, expect, it, jest } from '@jest/globals';
 
 const mockGetDetailFlightById = jest.fn();
+const mockCountFlightDataWithFilterAndCreateMeta = jest.fn();
 
 jest.unstable_mockModule('../../services/flight.js', () => ({
-  getDetailFlightById: mockGetDetailFlightById
+  getDetailFlightById: mockGetDetailFlightById,
+  countFlightDataWithFilterAndCreateMeta:
+    mockCountFlightDataWithFilterAndCreateMeta
 }));
 
 const flightMiddleware = await import('../flight.js');
 const { HttpError } = await import('../../utils/error.js');
 
-describe('flight middleware', () => {
+describe('Flight Middleware', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -191,6 +194,40 @@ describe('flight middleware', () => {
         airportIdTo: 'A',
         departureDate: '2023-01-01T12:00:00Z'
       });
+    });
+  });
+
+  describe('getMaxFlightDataAndCreateMeta', () => {
+    const mockResponse = {
+      locals: {
+        filter: { destination: 'NYC' },
+        page: 1
+      }
+    };
+
+    const mockNext = jest.fn();
+
+    it('should call next and set meta in locals', async () => {
+      const mockMeta = {
+        total: 100,
+        currentPage: 1,
+        totalPages: 10
+      };
+
+      mockCountFlightDataWithFilterAndCreateMeta.mockResolvedValue(mockMeta);
+
+      await flightMiddleware.getMaxFlightDataAndCreateMeta(
+        {},
+        mockResponse,
+        mockNext
+      );
+
+      expect(mockCountFlightDataWithFilterAndCreateMeta).toHaveBeenCalledWith(
+        { destination: 'NYC' },
+        1
+      );
+      expect(mockResponse.locals.meta).toEqual(mockMeta);
+      expect(mockNext).toHaveBeenCalled();
     });
   });
 });
