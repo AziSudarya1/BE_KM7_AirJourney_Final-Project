@@ -5188,7 +5188,7 @@
       ]
     },
     "/transactions/{id}/cancel": {
-      "put": {
+      "post": {
         "tags": ["Transactions"],
         "summary": "Cancel Transaction",
         "description": "Cancel Transaction",
@@ -5427,7 +5427,7 @@
           "required": true,
           "schema": {
             "type": "string",
-            "example": "0193cfa9-1862-75f2-9c33-fcde96a2b47c"
+            "example": "0193daba-099b-74d0-a271-48119855281d"
           }
         }
       ]
