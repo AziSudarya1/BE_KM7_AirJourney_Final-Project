@@ -126,34 +126,12 @@ export function getDetailTransactionById(id) {
   });
 }
 
-export function getAllTransactions(userId, filter) {
-  const query = {
-    where: {
-      userId
-    },
-    include: {
-      payment: true,
-      departureFlight: {
-        include: {
-          airportFrom: true,
-          airportTo: true
-        }
-      },
-      returnFlight: {
-        include: {
-          airportFrom: true,
-          airportTo: true
-        }
-      }
-    }
-  };
-
-  if (Object.keys(filter).length) {
-    query.where = {
-      ...query.where,
-      ...filter
-    };
-  }
-
+export function getAllTransactions(query) {
   return prisma.transaction.findMany(query);
+}
+
+export function countTransactionDataWithFilter(filter) {
+  return prisma.transaction.count({
+    where: filter
+  });
 }

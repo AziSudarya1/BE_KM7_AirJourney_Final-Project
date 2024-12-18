@@ -60,7 +60,7 @@ const today = new Date();
 today.setHours(0, 0, 0, 0);
 
 const queryParamSchema = Joi.object({
-  cursorId: Joi.string().uuid(),
+  page: Joi.string().pattern(/^\d+$/).min(1),
   class: Joi.string().valid(...ALLOWED_CLASS),
   departureDate: Joi.date().min(today),
   arrivalDate: Joi.date().min(today),
@@ -90,7 +90,7 @@ const generateDateFilter = (date) => {
   };
 };
 
-export async function validateFilterSortingAndCursorIdParams(req, res, next) {
+export async function validateFilterSortingAndPageParams(req, res, next) {
   try {
     const airLinesArray = req.query.airlineIds
       ? req.query.airlineIds.split(',')
@@ -106,6 +106,7 @@ export async function validateFilterSortingAndCursorIdParams(req, res, next) {
       arrivalDate,
       continent,
       sortBy,
+      page,
       sortOrder,
       airlineIds,
       ...filterQuery
@@ -125,6 +126,7 @@ export async function validateFilterSortingAndCursorIdParams(req, res, next) {
       ...(sortBy && { [sortBy]: sortOrder })
     };
 
+    res.locals.page = Number(page) || 1;
     res.locals.filter = filter;
     res.locals.sort = sort;
 
