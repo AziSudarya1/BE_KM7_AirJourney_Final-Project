@@ -63,20 +63,14 @@ export function getTransactionWithUserAndPassengerById(id) {
   });
 }
 
-export function getTransactionWithPassengerUserAndPaymentById(id) {
+export function getTransactionWithUserAndPaymentById(id) {
   return prisma.transaction.findUnique({
     where: {
       id
     },
     include: {
       payment: true,
-      user: true,
-      passenger: {
-        select: {
-          departureSeatId: true,
-          returnSeatId: true
-        }
-      }
+      user: true
     }
   });
 }
