@@ -45,7 +45,7 @@ export async function createFlightAndSeat(payload, aeroplane) {
   return flight;
 }
 
-export async function getAllFlight(filter, sort, meta) {
+export async function getAllFlight(filter, sort, meta, favourite) {
   const skip = meta.skip;
 
   const query = {
@@ -94,6 +94,15 @@ export async function getAllFlight(filter, sort, meta) {
     };
   }
 
+  if (favourite) {
+    query.distinct = ['airportIdFrom', 'airportIdTo'];
+    query.orderBy = {
+      departureTransaction: {
+        _count: 'desc'
+      }
+    };
+  }
+
   const flight = await flightRepository.getAllFlight(query);
 
   return flight;
@@ -117,29 +126,36 @@ export async function getFlightById(id) {
   return data;
 }
 
-export async function countFlightDataWithFilterAndCreateMeta(filter, page) {
-  const totalData = await flightRepository.countFlightDataWithFilter(filter);
-
+export async function countFlightDataWithFilterAndCreateMeta(
+  filter,
+  page,
+  favourite
+) {
   const limit = 10;
-
   let totalPage = 1;
   let skip = 0;
+  let totalData;
 
-  if (totalData) {
-    totalPage = Math.ceil(totalData / limit);
+  if (!favourite) {
+    totalData = await flightRepository.countFlightDataWithFilter(filter);
 
-    if (page > totalPage) {
-      throw new HttpError('Page not found', 404);
+    if (totalData) {
+      totalPage = Math.ceil(totalData / limit);
+
+      if (page > totalPage) {
+        throw new HttpError('Page not found', 404);
+      }
+
+      skip = (page - 1) * limit;
     }
-
-    skip = (page - 1) * limit;
   }
 
   return {
     page,
     limit,
     totalPage,
-    totalData,
-    skip
+    ...(totalData && { totalData }),
+    skip,
+    favourite
   };
 }

@@ -62,18 +62,31 @@ today.setHours(0, 0, 0, 0);
 const queryParamSchema = Joi.object({
   page: Joi.string().pattern(/^\d+$/).min(1),
   class: Joi.string().valid(...ALLOWED_CLASS),
+  favourite: Joi.string().valid('true', 'false'),
   departureDate: Joi.date().min(today),
   arrivalDate: Joi.date().min(today),
   airportIdFrom: Joi.string().uuid(),
   airportIdTo: Joi.string().uuid(),
-  continent: Joi.string().valid(...ALLOWED_CONTINENTS),
-  sortBy: Joi.string().valid(...ALLOWED_SORTING),
+  continent: Joi.string()
+    .valid(...ALLOWED_CONTINENTS)
+    .when('favourite', {
+      is: Joi.exist(),
+      then: Joi.optional(),
+      otherwise: Joi.forbidden()
+    }),
+  sortBy: Joi.string()
+    .valid(...ALLOWED_SORTING)
+    .when('continent', {
+      is: Joi.exist(),
+      then: Joi.forbidden()
+    }),
   airlineIds: Joi.array().items(Joi.string().uuid()),
   sortOrder: Joi.string()
     .valid(...ALLOWED_ORDER)
     .when('sortBy', {
       is: Joi.exist(),
-      then: Joi.required()
+      then: Joi.required(),
+      otherwise: Joi.forbidden()
     })
 });
 
@@ -107,6 +120,7 @@ export async function validateFilterSortingAndPageParams(req, res, next) {
       continent,
       sortBy,
       page,
+      favourite,
       sortOrder,
       airlineIds,
       ...filterQuery
@@ -129,6 +143,7 @@ export async function validateFilterSortingAndPageParams(req, res, next) {
     res.locals.page = Number(page) || 1;
     res.locals.filter = filter;
     res.locals.sort = sort;
+    res.locals.favourite = favourite === 'true';
 
     next();
   } catch (err) {

@@ -86,22 +86,30 @@ async function seedAirlines() {
   const airlines = [
     {
       name: 'Garuda Indonesia',
+      image: 'https://logotyp.us/file/garuda-indonesia.svg',
       code: 'GA'
     },
     {
       name: 'Singapore Airlines',
+      image: 'https://logotyp.us/file/singapore-airlines.svg',
       code: 'SQ'
     },
     {
       name: 'British Airways',
+      image:
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMkrHp1xK4Ehd0b6xWa5ZnNdZOupeGX4kdTQ&s',
       code: 'BA'
     },
     {
       name: 'American Airlines',
+      image:
+        'https://s202.q4cdn.com/986123435/files/doc_news/2022/04/1/AA-Destination-Net-Zero-pos-4x-100.jpeg',
       code: 'AA'
     },
     {
       name: 'Qantas',
+      image:
+        'https://fiu-original.b-cdn.net/fontsinuse.com/use-images/47/47831/47831.png?filename=Captura%20de%20pantalla%202017-01-25%20a%20les%2015.35.00.png',
       code: 'QF'
     }
   ];
@@ -187,10 +195,15 @@ async function seedFlights() {
       airlines[Math.floor(Math.random() * airlines.length)].id;
     const randomAeroplanesId =
       aeroplanes[Math.floor(Math.random() * aeroplanes.length)].id;
-    const randomAirportsId =
+    let randomAirportsId =
       airports[Math.floor(Math.random() * airports.length)].id;
     const randomClass =
       ALLOWED_CLASS[Math.floor(Math.random() * ALLOWED_CLASS.length)];
+
+    while (randomAirportsId === airports[0].id) {
+      randomAirportsId =
+        airports[Math.floor(Math.random() * airports.length)].id;
+    }
 
     flights.push({
       departureDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * (i + 9)),
