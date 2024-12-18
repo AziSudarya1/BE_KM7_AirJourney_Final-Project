@@ -214,7 +214,7 @@ export async function getTransactionWithFlightAndPassenger(id, userId, email) {
   }
 
   if (transaction.payment.status !== 'SUCCESS') {
-    throw new HttpError('Cannot send E-Ticket', 400);
+    throw new HttpError('Transaction incomplete cannot send e-ticket', 400);
   }
 
   const { departureFlight, returnFlight } = transaction;
