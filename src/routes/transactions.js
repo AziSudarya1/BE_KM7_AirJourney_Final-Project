@@ -38,4 +38,11 @@ export default (app) => {
     transactionMiddleware.getMaxTransactionDataAndCreateMeta,
     transactionController.getAllTransactions
   );
+
+  router.post(
+    '/:id/ticket',
+    authMiddleware.isAuthorized,
+    commonValidationMiddleware.validateIdParams,
+    transactionController.getTransactionWithFlightAndPassenger
+  );
 };

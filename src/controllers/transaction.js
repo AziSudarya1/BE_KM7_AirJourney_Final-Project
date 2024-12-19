@@ -57,3 +57,18 @@ export async function cancelTransaction(req, res) {
     message: 'Transaction canceled successfully'
   });
 }
+
+export async function getTransactionWithFlightAndPassenger(req, res) {
+  const { id } = req.params;
+  const { id: userId, email } = res.locals.user;
+
+  await transactionService.getTransactionWithFlightAndPassenger(
+    id,
+    userId,
+    email
+  );
+
+  res.status(200).json({
+    message: 'Ticket send successfully'
+  });
+}

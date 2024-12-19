@@ -1,0 +1,247 @@
+<mjml>
+  <mj-head>
+    <mj-preview>Your E-Ticket</mj-preview>
+    <mj-style inline="inline">
+      .vertical-line { border-left: 3px solid #f97316; margin: 0; } .nowrap-text
+      { white-space: nowrap; }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#ffffff">
+    <!-- Header Section -->
+    <mj-section background-color="#a600ff" padding="10px 0">
+      <mj-column width="33%">
+        <mj-image
+          src="https://ik.imagekit.io/jfne1iwnd/05182fbe-5995-418b-a4a0-5fcb5bf4d393_jfz6m9s05.png"
+          alt="Terbangin Logo"
+          width="100px"
+          padding="10px 0"
+        ></mj-image>
+      </mj-column>
+      <mj-column width="66%">
+        <mj-text
+          align="left"
+          color="#22177A"
+          font-size="30px"
+          font-weight="bold"
+          font-family="Lato, Helvetica, Arial, sans-serif"
+          padding="18px 0"
+          padding-left="60px"
+        >
+          E-Ticket
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Departure Flight -->
+    <mj-section padding="20px">
+      <mj-column width="100%">
+        <mj-text
+          font-size="18px"
+          font-weight="bold"
+          color="#22177A"
+          padding="0"
+        >
+          Departure Flight
+        </mj-text>
+        <mj-text
+          font-size="14px"
+          color="#000000"
+          padding="0"
+          padding-top="20px"
+          line-height="20px"
+        >
+          {{ticket.departureAirline}}<br />
+          {{ticket.departureAeroplane}}<br />
+          {{ticket.departureClass}}
+        </mj-text>
+      </mj-column>
+      <mj-column width="70%">
+        <mj-text
+          font-size="16px"
+          color="#f97316"
+          font-weight="bold"
+          padding="0"
+          padding-top="20px"
+        >
+          {{ticket.departureDate}}
+        </mj-text>
+        <mj-text
+          font-size="14px"
+          color="#333333"
+          padding="0"
+          padding-top="6px"
+          padding-bottom="20px"
+        >
+          {{ticket.departureTime}} - {{ticket.arrivalTime}} ({{ticket.duration}}
+          Minutes)
+        </mj-text>
+
+        <!-- Garis Vertikal -->
+        <mj-text
+          css-class="vertical-line"
+          font-size="14px"
+          color="#333333"
+          padding-left="10px"
+          line-height="20px"
+        >
+          {{ticket.departureTime}} - {{ticket.departureAirportFromCity}}
+          ({{ticket.departureAirportFromCode}})<br />
+          {{ticket.departureAirportFromName}}<br /><br />
+          {{ticket.arrivalTime}} - {{ticket.arrivalAirportToCity}}
+          ({{ticket.arrivalAirportToCode}})<br />
+          {{ticket.arrivalAirportToName}}
+        </mj-text>
+      </mj-column>
+      <mj-column width="30%">
+        <mj-text
+          align="right"
+          font-size="14px"
+          color="#333333"
+          css-class="nowrap-text"
+        >
+          {{ticket.departureAirportFromCity}} - {{ticket.arrivalAirportToCity}}
+        </mj-text>
+      </mj-column>
+      <mj-column width="100%">
+        <mj-divider
+          border-color="#cccccc"
+          border-width="1px"
+          padding-top="20px"
+          padding-bottom="10px"
+          padding="0"
+        />
+      </mj-column>
+    </mj-section>
+
+    <!-- Return Flight (Conditional Rendering) -->
+    {{#if ticket.returnFlight}}
+    <mj-section padding-top="0" padding-left="20px">
+      <mj-column width="100%">
+        <mj-text
+          font-size="18px"
+          font-weight="bold"
+          color="#22177A"
+          padding="0"
+        >
+          Return Flight
+        </mj-text>
+        <mj-text
+          font-size="14px"
+          color="#000000"
+          padding="0"
+          padding-top="20px"
+          line-height="20px"
+        >
+          {{ticket.returnFlight.returnAirline}}<br />
+          {{ticket.returnFlight.returnAeroplane}}<br />
+          {{ticket.returnFlight.returnClass}}
+        </mj-text>
+      </mj-column>
+      <mj-column width="70%">
+        <mj-text
+          font-size="16px"
+          color="#f97316"
+          font-weight="bold"
+          padding="0"
+          padding-top="20px"
+        >
+          {{ticket.returnFlight.returnDate}}
+        </mj-text>
+        <mj-text
+          font-size="14px"
+          color="#333333"
+          padding="0"
+          padding-top="6px"
+          padding-bottom="20px"
+        >
+          {{ticket.returnFlight.returnDepartureTime}} -
+          {{ticket.returnFlight.returnArrivalTime}}
+          ({{ticket.returnFlight.returnDuration}} Minutes)
+        </mj-text>
+
+        <!-- Garis Vertikal -->
+        <mj-text
+          css-class="vertical-line"
+          font-size="14px"
+          color="#333333"
+          padding-left="10px"
+          line-height="20px"
+        >
+          {{ticket.returnFlight.returnDepartureTime}} -
+          {{ticket.returnFlight.returnairportFromCity}}
+          ({{ticket.returnFlight.returnairportFromCode}})<br />
+          {{ticket.returnFlight.returnairportFromName}}<br /><br />
+          {{ticket.returnFlight.returnArrivalTime}} -
+          {{ticket.returnFlight.returnairportToCity}}
+          ({{ticket.returnFlight.returnairportToCode}})<br />
+          {{ticket.returnFlight.returnairportToName}}
+        </mj-text>
+      </mj-column>
+      <mj-column width="30%">
+        <mj-text
+          align="right"
+          font-size="14px"
+          color="#333333"
+          css-class="nowrap-text"
+        >
+          {{ticket.returnFlight.returnairportFromCity}} -
+          {{ticket.returnFlight.returnairportToCity}}
+        </mj-text>
+      </mj-column>
+      <mj-column width="100%">
+        <mj-divider
+          border-color="#cccccc"
+          border-width="1px"
+          padding-top="20px"
+          padding-bottom="10px"
+          padding="0"
+        />
+      </mj-column>
+    </mj-section>
+    {{/if}}
+
+    <!-- Passenger Information -->
+    <mj-section padding-top="0" padding-left="20px">
+      <mj-column>
+        <mj-text
+          font-size="18px"
+          font-weight="bold"
+          color="#22177A"
+          padding="0"
+        >
+          Passenger Information
+        </mj-text>
+        <mj-text
+          align="left"
+          color="#333333"
+          font-size="14px"
+          padding="0"
+          padding-top="20px"
+          line-height="20px"
+        >
+          {{#each ticket.passengers}}
+          <mj-text align="left" color="#333333" font-size="14px">
+            - {{this.title}}. {{this.firstName}} {{this.familyName}}
+            ({{this.type}}) <br />
+          </mj-text>
+          {{/each}}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer Section -->
+    <mj-section background-color="#a600ff" padding="10px">
+      <mj-column width="100%">
+        <mj-text
+          align="center"
+          color="#ffffff"
+          font-size="20px"
+          font-family="Lato, Helvetica, Arial, sans-serif"
+          padding="10px 25px"
+        >
+          Best Regards,<br /><br />The Terbangin Team
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
