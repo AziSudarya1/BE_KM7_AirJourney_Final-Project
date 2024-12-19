@@ -285,7 +285,10 @@ export async function cancelTransaction(id, userId) {
     throw new HttpError('Unauthorized', 403);
   }
 
-  if (transaction.payment.status !== 'PENDING') {
+  const notAllowedToCancel =
+    transaction.payment.status !== 'PENDING' || !transaction.payment.method;
+
+  if (notAllowedToCancel) {
     throw new HttpError('Transaction cannot be canceled', 400);
   }
 
