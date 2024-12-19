@@ -45,31 +45,58 @@ export async function createFlightAndSeat(payload, aeroplane) {
   return flight;
 }
 
-export async function getAllFlight(filter, sort) {
-  const { cursorId, ...restFilter } = filter;
-  const flight = await flightRepository.getAllFlight(cursorId, restFilter);
+export async function getAllFlight(filter, sort, meta) {
+  const skip = meta.skip;
 
-  const meta = {
-    limit: 10,
-    cursorId: flight[flight.length - 1]?.id
+  const query = {
+    take: meta.limit,
+    where: {
+      departureDate: {
+        gte: new Date()
+      }
+    },
+    include: {
+      airportFrom: true,
+      airportTo: true,
+      airline: true,
+      aeroplane: true,
+      _count: {
+        select: {
+          seat: {
+            where: {
+              status: 'AVAILABLE'
+            }
+          }
+        }
+      }
+    },
+    orderBy: {
+      id: 'asc'
+    }
   };
+
+  if (skip) {
+    query.skip = skip;
+  }
 
   const sortKey = Object.keys(sort)[0];
 
   if (sortKey) {
-    flight.sort((a, b) => {
-      if (sort[sortKey] === 'asc') {
-        return a[sortKey] - b[sortKey];
-      }
-
-      return b[sortKey] - a[sortKey];
-    });
+    query.orderBy = {
+      [sortKey]: sort[sortKey]
+    };
   }
 
-  return {
-    meta,
-    flight
-  };
+  if (Object.keys(filter).length) {
+    query.where = {
+      ...query.where,
+      ...filter
+    };
+  }
+
+  const flight = await flightRepository.getAllFlight(query);
+
+  return flight;
 }
 
 export async function getDetailFlightById(id) {
@@ -88,4 +115,31 @@ export async function getFlightById(id) {
   const data = await flightRepository.getFlightById(id);
 
   return data;
+}
+
+export async function countFlightDataWithFilterAndCreateMeta(filter, page) {
+  const totalData = await flightRepository.countFlightDataWithFilter(filter);
+
+  const limit = 10;
+
+  let totalPage = 1;
+  let skip = 0;
+
+  if (totalData) {
+    totalPage = Math.ceil(totalData / limit);
+
+    if (page > totalPage) {
+      throw new HttpError('Page not found', 404);
+    }
+
+    skip = (page - 1) * limit;
+  }
+
+  return {
+    page,
+    limit,
+    totalPage,
+    totalData,
+    skip
+  };
 }
