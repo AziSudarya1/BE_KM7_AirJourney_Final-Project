@@ -8,6 +8,7 @@ import { HttpError } from '../utils/error.js';
 import { sendEmail } from '../utils/email/mail.js';
 import * as paymentService from './payment.js';
 import * as paymentRepository from '../repositories/payment.js';
+import { cancelMidtransTransaction } from '../utils/midtrans.js';
 
 export async function createTransaction(payload) {
   const existingTransaction = await transactionRepository.getActiveTransaction(
@@ -274,9 +275,7 @@ export async function getTransactionWithFlightAndPassenger(id, userId, email) {
 
 export async function cancelTransaction(id, userId) {
   const transaction =
-    await transactionRepository.getTransactionWithPassengerUserAndPaymentById(
-      id
-    );
+    await transactionRepository.getTransactionWithUserAndPaymentById(id);
 
   if (!transaction) {
     throw new HttpError('Transaction not found', 404);
@@ -290,28 +289,7 @@ export async function cancelTransaction(id, userId) {
     throw new HttpError('Transaction cannot be canceled', 400);
   }
 
-  const seatIds = transaction.passenger.flatMap((p) => [
-    p.departureSeatId,
-    p.returnSeatId
-  ]);
-
-  const proccessedSeatIds = seatIds.filter((id) => id);
-
-  await prisma.$transaction(async (transaction) => {
-    await seatRepository.updateSeatStatusBySeats(
-      proccessedSeatIds,
-      'AVAILABLE',
-      transaction
-    );
-
-    await paymentRepository.updatePaymentStatusAndMethod(
-      id,
-      {
-        status: 'CANCELLED'
-      },
-      transaction
-    );
-  });
+  await cancelMidtransTransaction(transaction.id);
 }
 
 export async function countTransactionDataWithFilterAndCreateMeta(
