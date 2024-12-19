@@ -70,14 +70,14 @@ const queryParamSchema = Joi.object({
   continent: Joi.string()
     .valid(...ALLOWED_CONTINENTS)
     .when('favourite', {
-      is: Joi.exist(),
+      is: 'true',
       then: Joi.optional(),
       otherwise: Joi.forbidden()
     }),
   sortBy: Joi.string()
     .valid(...ALLOWED_SORTING)
-    .when('continent', {
-      is: Joi.exist(),
+    .when('favourite', {
+      is: 'true',
       then: Joi.forbidden()
     }),
   airlineIds: Joi.array().items(Joi.string().uuid()),
