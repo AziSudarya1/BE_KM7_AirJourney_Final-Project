@@ -53,7 +53,7 @@ export async function checkOauthLoginOrRegisterUser(data) {
     user = await updateVerifiedUserWithNotification(user.id, payload);
   }
 
-  const token = generateToken({ user: user.id });
+  const token = generateToken({ id: user.id, email: user.email });
 
   return {
     ...user,

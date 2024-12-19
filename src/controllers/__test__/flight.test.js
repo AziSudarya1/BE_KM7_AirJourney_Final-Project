@@ -1,25 +1,21 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
-const mockCreateFlight = jest.fn();
-const mockGetAllFlights = jest.fn();
-const mockGetFlightById = jest.fn();
 const mockValidateCreateFlightIdAndGetAeroplane = jest.fn();
 const mockCreateFlightAndSeat = jest.fn();
+const mockGetAllFlight = jest.fn();
 
 jest.unstable_mockModule('../../services/flight.js', () => ({
-  createFlight: mockCreateFlight,
-  getAllFlight: mockGetAllFlights,
-  getFlightById: mockGetFlightById,
   validateCreateFlightIdAndGetAeroplane:
     mockValidateCreateFlightIdAndGetAeroplane,
-  createFlightAndSeat: mockCreateFlightAndSeat
+  createFlightAndSeat: mockCreateFlightAndSeat,
+  getAllFlight: mockGetAllFlight
 }));
 
 const flightController = await import('../flight.js');
 
-describe('flightController', () => {
+describe('Flight Controller', () => {
   describe('createFlight', () => {
-    it('should create flight', async () => {
+    it('should create a flight successfully', async () => {
       const mockRequest = {
         body: {
           airportIdFrom: 'from1',
@@ -31,14 +27,11 @@ describe('flightController', () => {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
         locals: {
-          aeroplane: {
-            id: 'aeroplane1'
-          }
+          aeroplane: { id: 'aeroplane1' }
         }
       };
 
-      mockValidateCreateFlightIdAndGetAeroplane.mockResolvedValueOnce({});
-
+      mockValidateCreateFlightIdAndGetAeroplane.mockResolvedValueOnce();
       mockCreateFlightAndSeat.mockResolvedValueOnce({
         id: 'flight1',
         airportIdFrom: 'from1',
@@ -49,9 +42,9 @@ describe('flightController', () => {
       await flightController.createFlight(mockRequest, mockResponse);
 
       expect(mockValidateCreateFlightIdAndGetAeroplane).toHaveBeenCalledWith(
-        mockRequest.body.airportIdFrom,
-        mockRequest.body.airportIdTo,
-        mockRequest.body.airlineId
+        'from1',
+        'to2',
+        'airline3'
       );
       expect(mockCreateFlightAndSeat).toHaveBeenCalledWith(
         mockRequest.body,
@@ -71,53 +64,47 @@ describe('flightController', () => {
   });
 
   describe('getAllFlights', () => {
-    it('should get all flights', async () => {
+    it('should get all flights successfully', async () => {
       const mockRequest = {};
       const mockResponse = {
         json: jest.fn(),
         locals: {
-          filter: {
-            startDate: '2023-01-01',
-            endDate: '2023-01-31'
-          },
-          sort: {
-            createdAt: 'asc'
-          }
+          filter: { startDate: '2023-01-01', endDate: '2023-01-31' },
+          sort: { createdAt: 'asc' },
+          meta: { total: 1, currentPage: 1, totalPages: 1 },
+          favourite: false
         }
       };
 
-      const data = {
-        flight: [
-          {
-            id: 'flight1',
-            airportIdFrom: 'from1',
-            airportIdTo: 'to2',
-            airlineId: 'airline3'
-          }
-        ],
-        meta: {
-          total: 1
+      const flights = [
+        {
+          id: 'flight1',
+          airportIdFrom: 'from1',
+          airportIdTo: 'to2',
+          airlineId: 'airline3'
         }
-      };
+      ];
 
-      mockGetAllFlights.mockResolvedValueOnce(data);
+      mockGetAllFlight.mockResolvedValueOnce(flights);
 
       await flightController.getAllFlights(mockRequest, mockResponse);
 
-      expect(mockGetAllFlights).toHaveBeenCalledWith(
+      expect(mockGetAllFlight).toHaveBeenCalledWith(
         mockResponse.locals.filter,
-        mockResponse.locals.sort
+        mockResponse.locals.sort,
+        mockResponse.locals.meta,
+        mockResponse.locals.favourite
       );
       expect(mockResponse.json).toHaveBeenCalledWith({
         message: 'Successfully get all flight',
-        meta: data.meta,
-        data: data.flight
+        meta: mockResponse.locals.meta,
+        data: flights
       });
     });
   });
 
   describe('getFlightById', () => {
-    it('should get flight by id', async () => {
+    it('should return flight details by ID', async () => {
       const mockRequest = {};
       const mockResponse = {
         json: jest.fn(),
@@ -133,21 +120,9 @@ describe('flightController', () => {
 
       await flightController.getFlightById(mockRequest, mockResponse);
 
-      mockGetFlightById.mockResolvedValueOnce({
-        id: 'flight1',
-        airportIdFrom: 'from1',
-        airportIdTo: 'to2',
-        airlineId: 'airline3'
-      });
-
       expect(mockResponse.json).toHaveBeenCalledWith({
         message: 'Successfully get flight',
-        data: {
-          id: 'flight1',
-          airportIdFrom: 'from1',
-          airportIdTo: 'to2',
-          airlineId: 'airline3'
-        }
+        data: mockResponse.locals.flight
       });
     });
   });

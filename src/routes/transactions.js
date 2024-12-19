@@ -24,7 +24,7 @@ export default (app) => {
     transactionController.getDetailTransactionById
   );
 
-  router.put(
+  router.post(
     '/:id/cancel',
     authMiddleware.isAuthorized,
     commonValidationMiddleware.validateIdParams,
@@ -37,5 +37,12 @@ export default (app) => {
     transactionValidationMiddleware.getTransactionFilterValidation,
     transactionMiddleware.getMaxTransactionDataAndCreateMeta,
     transactionController.getAllTransactions
+  );
+
+  router.post(
+    '/:id/ticket',
+    authMiddleware.isAuthorized,
+    commonValidationMiddleware.validateIdParams,
+    transactionController.getTransactionWithFlightAndPassenger
   );
 };
