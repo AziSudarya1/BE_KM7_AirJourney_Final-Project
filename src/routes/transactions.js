@@ -24,7 +24,7 @@ export default (app) => {
     transactionController.getDetailTransactionById
   );
 
-  router.put(
+  router.post(
     '/:id/cancel',
     authMiddleware.isAuthorized,
     commonValidationMiddleware.validateIdParams,
