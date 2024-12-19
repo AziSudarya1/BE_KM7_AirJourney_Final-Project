@@ -201,7 +201,8 @@ describe('Flight Middleware', () => {
     const mockResponse = {
       locals: {
         filter: { destination: 'NYC' },
-        page: 1
+        page: 1,
+        favourite: false
       }
     };
 
@@ -224,7 +225,8 @@ describe('Flight Middleware', () => {
 
       expect(mockCountFlightDataWithFilterAndCreateMeta).toHaveBeenCalledWith(
         { destination: 'NYC' },
-        1
+        1,
+        false
       );
       expect(mockResponse.locals.meta).toEqual(mockMeta);
       expect(mockNext).toHaveBeenCalled();

@@ -3,19 +3,17 @@ import { describe, expect, it, jest } from '@jest/globals';
 const mockValidateCreateFlightIdAndGetAeroplane = jest.fn();
 const mockCreateFlightAndSeat = jest.fn();
 const mockGetAllFlight = jest.fn();
-const mockGetFlightById = jest.fn();
 
 jest.unstable_mockModule('../../services/flight.js', () => ({
   validateCreateFlightIdAndGetAeroplane:
     mockValidateCreateFlightIdAndGetAeroplane,
   createFlightAndSeat: mockCreateFlightAndSeat,
-  getAllFlight: mockGetAllFlight,
-  getFlightById: mockGetFlightById
+  getAllFlight: mockGetAllFlight
 }));
 
 const flightController = await import('../flight.js');
 
-describe('flightController', () => {
+describe('Flight Controller', () => {
   describe('createFlight', () => {
     it('should create a flight successfully', async () => {
       const mockRequest = {
@@ -33,7 +31,7 @@ describe('flightController', () => {
         }
       };
 
-      mockValidateCreateFlightIdAndGetAeroplane.mockResolvedValueOnce({});
+      mockValidateCreateFlightIdAndGetAeroplane.mockResolvedValueOnce();
       mockCreateFlightAndSeat.mockResolvedValueOnce({
         id: 'flight1',
         airportIdFrom: 'from1',
@@ -73,7 +71,8 @@ describe('flightController', () => {
         locals: {
           filter: { startDate: '2023-01-01', endDate: '2023-01-31' },
           sort: { createdAt: 'asc' },
-          meta: { total: 1, currentPage: 1, totalPages: 1 }
+          meta: { total: 1, currentPage: 1, totalPages: 1 },
+          favourite: false
         }
       };
 
@@ -93,7 +92,8 @@ describe('flightController', () => {
       expect(mockGetAllFlight).toHaveBeenCalledWith(
         mockResponse.locals.filter,
         mockResponse.locals.sort,
-        mockResponse.locals.meta
+        mockResponse.locals.meta,
+        mockResponse.locals.favourite
       );
       expect(mockResponse.json).toHaveBeenCalledWith({
         message: 'Successfully get all flight',
