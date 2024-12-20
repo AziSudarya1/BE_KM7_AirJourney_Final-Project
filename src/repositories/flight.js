@@ -25,15 +25,8 @@ export function createFlightAndSeat(payload) {
   });
 }
 
-export function countFlightDataWithFilter(filter) {
-  return prisma.flight.count({
-    where: {
-      ...filter,
-      departureDate: {
-        gte: new Date()
-      }
-    }
-  });
+export function countFlightDataWithFilter(query) {
+  return prisma.flight.count(query);
 }
 
 export function getAllFlight(query) {
