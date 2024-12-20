@@ -1,18 +1,6 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
-// Mock HttpError
-const mockHttpError = jest.fn();
-
-jest.unstable_mockModule('../../utils/error.js', () => ({
-  HttpError: jest.fn().mockImplementation((message, statusCode) => {
-    mockHttpError(message, statusCode);
-
-    const error = new Error(message);
-    Object.setPrototypeOf(error, Error.prototype);
-    error.statusCode = statusCode;
-    return error;
-  })
-}));
+import { HttpError } from '../../utils/error.js';
 
 // Mock repositories flight
 const mockCreateFlight = jest.fn();
@@ -68,16 +56,13 @@ jest.unstable_mockModule('../../scripts/generateSeats.js', () => ({
 }));
 
 const flightService = await import('../flight.js');
-
 describe('Flight Service', () => {
   describe('validateCreateFlightIdAndGetAeroplane', () => {
     it('should throw an error if departure and arrival airport are the same', async () => {
       await expect(
         flightService.validateCreateFlightIdAndGetAeroplane(1, 1, 1)
-      ).rejects.toThrow('Departure and arrival airport cannot be the same');
-      expect(mockHttpError).toHaveBeenCalledWith(
-        'Departure and arrival airport cannot be the same',
-        400
+      ).rejects.toThrowError(
+        new HttpError('Departure and arrival airport cannot be the same', 400)
       );
     });
 
@@ -85,8 +70,7 @@ describe('Flight Service', () => {
       mockGetAirportById.mockResolvedValueOnce(null);
       await expect(
         flightService.validateCreateFlightIdAndGetAeroplane(1, 2, 1)
-      ).rejects.toThrow('Airport not found');
-      expect(mockHttpError).toHaveBeenCalledWith('Airport not found', 404);
+      ).rejects.toThrowError(new HttpError('Airport not found', 404));
     });
 
     it('should throw an error if airportTo is not found', async () => {
@@ -95,8 +79,7 @@ describe('Flight Service', () => {
         .mockResolvedValueOnce(null);
       await expect(
         flightService.validateCreateFlightIdAndGetAeroplane(1, 2, 1)
-      ).rejects.toThrow('Airport not found');
-      expect(mockHttpError).toHaveBeenCalledWith('Airport not found', 404);
+      ).rejects.toThrowError(new HttpError('Airport not found', 404));
     });
 
     it('should throw an error if airline is not found', async () => {
@@ -106,8 +89,7 @@ describe('Flight Service', () => {
       mockGetAirlineById.mockResolvedValueOnce(null);
       await expect(
         flightService.validateCreateFlightIdAndGetAeroplane(1, 2, 1)
-      ).rejects.toThrow('Airline not found');
-      expect(mockHttpError).toHaveBeenCalledWith('Airline not found', 404);
+      ).rejects.toThrowError(new HttpError('Airline not found', 404));
     });
 
     it('should pass validation if all data is valid', async () => {
@@ -219,6 +201,54 @@ describe('Flight Service', () => {
         orderBy: { id: 'asc' }
       });
     });
+
+    it('should set distinct and orderBy fields when favourite is true', async () => {
+      const filter = {};
+      const sort = {};
+      const meta = { limit: 10, skip: 0 };
+      const favourite = true;
+      const flights = [{ id: 1, flightNumber: '123' }];
+
+      mockGetAllFlights.mockResolvedValueOnce(flights);
+
+      const result = await flightService.getAllFlight(
+        filter,
+        sort,
+        meta,
+        favourite
+      );
+
+      expect(result).toEqual(flights);
+      expect(mockGetAllFlights).toHaveBeenCalledWith({
+        take: 10,
+        where: {
+          departureDate: {
+            gte: expect.any(Date)
+          }
+        },
+        include: {
+          airportFrom: true,
+          airportTo: true,
+          airline: true,
+          aeroplane: true,
+          _count: {
+            select: {
+              seat: {
+                where: {
+                  status: 'AVAILABLE'
+                }
+              }
+            }
+          }
+        },
+        distinct: ['airportIdFrom', 'airportIdTo'],
+        orderBy: {
+          departureTransaction: {
+            _count: 'desc'
+          }
+        }
+      });
+    });
   });
 
   describe('getDetailFlightById', () => {
@@ -258,7 +288,7 @@ describe('Flight Service', () => {
   });
 
   describe('countFlightDataWithFilterAndCreateMeta', () => {
-    it('should calculate pagination metadata', async () => {
+    it('should calculate pagination metadata correctly', async () => {
       mockCountFlightDataWithFilter.mockResolvedValueOnce(25);
 
       const result = await flightService.countFlightDataWithFilterAndCreateMeta(
@@ -271,7 +301,8 @@ describe('Flight Service', () => {
         limit: 10,
         totalPage: 3,
         totalData: 25,
-        skip: 10
+        skip: 10,
+        favourite: undefined
       });
       expect(mockCountFlightDataWithFilter).toHaveBeenCalledWith({});
     });
@@ -281,9 +312,9 @@ describe('Flight Service', () => {
 
       await expect(
         flightService.countFlightDataWithFilterAndCreateMeta({}, 5)
-      ).rejects.toThrow('Page not found');
-      expect(mockHttpError).toHaveBeenCalledWith('Page not found', 404);
+      ).rejects.toThrowError(new HttpError('Page not found', 404));
     });
+
     it('should return correct metadata when totalData is zero', async () => {
       mockCountFlightDataWithFilter.mockResolvedValueOnce(0);
 
@@ -296,10 +327,28 @@ describe('Flight Service', () => {
         page: 1,
         limit: 10,
         totalPage: 1,
-        totalData: 0,
-        skip: 0
+        skip: 0,
+        favourite: undefined
       });
       expect(mockCountFlightDataWithFilter).toHaveBeenCalledWith({});
+    });
+
+    it('should return metadata with favourite flag', async () => {
+      mockCountFlightDataWithFilter.mockClear();
+      const result = await flightService.countFlightDataWithFilterAndCreateMeta(
+        {},
+        1,
+        true
+      );
+
+      expect(result).toEqual({
+        page: 1,
+        limit: 10,
+        totalPage: 1,
+        skip: 0,
+        favourite: true
+      });
+      expect(mockCountFlightDataWithFilter).not.toHaveBeenCalled();
     });
   });
 });

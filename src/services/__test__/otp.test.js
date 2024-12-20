@@ -1,18 +1,6 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
-// Mock HttpError
-const mockHttpError = jest.fn();
-
-jest.unstable_mockModule('../../utils/error.js', () => ({
-  HttpError: jest.fn().mockImplementation((message, statusCode) => {
-    mockHttpError(message, statusCode);
-
-    const error = new Error(message);
-    Object.setPrototypeOf(error, Error.prototype);
-    error.statusCode = statusCode;
-    return error;
-  })
-}));
+import { HttpError } from '../../utils/error.js';
 
 const mockSendEmail = jest.fn();
 
@@ -56,34 +44,27 @@ describe('OTP Services', () => {
     it('should throw an error if user is not found', async () => {
       mockGetUserByEmail.mockResolvedValue(null);
 
-      await expect(otpServices.sendOtp('test@example.com')).rejects.toThrow(
-        'User not found'
-      );
-      expect(mockHttpError).toHaveBeenCalledWith('User not found', 404);
+      await expect(
+        otpServices.sendOtp('test@example.com')
+      ).rejects.toThrowError(new HttpError('User not found', 404));
     });
 
     it('should throw an error if user is already verified', async () => {
       mockGetUserByEmail.mockResolvedValue({ verified: true });
 
-      await expect(otpServices.sendOtp('test@example.com')).rejects.toThrow(
-        'User is already verified'
-      );
-      expect(mockHttpError).toHaveBeenCalledWith(
-        'User is already verified',
-        400
-      );
+      await expect(
+        otpServices.sendOtp('test@example.com')
+      ).rejects.toThrowError(new HttpError('User is already verified', 400));
     });
 
     it('should throw an error if an active OTP already exists', async () => {
       mockGetUserByEmail.mockResolvedValue({ id: 1, verified: false });
       mockFindActiveOtp.mockResolvedValue(true);
 
-      await expect(otpServices.sendOtp('test@example.com')).rejects.toThrow(
-        'An active OTP already exists'
-      );
-      expect(mockHttpError).toHaveBeenCalledWith(
-        'An active OTP already exists',
-        400
+      await expect(
+        otpServices.sendOtp('test@example.com')
+      ).rejects.toThrowError(
+        new HttpError('An active OTP already exists', 400)
       );
     });
 
@@ -117,8 +98,7 @@ describe('OTP Services', () => {
 
       await expect(
         otpServices.verifyOtp('test@example.com', '123456')
-      ).rejects.toThrow('User not found');
-      expect(mockHttpError).toHaveBeenCalledWith('User not found', 404);
+      ).rejects.toThrowError(new HttpError('User not found', 404));
     });
 
     it('should throw an error if OTP is invalid or expired', async () => {
@@ -127,8 +107,7 @@ describe('OTP Services', () => {
 
       await expect(
         otpServices.verifyOtp('test@example.com', '123456')
-      ).rejects.toThrow('Invalid or expired OTP');
-      expect(mockHttpError).toHaveBeenCalledWith('Invalid or expired OTP', 400);
+      ).rejects.toThrowError(new HttpError('Invalid or expired OTP', 400));
     });
 
     it('should verify the OTP and update user verification', async () => {

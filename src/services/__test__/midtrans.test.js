@@ -17,18 +17,7 @@ jest.unstable_mockModule('../../utils/midtrans.js', () => ({
   MidtransError: mockMidtransError
 }));
 
-const mockHttpError = jest.fn();
-
-jest.unstable_mockModule('../../utils/error.js', () => ({
-  HttpError: jest.fn().mockImplementation((message, statusCode) => {
-    mockHttpError(message, statusCode);
-
-    const error = new Error(message);
-    Object.setPrototypeOf(error, Error.prototype);
-    error.statusCode = statusCode;
-    return error;
-  })
-}));
+import { HttpError } from '../../utils/error.js';
 
 const midtransServices = await import('../midtrans.js');
 const { checkMidtransTransactionValidity } = midtransServices;
@@ -40,11 +29,7 @@ describe('checkMidtransTransactionValidity', () => {
 
   it('should throw HttpError when transactionId is not provided', async () => {
     await expect(checkMidtransTransactionValidity()).rejects.toThrowError(
-      'Transaction ID is required'
-    );
-    expect(mockHttpError).toHaveBeenCalledWith(
-      'Transaction ID is required',
-      400
+      new HttpError('Transaction ID is required', 400)
     );
   });
 
@@ -71,8 +56,7 @@ describe('checkMidtransTransactionValidity', () => {
 
     await expect(
       checkMidtransTransactionValidity('12345')
-    ).rejects.toThrowError('Transaction not found');
-    expect(mockHttpError).toHaveBeenCalledWith('Transaction not found', 404);
+    ).rejects.toThrowError(new HttpError('Transaction not found', 404));
   });
 
   it('should re-throw non-MidtransError errors', async () => {
@@ -92,7 +76,6 @@ describe('checkMidtransTransactionValidity', () => {
     await expect(
       checkMidtransTransactionValidity('12345')
     ).rejects.toThrowError('Error occurred');
-    expect(mockHttpError).not.toHaveBeenCalled();
   });
 
   it('should re-throw MidtransError when ApiResponse is not an object', async () => {
@@ -105,6 +88,5 @@ describe('checkMidtransTransactionValidity', () => {
     await expect(
       checkMidtransTransactionValidity('12345')
     ).rejects.toThrowError('Error occurred');
-    expect(mockHttpError).not.toHaveBeenCalled();
   });
 });

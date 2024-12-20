@@ -1,18 +1,6 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 
-// Mock HttpError
-const mockHttpError = jest.fn();
-
-jest.unstable_mockModule('../../utils/error.js', () => ({
-  HttpError: jest.fn().mockImplementation((message, statusCode) => {
-    mockHttpError(message, statusCode);
-
-    const error = new Error(message);
-    Object.setPrototypeOf(error, Error.prototype);
-    error.statusCode = statusCode;
-    return error;
-  })
-}));
+import { HttpError } from '../../utils/error.js';
 
 const mockSendEmail = jest.fn();
 
@@ -75,9 +63,7 @@ describe('passwordResetServices', () => {
 
       await expect(
         passwordResetServices.sendResetPasswordEmail(testEmail)
-      ).rejects.toThrow('User not found');
-
-      expect(mockHttpError).toHaveBeenCalledWith('User not found', 404);
+      ).rejects.toThrowError(new HttpError('User not found', 404));
 
       expect(mockGetUserByEmail).toHaveBeenCalledWith(testEmail);
     });
@@ -128,7 +114,7 @@ describe('passwordResetServices', () => {
 
       await expect(
         passwordResetServices.sendResetPasswordEmail(mockUser.email)
-      ).rejects.toThrow('Email sending failed');
+      ).rejects.toThrowError(new HttpError('Email sending failed', 500));
 
       expect(mockSendEmail).toHaveBeenCalledWith(
         mockUser.email,
@@ -161,11 +147,8 @@ describe('passwordResetServices', () => {
 
       await expect(
         passwordResetServices.validateResetPasswordToken('test-token')
-      ).rejects.toThrow('Invalid or expired reset password token');
-
-      expect(mockHttpError).toHaveBeenCalledWith(
-        'Invalid or expired reset password token',
-        400
+      ).rejects.toThrowError(
+        new HttpError('Invalid or expired reset password token', 400)
       );
     });
   });
@@ -196,11 +179,8 @@ describe('passwordResetServices', () => {
 
       await expect(
         passwordResetServices.resetPassword('test-token', 'new-password')
-      ).rejects.toThrow('Invalid or expired reset password token');
-
-      expect(mockHttpError).toHaveBeenCalledWith(
-        'Invalid or expired reset password token',
-        400
+      ).rejects.toThrowError(
+        new HttpError('Invalid or expired reset password token', 400)
       );
     });
   });

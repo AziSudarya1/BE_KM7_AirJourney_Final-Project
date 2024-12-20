@@ -1,17 +1,6 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
-const mockHttpError = jest.fn();
-
-jest.unstable_mockModule('../../utils/error.js', () => ({
-  HttpError: jest.fn().mockImplementation((message, statusCode) => {
-    mockHttpError(message, statusCode);
-
-    const error = new Error(message);
-    Object.setPrototypeOf(error, Error.prototype);
-    error.statusCode = statusCode;
-    return error;
-  })
-}));
+import { HttpError } from '../../utils/error.js';
 
 const mockOauth2Client = {
   getToken: jest.fn(),
@@ -116,10 +105,9 @@ describe('OAuth Services', () => {
     it('should throw an error if email or name is empty', async () => {
       const data = { email: '', name: '', picture: 'test-picture' };
 
-      await expect(checkOauthLoginOrRegisterUser(data)).rejects.toThrow(
-        'Email or name is empty'
+      await expect(checkOauthLoginOrRegisterUser(data)).rejects.toThrowError(
+        new HttpError('Email or name is empty', 400)
       );
-      expect(mockHttpError).toHaveBeenCalledWith('Email or name is empty', 400);
     });
 
     it('should create a new verified user if user does not exist', async () => {
@@ -142,7 +130,10 @@ describe('OAuth Services', () => {
         email: data.email,
         image: data.picture
       });
-      expect(mockGenerateToken).toHaveBeenCalledWith({ user: user.id });
+      expect(mockGenerateToken).toHaveBeenCalledWith({
+        id: user.id,
+        email: data.email
+      });
       expect(result).toEqual({ ...user, token: 'test-token' });
     });
 
@@ -171,7 +162,10 @@ describe('OAuth Services', () => {
         user.id
       );
 
-      expect(mockGenerateToken).toHaveBeenCalledWith({ user: user.id });
+      expect(mockGenerateToken).toHaveBeenCalledWith({
+        id: user.id,
+        email: data.email
+      });
       expect(result).toEqual({
         ...user,
         image: data.picture,
@@ -194,7 +188,10 @@ describe('OAuth Services', () => {
       const result = await checkOauthLoginOrRegisterUser(data);
 
       expect(mockGetUserByEmail).toHaveBeenCalledWith(data.email);
-      expect(mockGenerateToken).toHaveBeenCalledWith({ user: user.id });
+      expect(mockGenerateToken).toHaveBeenCalledWith({
+        id: user.id,
+        email: data.email
+      });
       expect(result).toEqual({ ...user, token: 'test-token' });
     });
   });

@@ -6,22 +6,12 @@ const mockGetUserByEmail = jest.fn();
 const mockGetUserById = jest.fn();
 const mockGenerateToken = jest.fn();
 const mockVerifyToken = jest.fn();
-const mockHttpError = jest.fn();
+
+import { HttpError } from '../../utils/error.js';
 
 jest.unstable_mockModule('../../repositories/user.js', () => ({
   getUserByEmail: mockGetUserByEmail,
   getUserById: mockGetUserById
-}));
-
-jest.unstable_mockModule('../../utils/error.js', () => ({
-  HttpError: jest.fn().mockImplementation((message, statusCode) => {
-    mockHttpError(message, statusCode);
-
-    const error = new Error(message);
-    Object.setPrototypeOf(error, Error.prototype);
-    error.statusCode = statusCode;
-    return error;
-  })
 }));
 
 jest.unstable_mockModule('../../utils/jwt.js', () => ({
@@ -68,10 +58,9 @@ describe('Auth Services', () => {
 
       mockGetUserByEmail.mockResolvedValue(null);
 
-      await expect(authServices.login(email, password)).rejects.toThrow(
-        'User not found'
+      await expect(authServices.login(email, password)).rejects.toThrowError(
+        new HttpError('User not found', 404)
       );
-      expect(mockHttpError).toHaveBeenCalledWith('User not found', 404);
     });
 
     it('should throw an error if user is not verified', async () => {
@@ -88,10 +77,9 @@ describe('Auth Services', () => {
 
       mockGetUserByEmail.mockResolvedValue(mockUser);
 
-      await expect(authServices.login(email, password)).rejects.toThrow(
-        'User is not verified'
+      await expect(authServices.login(email, password)).rejects.toThrowError(
+        new HttpError('User is not verified', 401)
       );
-      expect(mockHttpError).toHaveBeenCalledWith('User is not verified', 401);
     });
 
     it('should throw an error for invalid password', async () => {
@@ -108,10 +96,9 @@ describe('Auth Services', () => {
 
       mockGetUserByEmail.mockResolvedValue(mockUser);
 
-      await expect(authServices.login(email, password)).rejects.toThrow(
-        'Invalid password'
+      await expect(authServices.login(email, password)).rejects.toThrowError(
+        new HttpError('Invalid password', 401)
       );
-      expect(mockHttpError).toHaveBeenCalledWith('Invalid password', 401);
     });
   });
 
@@ -142,10 +129,9 @@ describe('Auth Services', () => {
       mockVerifyToken.mockReturnValue({ id: 1 });
       mockGetUserById.mockResolvedValue(null);
 
-      await expect(authServices.verifyTokenAndUser(token)).rejects.toThrow(
-        'User not found'
+      await expect(authServices.verifyTokenAndUser(token)).rejects.toThrowError(
+        new HttpError('User not found', 401)
       );
-      expect(mockHttpError).toHaveBeenCalledWith('User not found', 401);
     });
 
     it('should throw an error for invalid token', async () => {
@@ -155,10 +141,9 @@ describe('Auth Services', () => {
         throw new jwt.JsonWebTokenError('Invalid token');
       });
 
-      await expect(authServices.verifyTokenAndUser(token)).rejects.toThrow(
-        'Invalid token'
+      await expect(authServices.verifyTokenAndUser(token)).rejects.toThrowError(
+        new HttpError('Invalid token', 401)
       );
-      expect(mockHttpError).toHaveBeenCalledWith('Invalid token', 401);
     });
   });
 

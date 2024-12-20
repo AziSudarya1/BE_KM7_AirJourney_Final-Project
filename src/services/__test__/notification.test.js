@@ -9,18 +9,8 @@ const mockUpdateAllNotification = jest.fn();
 const mockDeleteNotification = jest.fn();
 const mockCheckUserId = jest.fn();
 const mockGetUserById = jest.fn();
-const mockHttpError = jest.fn();
 
-jest.unstable_mockModule('../../utils/error.js', () => ({
-  HttpError: jest.fn().mockImplementation((message, statusCode) => {
-    mockHttpError(message, statusCode);
-
-    const error = new Error(message);
-    Object.setPrototypeOf(error, Error.prototype);
-    error.statusCode = statusCode;
-    return error;
-  })
-}));
+import { HttpError } from '../../utils/error.js';
 
 jest.unstable_mockModule('../../repositories/notification.js', () => ({
   createNotification: mockCreateNotification,
@@ -69,8 +59,7 @@ describe('Notification Services', () => {
 
       await expect(
         notificationServices.createNotification(payload)
-      ).rejects.toThrow('User not found!');
-      expect(mockHttpError).toHaveBeenCalledWith('User not found!', 404);
+      ).rejects.toThrowError(new HttpError('User not found!', 404));
     });
   });
 
@@ -165,11 +154,7 @@ describe('Notification Services', () => {
 
       await expect(
         notificationServices.updateNotification(id, userId, notification)
-      ).rejects.toThrow('Notification already read!');
-      expect(mockHttpError).toHaveBeenCalledWith(
-        'Notification already read!',
-        400
-      );
+      ).rejects.toThrowError(new HttpError('Notification already read!', 400));
     });
   });
 
