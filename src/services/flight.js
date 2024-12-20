@@ -136,7 +136,23 @@ export async function countFlightDataWithFilterAndCreateMeta(
   let totalData;
 
   if (!favourite) {
-    totalData = await flightRepository.countFlightDataWithFilter(filter);
+    const query = {
+      take: limit,
+      where: {
+        departureDate: {
+          gte: new Date()
+        }
+      }
+    };
+
+    if (Object.keys(filter).length) {
+      query.where = {
+        ...query.where,
+        ...filter
+      };
+    }
+
+    totalData = await flightRepository.countFlightDataWithFilter(query);
 
     if (totalData) {
       totalPage = Math.ceil(totalData / limit);
