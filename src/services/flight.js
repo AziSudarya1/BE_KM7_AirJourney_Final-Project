@@ -2,7 +2,6 @@ import { HttpError } from '../utils/error.js';
 import * as airportService from '../services/airport.js';
 import * as airlineService from '../services/airline.js';
 import * as flightRepository from '../repositories/flight.js';
-import { generateSeats } from '../scripts/generateSeats.js';
 
 export async function validateCreateFlightIdAndGetAeroplane(
   airportIdFrom,
@@ -137,7 +136,23 @@ export async function countFlightDataWithFilterAndCreateMeta(
   let totalData;
 
   if (!favourite) {
-    totalData = await flightRepository.countFlightDataWithFilter(filter);
+    const query = {
+      take: limit,
+      where: {
+        departureDate: {
+          gte: new Date()
+        }
+      }
+    };
+
+    if (Object.keys(filter).length) {
+      query.where = {
+        ...query.where,
+        ...filter
+      };
+    }
+
+    totalData = await flightRepository.countFlightDataWithFilter(query);
 
     if (totalData) {
       totalPage = Math.ceil(totalData / limit);
@@ -158,4 +173,25 @@ export async function countFlightDataWithFilterAndCreateMeta(
     skip,
     favourite
   };
+}
+
+export function generateSeats(maxRow, maxColumn, aeroplaneId, flightId) {
+  const seats = [];
+
+  for (let i = 0; i < maxRow; i++) {
+    for (let j = 0; j < maxColumn; j++) {
+      const seat = {
+        row: i + 1,
+        column: j + 1,
+        status: 'AVAILABLE',
+        aeroplaneId
+      };
+      if (flightId) {
+        seat.flightId = flightId;
+      }
+      seats.push(seat);
+    }
+  }
+
+  return seats;
 }
