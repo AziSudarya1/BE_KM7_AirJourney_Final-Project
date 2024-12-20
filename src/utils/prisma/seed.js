@@ -2,7 +2,7 @@
 import { prisma } from '../db.js';
 import bcrypt from 'bcrypt';
 import { appEnv } from '../env.js';
-import { generateSeats } from '../../scripts/generateSeats.js';
+import { generateSeats } from '../../services/flight.js';
 import { ALLOWED_CLASS } from '../../middlewares/validation/flight.js';
 
 async function seedUsers() {
