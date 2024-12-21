@@ -2,6 +2,7 @@ import { midtrans } from '../utils/midtrans.js';
 import * as paymentRepository from '../repositories/payment.js';
 import * as transactionRepository from '../repositories/transaction.js';
 import * as seatRepository from '../repositories/seat.js';
+import * as notificationService from './notification.js';
 import { HttpError } from '../utils/error.js';
 import { prisma } from '../utils/db.js';
 
@@ -49,6 +50,15 @@ export async function updateTransactionStatus(orderId, status, method) {
         tx
       );
       newStatus = 'SUCCESS';
+
+      await notificationService.createUserNotification(
+        transaction.userId,
+        {
+          title: 'Ticket Booking Success',
+          message: 'Your ticket has been successfully booked'
+        },
+        tx
+      );
     } else if (['cancel', 'expire'].includes(status)) {
       await seatRepository.updateSeatStatusBySeats(
         proccessedSeatIds,
@@ -56,6 +66,15 @@ export async function updateTransactionStatus(orderId, status, method) {
         tx
       );
       newStatus = 'CANCELLED';
+
+      await notificationService.createUserNotification(
+        transaction.userId,
+        {
+          title: 'Ticket Booking Canceled',
+          message: 'Your ticket has been canceled'
+        },
+        tx
+      );
     } else if (status === 'pending') {
       newStatus = 'PENDING';
     }
