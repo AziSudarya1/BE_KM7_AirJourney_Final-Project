@@ -6,7 +6,7 @@ const createUserSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
   phoneNumber: Joi.string()
-    .pattern(/^\+?[0-9]+$/)
+    .pattern(/^(\+[1-9][0-9]*|0[1-9][0-9]*)$/)
     .min(11)
     .required()
 });
@@ -14,7 +14,7 @@ const createUserSchema = Joi.object({
 const updateUserSchema = Joi.object({
   name: Joi.string().min(3).max(50),
   phoneNumber: Joi.string()
-    .pattern(/^\+?[0-9]+$/)
+    .pattern(/^(\+[1-9][0-9]*|0[1-9][0-9]*)$/)
     .min(11)
 }).min(1);
 
