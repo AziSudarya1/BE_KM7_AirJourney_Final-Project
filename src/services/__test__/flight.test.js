@@ -33,28 +33,6 @@ jest.unstable_mockModule('../../repositories/airline.js', () => ({
   getAirlineById: mockGetAirlineById
 }));
 
-// Mock seat generation script
-const mockGenerateSeats = jest.fn();
-jest.unstable_mockModule('../../scripts/generateSeats.js', () => ({
-  generateSeats: jest.fn((maxRow, maxColumn, aeroplaneId) => {
-    mockGenerateSeats(maxRow, maxColumn, aeroplaneId);
-
-    const seats = [];
-    for (let i = 0; i < maxRow; i++) {
-      for (let j = 0; j < maxColumn; j++) {
-        const seat = {
-          row: i + 1,
-          column: j + 1,
-          status: 'AVAILABLE',
-          aeroplaneId
-        };
-        seats.push(seat);
-      }
-    }
-    return seats;
-  })
-}));
-
 const flightService = await import('../flight.js');
 describe('Flight Service', () => {
   describe('validateCreateFlightIdAndGetAeroplane', () => {
@@ -107,17 +85,16 @@ describe('Flight Service', () => {
     it('should create flight and seats', async () => {
       const payload = { flightNumber: '123' };
       const aeroplane = { maxRow: 2, maxColumn: 2, id: 1 };
-      const seats = [
-        { row: 1, column: 1, status: 'AVAILABLE', aeroplaneId: 1 },
-        { row: 1, column: 2, status: 'AVAILABLE', aeroplaneId: 1 },
-        { row: 2, column: 1, status: 'AVAILABLE', aeroplaneId: 1 },
-        { row: 2, column: 2, status: 'AVAILABLE', aeroplaneId: 1 }
-      ];
-      mockGenerateSeats.mockReturnValueOnce(seats);
+
       mockCreateFlightAndSeat.mockResolvedValueOnce({
         id: 1,
         ...payload,
-        seats
+        seats: [
+          { aeroplaneId: 1, column: 1, row: 1, status: 'AVAILABLE' },
+          { aeroplaneId: 1, column: 2, row: 1, status: 'AVAILABLE' },
+          { aeroplaneId: 1, column: 1, row: 2, status: 'AVAILABLE' },
+          { aeroplaneId: 1, column: 2, row: 2, status: 'AVAILABLE' }
+        ]
       });
 
       const result = await flightService.createFlightAndSeat(
@@ -125,11 +102,24 @@ describe('Flight Service', () => {
         aeroplane
       );
 
-      expect(result).toEqual({ id: 1, ...payload, seats });
-      expect(mockGenerateSeats).toHaveBeenCalledWith(2, 2, 1);
+      expect(result).toEqual({
+        id: 1,
+        ...payload,
+        seats: [
+          { aeroplaneId: 1, column: 1, row: 1, status: 'AVAILABLE' },
+          { aeroplaneId: 1, column: 2, row: 1, status: 'AVAILABLE' },
+          { aeroplaneId: 1, column: 1, row: 2, status: 'AVAILABLE' },
+          { aeroplaneId: 1, column: 2, row: 2, status: 'AVAILABLE' }
+        ]
+      });
       expect(mockCreateFlightAndSeat).toHaveBeenCalledWith({
         ...payload,
-        seats
+        seats: [
+          { aeroplaneId: 1, column: 1, row: 1, status: 'AVAILABLE' },
+          { aeroplaneId: 1, column: 2, row: 1, status: 'AVAILABLE' },
+          { aeroplaneId: 1, column: 1, row: 2, status: 'AVAILABLE' },
+          { aeroplaneId: 1, column: 2, row: 2, status: 'AVAILABLE' }
+        ]
       });
     });
   });
@@ -304,7 +294,14 @@ describe('Flight Service', () => {
         skip: 10,
         favourite: undefined
       });
-      expect(mockCountFlightDataWithFilter).toHaveBeenCalledWith({});
+      expect(mockCountFlightDataWithFilter).toHaveBeenCalledWith({
+        take: 10,
+        where: {
+          departureDate: {
+            gte: expect.any(Date)
+          }
+        }
+      });
     });
 
     it('should throw an error if requested page exceeds total pages', async () => {
@@ -330,7 +327,14 @@ describe('Flight Service', () => {
         skip: 0,
         favourite: undefined
       });
-      expect(mockCountFlightDataWithFilter).toHaveBeenCalledWith({});
+      expect(mockCountFlightDataWithFilter).toHaveBeenCalledWith({
+        take: 10,
+        where: {
+          departureDate: {
+            gte: expect.any(Date)
+          }
+        }
+      });
     });
 
     it('should return metadata with favourite flag', async () => {
@@ -349,6 +353,71 @@ describe('Flight Service', () => {
         favourite: true
       });
       expect(mockCountFlightDataWithFilter).not.toHaveBeenCalled();
+    });
+
+    it('should include filter in the query if filter is provided', async () => {
+      const filter = { airlineId: 1 };
+      mockCountFlightDataWithFilter.mockResolvedValueOnce(10);
+
+      const result = await flightService.countFlightDataWithFilterAndCreateMeta(
+        filter,
+        1
+      );
+
+      expect(result).toEqual({
+        page: 1,
+        limit: 10,
+        totalPage: 1,
+        totalData: 10,
+        skip: 0,
+        favourite: undefined
+      });
+      expect(mockCountFlightDataWithFilter).toHaveBeenCalledWith({
+        take: 10,
+        where: {
+          departureDate: {
+            gte: expect.any(Date)
+          },
+          ...filter
+        }
+      });
+    });
+  });
+
+  describe('generateSeats', () => {
+    it('should generate seats correctly', () => {
+      const maxRow = 2;
+      const maxColumn = 2;
+      const aeroplaneId = 1;
+      const expectedSeats = [
+        { row: 1, column: 1, status: 'AVAILABLE', aeroplaneId },
+        { row: 1, column: 2, status: 'AVAILABLE', aeroplaneId },
+        { row: 2, column: 1, status: 'AVAILABLE', aeroplaneId },
+        { row: 2, column: 2, status: 'AVAILABLE', aeroplaneId }
+      ];
+
+      const seats = flightService.generateSeats(maxRow, maxColumn, aeroplaneId);
+
+      expect(seats).toEqual(expectedSeats);
+    });
+
+    it('should include flightId if provided', () => {
+      const maxRow = 1;
+      const maxColumn = 1;
+      const aeroplaneId = 1;
+      const flightId = 1;
+      const expectedSeats = [
+        { row: 1, column: 1, status: 'AVAILABLE', aeroplaneId, flightId }
+      ];
+
+      const seats = flightService.generateSeats(
+        maxRow,
+        maxColumn,
+        aeroplaneId,
+        flightId
+      );
+
+      expect(seats).toEqual(expectedSeats);
     });
   });
 });
