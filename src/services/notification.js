@@ -64,3 +64,17 @@ export async function deleteNotification(id, userId) {
 
   return data;
 }
+
+export async function createUserNotification(userId, payload, tx) {
+  if (!payload.title || !payload.message) {
+    throw new Error('Payload must include both title and message');
+  }
+
+  const notification = await notificationRepository.createUserNotification(
+    userId,
+    payload,
+    tx
+  );
+
+  return notification;
+}
