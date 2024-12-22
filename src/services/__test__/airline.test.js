@@ -30,7 +30,7 @@ describe('airlineServices', () => {
       };
 
       const mockData = {
-        id: 1,
+        id: '1',
         code: 'code',
         name: 'name',
         image: 'image'
@@ -47,7 +47,7 @@ describe('airlineServices', () => {
 
   describe('getAirlineById', () => {
     it('should get an airline by id', async () => {
-      const mockId = 1;
+      const mockId = '1';
       const mockData = {
         id: mockId,
         code: 'code',
@@ -68,7 +68,7 @@ describe('airlineServices', () => {
     it('should get an airline by name', async () => {
       const mockName = 'name';
       const mockData = {
-        id: 1,
+        id: '1',
         code: 'code',
         name: 'name',
         image: 'image'
@@ -87,7 +87,7 @@ describe('airlineServices', () => {
     it('should get an airline by code', async () => {
       const mockCode = 'code';
       const mockData = {
-        id: 1,
+        id: '1',
         code: 'code',
         name: 'name',
         image: 'image'
@@ -106,13 +106,13 @@ describe('airlineServices', () => {
     it('should get all airlines', async () => {
       const mockData = [
         {
-          id: 1,
+          id: '1',
           code: 'code',
           name: 'name',
           image: 'image'
         },
         {
-          id: 2,
+          id: '2',
           code: 'code',
           name: 'name',
           image: 'image'
@@ -130,7 +130,7 @@ describe('airlineServices', () => {
 
   describe('updateAirlineById', () => {
     it('should update an airline by id', async () => {
-      const mockId = 1;
+      const mockId = '1';
       const payload = {
         code: 'code',
         name: 'name',
@@ -155,7 +155,7 @@ describe('airlineServices', () => {
 
   describe('deleteAirlineById', () => {
     it('should delete an airline by id', async () => {
-      const mockId = 1;
+      const mockId = '1';
 
       await airlineServices.deleteAirlineById(mockId);
 

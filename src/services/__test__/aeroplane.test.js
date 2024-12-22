@@ -32,7 +32,7 @@ describe('Aeroplane Services', () => {
       };
 
       const mockAeroplaneData = {
-        id: 1,
+        id: '1',
         ...payload
       };
 
@@ -47,7 +47,7 @@ describe('Aeroplane Services', () => {
 
   describe('getAeroplaneById', () => {
     it('should get an aeroplane by id', async () => {
-      const mockAeroplaneId = 1;
+      const mockAeroplaneId = '1';
       const mockAeroplaneData = {
         id: mockAeroplaneId,
         name: 'Aeroplane 1',
@@ -70,7 +70,7 @@ describe('Aeroplane Services', () => {
     it('should get an aeroplane by name', async () => {
       const mockAeroplaneName = 'Aeroplane 1';
       const mockAeroplaneData = {
-        id: 1,
+        id: '1',
         name: mockAeroplaneName,
         code: 'A1',
         type: 'Type 1',
@@ -92,7 +92,7 @@ describe('Aeroplane Services', () => {
     it('should get an aeroplane by code', async () => {
       const mockAeroplaneCode = 'A1';
       const mockAeroplaneData = {
-        id: 1,
+        id: '1',
         name: 'Aeroplane 1',
         code: mockAeroplaneCode,
         type: 'Type 1',
@@ -112,7 +112,7 @@ describe('Aeroplane Services', () => {
 
   describe('updateAeroplaneById', () => {
     it('should update an aeroplane by id', async () => {
-      const mockAeroplaneId = 1;
+      const mockAeroplaneId = '1';
       const payload = {
         name: 'Aeroplane 1',
         code: 'A1',
@@ -144,7 +144,7 @@ describe('Aeroplane Services', () => {
 
   describe('deleteAeroplaneById', () => {
     it('should delete an aeroplane by id', async () => {
-      const mockAeroplaneId = 1;
+      const mockAeroplaneId = '1';
 
       mockDeleteAeroplaneById.mockResolvedValue(mockAeroplaneId);
 
@@ -160,7 +160,7 @@ describe('Aeroplane Services', () => {
     it('should get all aeroplanes', async () => {
       const mockAeroplaneData = [
         {
-          id: 1,
+          id: '1',
           name: 'Aeroplane 1',
           code: 'A1',
           type: 'Type 1',
@@ -168,7 +168,7 @@ describe('Aeroplane Services', () => {
           maxColumn: 5
         },
         {
-          id: 2,
+          id: '2',
           name: 'Aeroplane 2',
           code: 'A2',
           type: 'Type 2',

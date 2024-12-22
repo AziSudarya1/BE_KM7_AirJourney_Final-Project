@@ -38,7 +38,7 @@ describe('Flight Service', () => {
   describe('validateCreateFlightIdAndGetAeroplane', () => {
     it('should throw an error if departure and arrival airport are the same', async () => {
       await expect(
-        flightService.validateCreateFlightIdAndGetAeroplane(1, 1, 1)
+        flightService.validateCreateFlightIdAndGetAeroplane('1', '1', '1')
       ).rejects.toThrowError(
         new HttpError('Departure and arrival airport cannot be the same', 400)
       );
@@ -47,36 +47,36 @@ describe('Flight Service', () => {
     it('should throw an error if airportFrom is not found', async () => {
       mockGetAirportById.mockResolvedValueOnce(null);
       await expect(
-        flightService.validateCreateFlightIdAndGetAeroplane(1, 2, 1)
+        flightService.validateCreateFlightIdAndGetAeroplane('1', '2', '1')
       ).rejects.toThrowError(new HttpError('Airport not found', 404));
     });
 
     it('should throw an error if airportTo is not found', async () => {
       mockGetAirportById
-        .mockResolvedValueOnce({ id: 1 })
+        .mockResolvedValueOnce({ id: '1' })
         .mockResolvedValueOnce(null);
       await expect(
-        flightService.validateCreateFlightIdAndGetAeroplane(1, 2, 1)
+        flightService.validateCreateFlightIdAndGetAeroplane('1', '2', '1')
       ).rejects.toThrowError(new HttpError('Airport not found', 404));
     });
 
     it('should throw an error if airline is not found', async () => {
       mockGetAirportById
-        .mockResolvedValueOnce({ id: 1 })
-        .mockResolvedValueOnce({ id: 2 });
+        .mockResolvedValueOnce({ id: '1' })
+        .mockResolvedValueOnce({ id: '2' });
       mockGetAirlineById.mockResolvedValueOnce(null);
       await expect(
-        flightService.validateCreateFlightIdAndGetAeroplane(1, 2, 1)
+        flightService.validateCreateFlightIdAndGetAeroplane('1', '2', '1')
       ).rejects.toThrowError(new HttpError('Airline not found', 404));
     });
 
     it('should pass validation if all data is valid', async () => {
       mockGetAirportById
-        .mockResolvedValueOnce({ id: 1 })
-        .mockResolvedValueOnce({ id: 2 });
-      mockGetAirlineById.mockResolvedValueOnce({ id: 1 });
+        .mockResolvedValueOnce({ id: '1' })
+        .mockResolvedValueOnce({ id: '2' });
+      mockGetAirlineById.mockResolvedValueOnce({ id: '1' });
       await expect(
-        flightService.validateCreateFlightIdAndGetAeroplane(1, 2, 1)
+        flightService.validateCreateFlightIdAndGetAeroplane('1', '2', '1')
       ).resolves.not.toThrow();
     });
   });
@@ -84,16 +84,16 @@ describe('Flight Service', () => {
   describe('createFlightAndSeat', () => {
     it('should create flight and seats', async () => {
       const payload = { flightNumber: '123' };
-      const aeroplane = { maxRow: 2, maxColumn: 2, id: 1 };
+      const aeroplane = { maxRow: 2, maxColumn: 2, id: '1' };
 
       mockCreateFlightAndSeat.mockResolvedValueOnce({
-        id: 1,
+        id: '1',
         ...payload,
         seats: [
-          { aeroplaneId: 1, column: 1, row: 1, status: 'AVAILABLE' },
-          { aeroplaneId: 1, column: 2, row: 1, status: 'AVAILABLE' },
-          { aeroplaneId: 1, column: 1, row: 2, status: 'AVAILABLE' },
-          { aeroplaneId: 1, column: 2, row: 2, status: 'AVAILABLE' }
+          { aeroplaneId: '1', column: 1, row: 1, status: 'AVAILABLE' },
+          { aeroplaneId: '1', column: 2, row: 1, status: 'AVAILABLE' },
+          { aeroplaneId: '1', column: 1, row: 2, status: 'AVAILABLE' },
+          { aeroplaneId: '1', column: 2, row: 2, status: 'AVAILABLE' }
         ]
       });
 
@@ -103,22 +103,22 @@ describe('Flight Service', () => {
       );
 
       expect(result).toEqual({
-        id: 1,
+        id: '1',
         ...payload,
         seats: [
-          { aeroplaneId: 1, column: 1, row: 1, status: 'AVAILABLE' },
-          { aeroplaneId: 1, column: 2, row: 1, status: 'AVAILABLE' },
-          { aeroplaneId: 1, column: 1, row: 2, status: 'AVAILABLE' },
-          { aeroplaneId: 1, column: 2, row: 2, status: 'AVAILABLE' }
+          { aeroplaneId: '1', column: 1, row: 1, status: 'AVAILABLE' },
+          { aeroplaneId: '1', column: 2, row: 1, status: 'AVAILABLE' },
+          { aeroplaneId: '1', column: 1, row: 2, status: 'AVAILABLE' },
+          { aeroplaneId: '1', column: 2, row: 2, status: 'AVAILABLE' }
         ]
       });
       expect(mockCreateFlightAndSeat).toHaveBeenCalledWith({
         ...payload,
         seats: [
-          { aeroplaneId: 1, column: 1, row: 1, status: 'AVAILABLE' },
-          { aeroplaneId: 1, column: 2, row: 1, status: 'AVAILABLE' },
-          { aeroplaneId: 1, column: 1, row: 2, status: 'AVAILABLE' },
-          { aeroplaneId: 1, column: 2, row: 2, status: 'AVAILABLE' }
+          { aeroplaneId: '1', column: 1, row: 1, status: 'AVAILABLE' },
+          { aeroplaneId: '1', column: 2, row: 1, status: 'AVAILABLE' },
+          { aeroplaneId: '1', column: 1, row: 2, status: 'AVAILABLE' },
+          { aeroplaneId: '1', column: 2, row: 2, status: 'AVAILABLE' }
         ]
       });
     });
@@ -126,10 +126,10 @@ describe('Flight Service', () => {
 
   describe('getAllFlight', () => {
     it('should get all flights with filters, sorting, and skip', async () => {
-      const filter = { airlineId: 1 };
+      const filter = { airlineId: '1' };
       const sort = { departureDate: 'asc' };
       const meta = { limit: 10, skip: 10 };
-      const flights = [{ id: 1, flightNumber: '123' }];
+      const flights = [{ id: '1', flightNumber: '123' }];
       mockGetAllFlights.mockResolvedValueOnce(flights);
 
       const result = await flightService.getAllFlight(filter, sort, meta);
@@ -162,7 +162,7 @@ describe('Flight Service', () => {
     });
     it('should get all flights without filters and sorting', async () => {
       const meta = { limit: 10, skip: 0 };
-      const flights = [{ id: 1, flightNumber: '123' }];
+      const flights = [{ id: '1', flightNumber: '123' }];
       mockGetAllFlights.mockResolvedValueOnce(flights);
 
       const result = await flightService.getAllFlight({}, {}, meta);
@@ -197,7 +197,7 @@ describe('Flight Service', () => {
       const sort = {};
       const meta = { limit: 10, skip: 0 };
       const favourite = true;
-      const flights = [{ id: 1, flightNumber: '123' }];
+      const flights = [{ id: '1', flightNumber: '123' }];
 
       mockGetAllFlights.mockResolvedValueOnce(flights);
 
@@ -243,37 +243,37 @@ describe('Flight Service', () => {
 
   describe('getDetailFlightById', () => {
     it('should return flight details by id', async () => {
-      const flightDetails = { id: 1, flightNumber: '123' };
+      const flightDetails = { id: '1', flightNumber: '123' };
       mockGetDetailFlightById.mockResolvedValueOnce(flightDetails);
 
-      const result = await flightService.getDetailFlightById(1);
+      const result = await flightService.getDetailFlightById('1');
 
       expect(result).toEqual(flightDetails);
-      expect(mockGetDetailFlightById).toHaveBeenCalledWith(1);
+      expect(mockGetDetailFlightById).toHaveBeenCalledWith('1');
     });
   });
 
   describe('getFlightWithSeatsById', () => {
     it('should return flight with seats by id', async () => {
-      const flightWithSeats = { id: 1, flightNumber: '123', seats: [] };
+      const flightWithSeats = { id: '1', flightNumber: '123', seats: [] };
       mockGetFlightWithSeatsById.mockResolvedValueOnce(flightWithSeats);
 
-      const result = await flightService.getFlightWithSeatsById(1);
+      const result = await flightService.getFlightWithSeatsById('1');
 
       expect(result).toEqual(flightWithSeats);
-      expect(mockGetFlightWithSeatsById).toHaveBeenCalledWith(1);
+      expect(mockGetFlightWithSeatsById).toHaveBeenCalledWith('1');
     });
   });
 
   describe('getFlightById', () => {
     it('should get flight by id', async () => {
-      const flight = { id: 1, flightNumber: '123' };
+      const flight = { id: '1', flightNumber: '123' };
       mockGetFlightById.mockResolvedValueOnce(flight);
 
-      const result = await flightService.getFlightById(1);
+      const result = await flightService.getFlightById('1');
 
       expect(result).toEqual(flight);
-      expect(mockGetFlightById).toHaveBeenCalledWith(1);
+      expect(mockGetFlightById).toHaveBeenCalledWith('1');
     });
   });
 
@@ -358,7 +358,7 @@ describe('Flight Service', () => {
     });
 
     it('should include filter in the query if filter is provided', async () => {
-      const filter = { airlineId: 1 };
+      const filter = { airlineId: '1' };
       mockCountFlightDataWithFilter.mockResolvedValueOnce(10);
 
       const result = await flightService.countFlightDataWithFilterAndCreateMeta(
@@ -389,7 +389,7 @@ describe('Flight Service', () => {
     it('should generate seats correctly', () => {
       const maxRow = 2;
       const maxColumn = 2;
-      const aeroplaneId = 1;
+      const aeroplaneId = '1';
       const expectedSeats = [
         { row: 1, column: 1, status: 'AVAILABLE', aeroplaneId },
         { row: 1, column: 2, status: 'AVAILABLE', aeroplaneId },
@@ -405,8 +405,8 @@ describe('Flight Service', () => {
     it('should include flightId if provided', () => {
       const maxRow = 1;
       const maxColumn = 1;
-      const aeroplaneId = 1;
-      const flightId = 1;
+      const aeroplaneId = '1';
+      const flightId = '1';
       const expectedSeats = [
         { row: 1, column: 1, status: 'AVAILABLE', aeroplaneId, flightId }
       ];

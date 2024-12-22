@@ -58,7 +58,7 @@ describe('OTP Services', () => {
     });
 
     it('should throw an error if an active OTP already exists', async () => {
-      mockGetUserByEmail.mockResolvedValue({ id: 1, verified: false });
+      mockGetUserByEmail.mockResolvedValue({ id: '1', verified: false });
       mockFindActiveOtp.mockResolvedValue(true);
 
       await expect(
@@ -70,25 +70,29 @@ describe('OTP Services', () => {
 
     it('should create a new OTP and send an email', async () => {
       mockGetUserByEmail.mockResolvedValue({
-        id: 1,
+        id: '1',
         email: 'test@example.com',
         verified: false
       });
       mockFindActiveOtp.mockResolvedValue(null);
       mockGenerateOtp.mockReturnValue('123456');
-      mockCreateOtp.mockResolvedValue({ id: 1, otp: '123456' });
+      mockCreateOtp.mockResolvedValue({ id: '1', otp: '123456' });
 
       const result = await otpServices.sendOtp('test@example.com');
 
       expect(mockGenerateOtp).toHaveBeenCalled();
-      expect(mockCreateOtp).toHaveBeenCalledWith(1, '123456', expect.any(Date));
+      expect(mockCreateOtp).toHaveBeenCalledWith(
+        '1',
+        '123456',
+        expect.any(Date)
+      );
       expect(mockSendEmail).toHaveBeenCalledWith(
         'test@example.com',
         'Your OTP Code',
         'otp',
         { otp: '123456' }
       );
-      expect(result).toEqual({ id: 1, otp: '123456' });
+      expect(result).toEqual({ id: '1', otp: '123456' });
     });
   });
 
@@ -102,7 +106,7 @@ describe('OTP Services', () => {
     });
 
     it('should throw an error if OTP is invalid or expired', async () => {
-      mockGetUserByEmail.mockResolvedValue({ id: 1 });
+      mockGetUserByEmail.mockResolvedValue({ id: '1' });
       mockFindValidOtp.mockResolvedValue(null);
 
       await expect(
@@ -111,18 +115,18 @@ describe('OTP Services', () => {
     });
 
     it('should verify the OTP and update user verification', async () => {
-      mockGetUserByEmail.mockResolvedValue({ id: 1 });
-      mockFindValidOtp.mockResolvedValue({ id: 1 });
+      mockGetUserByEmail.mockResolvedValue({ id: '1' });
+      mockFindValidOtp.mockResolvedValue({ id: '1' });
       mockUpdateUserVerificationMarkOtpUsedAndCreateNotification.mockResolvedValue(
         { success: true }
       );
 
       const result = await otpServices.verifyOtp('test@example.com', '123456');
 
-      expect(mockFindValidOtp).toHaveBeenCalledWith(1, '123456');
+      expect(mockFindValidOtp).toHaveBeenCalledWith('1', '123456');
       expect(
         mockUpdateUserVerificationMarkOtpUsedAndCreateNotification
-      ).toHaveBeenCalledWith(1, 1);
+      ).toHaveBeenCalledWith('1', '1');
       expect(result).toEqual({ success: true });
     });
   });

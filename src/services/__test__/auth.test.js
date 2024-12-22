@@ -27,7 +27,7 @@ describe('Auth Services', () => {
       const email = 'test@example.com';
       const password = 'password';
       const mockUser = {
-        id: 1,
+        id: '1',
         name: 'John Doe',
         email,
         password: await bcrypt.hash(password, 10),
@@ -67,7 +67,7 @@ describe('Auth Services', () => {
       const email = 'test@example.com';
       const password = 'password';
       const mockUser = {
-        id: 1,
+        id: '1',
         name: 'John Doe',
         email,
         password: await bcrypt.hash(password, 10),
@@ -86,7 +86,7 @@ describe('Auth Services', () => {
       const email = 'test@example.com';
       const password = 'password';
       const mockUser = {
-        id: 1,
+        id: '1',
         name: 'John Doe',
         email,
         password: await bcrypt.hash('wrongPassword', 10),
@@ -106,7 +106,7 @@ describe('Auth Services', () => {
     it('should return user data for valid token', async () => {
       const token = 'validToken';
       const mockUser = {
-        id: 1,
+        id: '1',
         name: 'John Doe',
         email: 'test@example.com',
         role: 'USER',
@@ -126,7 +126,7 @@ describe('Auth Services', () => {
     it('should throw an error if user not found', async () => {
       const token = 'validToken';
 
-      mockVerifyToken.mockReturnValue({ id: 1 });
+      mockVerifyToken.mockReturnValue({ id: '1' });
       mockGetUserById.mockResolvedValue(null);
 
       await expect(authServices.verifyTokenAndUser(token)).rejects.toThrowError(
