@@ -9,6 +9,7 @@ const mockUpdateAllNotification = jest.fn();
 const mockDeleteNotification = jest.fn();
 const mockCheckUserId = jest.fn();
 const mockGetUserById = jest.fn();
+const mockCreateUserNotification = jest.fn();
 
 import { HttpError } from '../../utils/error.js';
 
@@ -20,12 +21,18 @@ jest.unstable_mockModule('../../repositories/notification.js', () => ({
   updateNotification: mockUpdateNotificcation,
   updateAllNotification: mockUpdateAllNotification,
   deleteNotification: mockDeleteNotification,
-  checkUserId: mockCheckUserId
+  checkUserId: mockCheckUserId,
+  createUserNotification: mockCreateUserNotification
 }));
 
 jest.unstable_mockModule('../../repositories/user.js', () => ({
   getUserById: mockGetUserById
 }));
+
+const mockTx = {
+  commit: jest.fn(),
+  rollback: jest.fn()
+};
 
 const notificationServices = await import('../notification.js');
 
@@ -180,6 +187,47 @@ describe('Notification Services', () => {
 
       expect(mockDeleteNotification).toHaveBeenCalledWith(id, userId);
       expect(result).toEqual({ success: true });
+    });
+  });
+
+  describe('createUserNotification', () => {
+    it('should create a notification for a user', async () => {
+      const userId = '1';
+      const payload = {
+        title: 'Test Notification',
+        message: 'This is a test notification'
+      };
+      mockCreateUserNotification.mockResolvedValue({
+        id: '123',
+        title: 'Test Notification'
+      });
+
+      const result = await notificationServices.createUserNotification(
+        userId,
+        payload,
+        mockTx
+      );
+
+      expect(mockCreateUserNotification).toHaveBeenCalledWith(
+        userId,
+        payload,
+        mockTx
+      );
+      expect(result).toEqual({ id: '123', title: 'Test Notification' });
+    });
+
+    it('should throw error if title or message is missing', async () => {
+      const userId = '1';
+      const payload = {
+        title: '',
+        message: 'This is a test notification'
+      };
+
+      await expect(
+        notificationServices.createUserNotification(userId, payload)
+      ).rejects.toThrowError(
+        new HttpError('Payload must include both title and message', 400)
+      );
     });
   });
 });

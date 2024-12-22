@@ -35,6 +35,16 @@ jest.unstable_mockModule('../../utils/db.js', () => ({
   }
 }));
 
+const mockCreateUserNotification = jest.fn();
+jest.unstable_mockModule('../notification.js', () => ({
+  createUserNotification: mockCreateUserNotification
+}));
+
+const mockTx = {
+  commit: jest.fn(),
+  rollback: jest.fn()
+};
+
 const paymentServices = await import('../payment.js');
 
 describe('createMidtransToken', () => {
@@ -99,7 +109,7 @@ describe('updateTransactionStatus', () => {
 
     mockGetTransactionWithPassengerById.mockResolvedValue(mockTransaction);
     mockPrismaTransaction.mockImplementation(async (callback) => {
-      await callback();
+      await callback(mockTx);
     });
 
     await paymentServices.updateTransactionStatus(
@@ -111,12 +121,12 @@ describe('updateTransactionStatus', () => {
     expect(mockUpdateSeatStatusBySeats).toHaveBeenCalledWith(
       ['seat1', 'seat2', 'seat3'],
       'BOOKED',
-      undefined
+      mockTx
     );
     expect(updatePaymentStatusAndMethod).toHaveBeenCalledWith(
       '123',
       { status: 'SUCCESS', method: 'credit_card' },
-      undefined
+      mockTx
     );
   });
 
@@ -131,7 +141,7 @@ describe('updateTransactionStatus', () => {
 
     mockGetTransactionWithPassengerById.mockResolvedValue(mockTransaction);
     mockPrismaTransaction.mockImplementation(async (callback) => {
-      await callback();
+      await callback(mockTx);
     });
 
     await paymentServices.updateTransactionStatus(
@@ -143,12 +153,12 @@ describe('updateTransactionStatus', () => {
     expect(mockUpdateSeatStatusBySeats).toHaveBeenCalledWith(
       ['seat1', 'seat2', 'seat3'],
       'AVAILABLE',
-      undefined
+      mockTx
     );
     expect(updatePaymentStatusAndMethod).toHaveBeenCalledWith(
       '123',
       { status: 'CANCELLED', method: 'credit_card' },
-      undefined
+      mockTx
     );
   });
 
@@ -163,7 +173,7 @@ describe('updateTransactionStatus', () => {
 
     mockGetTransactionWithPassengerById.mockResolvedValue(mockTransaction);
     mockPrismaTransaction.mockImplementation(async (callback) => {
-      await callback();
+      await callback(mockTx);
     });
 
     await paymentServices.updateTransactionStatus(
@@ -176,7 +186,7 @@ describe('updateTransactionStatus', () => {
     expect(updatePaymentStatusAndMethod).toHaveBeenCalledWith(
       '123',
       { status: 'PENDING', method: 'credit_card' },
-      undefined
+      mockTx
     );
   });
 
@@ -191,7 +201,7 @@ describe('updateTransactionStatus', () => {
 
     mockGetTransactionWithPassengerById.mockResolvedValue(mockTransaction);
     mockPrismaTransaction.mockImplementation(async (callback) => {
-      await callback();
+      await callback(mockTx);
     });
 
     await paymentServices.updateTransactionStatus(
@@ -204,7 +214,69 @@ describe('updateTransactionStatus', () => {
     expect(updatePaymentStatusAndMethod).toHaveBeenCalledWith(
       '123',
       { status: undefined, method: 'credit_card' },
-      undefined
+      mockTx
+    );
+  });
+
+  it('should create a user notification on successful booking', async () => {
+    const mockTransaction = {
+      id: '123',
+      userId: 'user1',
+      passenger: [
+        { departureSeatId: 'seat1', returnSeatId: 'seat2' },
+        { departureSeatId: 'seat3', returnSeatId: null }
+      ]
+    };
+
+    mockGetTransactionWithPassengerById.mockResolvedValue(mockTransaction);
+    mockPrismaTransaction.mockImplementation(async (callback) => {
+      await callback(mockTx);
+    });
+
+    await paymentServices.updateTransactionStatus(
+      '123',
+      'settlement',
+      'credit_card'
+    );
+
+    expect(mockCreateUserNotification).toHaveBeenCalledWith(
+      'user1',
+      {
+        title: 'Ticket Booking Success',
+        message: 'Your ticket has been successfully booked'
+      },
+      mockTx
+    );
+  });
+
+  it('should create a user notification on booking cancellation', async () => {
+    const mockTransaction = {
+      id: '123',
+      userId: 'user1',
+      passenger: [
+        { departureSeatId: 'seat1', returnSeatId: 'seat2' },
+        { departureSeatId: 'seat3', returnSeatId: null }
+      ]
+    };
+
+    mockGetTransactionWithPassengerById.mockResolvedValue(mockTransaction);
+    mockPrismaTransaction.mockImplementation(async (callback) => {
+      await callback(mockTx);
+    });
+
+    await paymentServices.updateTransactionStatus(
+      '123',
+      'cancel',
+      'credit_card'
+    );
+
+    expect(mockCreateUserNotification).toHaveBeenCalledWith(
+      'user1',
+      {
+        title: 'Ticket Booking Canceled',
+        message: 'Your ticket has been canceled'
+      },
+      mockTx
     );
   });
 });
