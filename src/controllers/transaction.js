@@ -72,3 +72,11 @@ export async function getTransactionWithFlightAndPassenger(req, res) {
     message: 'Ticket send successfully'
   });
 }
+
+export async function invalidateExpiredTransactions(_req, res) {
+  await transactionService.invalidateExpiredTransactions();
+
+  res.status(200).json({
+    message: 'Expired transactions invalidated successfully'
+  });
+}

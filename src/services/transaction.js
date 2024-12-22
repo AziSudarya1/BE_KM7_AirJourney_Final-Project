@@ -432,3 +432,39 @@ export async function validatePassengers(
 
   return { seatIds, proccessedPassengers };
 }
+
+export async function invalidateExpiredTransactions() {
+  const payments =
+    await paymentRepository.getExpiredPaymentWithFlightAndPassenger();
+
+  if (payments.length) {
+    const seatIds = [];
+    const paymentIds = [];
+
+    payments.forEach((payment) => {
+      paymentIds.push(payment.id);
+
+      const { transaction } = payment;
+
+      transaction.passenger.forEach((passenger) => {
+        if (passenger.departureSeatId) {
+          seatIds.push(passenger.departureSeatId);
+        }
+
+        if (passenger.returnSeatId) {
+          seatIds.push(passenger.returnSeatId);
+        }
+      });
+    });
+
+    await prisma.$transaction(async (transaction) => {
+      await seatRepository.updateSeatStatusBySeats(
+        seatIds,
+        'AVAILABLE',
+        transaction
+      );
+
+      await paymentRepository.cancelAllPaymentByIds(paymentIds, transaction);
+    });
+  }
+}
