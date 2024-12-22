@@ -26,12 +26,22 @@ export async function createMidtransToken(transaction) {
   return paymentResponse;
 }
 
-export async function updateTransactionStatus(orderId, status, method) {
+export async function updateTransactionStatus(transactionId, status, method) {
   const transaction =
-    await transactionRepository.getTransactionWithPassengerById(orderId);
+    await transactionRepository.getTransactionWithPassengerAndPaymentById(
+      transactionId
+    );
 
   if (!transaction) {
     throw new HttpError('Transaction not found', 404);
+  }
+
+  if (transaction.payment.expiredAt < new Date()) {
+    throw new HttpError('Transaction has expired', 400);
+  }
+
+  if (transaction.payment.status !== 'PENDING') {
+    throw new HttpError('Transaction already processed', 400);
   }
 
   const seatIds = transaction.passenger.flatMap((p) => [
