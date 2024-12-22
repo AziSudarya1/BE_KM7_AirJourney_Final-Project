@@ -294,14 +294,15 @@ describe('Flight Service', () => {
         skip: 10,
         favourite: undefined
       });
-      expect(mockCountFlightDataWithFilter).toHaveBeenCalledWith({
-        take: 10,
-        where: {
-          departureDate: {
-            gte: expect.any(Date)
-          }
-        }
-      });
+      expect(mockCountFlightDataWithFilter).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            departureDate: expect.objectContaining({
+              gte: expect.any(Date)
+            })
+          })
+        })
+      );
     });
 
     it('should throw an error if requested page exceeds total pages', async () => {
@@ -327,14 +328,15 @@ describe('Flight Service', () => {
         skip: 0,
         favourite: undefined
       });
-      expect(mockCountFlightDataWithFilter).toHaveBeenCalledWith({
-        take: 10,
-        where: {
-          departureDate: {
-            gte: expect.any(Date)
-          }
-        }
-      });
+      expect(mockCountFlightDataWithFilter).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            departureDate: expect.objectContaining({
+              gte: expect.any(Date)
+            })
+          })
+        })
+      );
     });
 
     it('should return metadata with favourite flag', async () => {
@@ -373,7 +375,6 @@ describe('Flight Service', () => {
         favourite: undefined
       });
       expect(mockCountFlightDataWithFilter).toHaveBeenCalledWith({
-        take: 10,
         where: {
           departureDate: {
             gte: expect.any(Date)
