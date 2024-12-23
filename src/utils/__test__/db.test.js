@@ -12,14 +12,14 @@ jest.unstable_mockModule('@prisma/client', () => {
 jest.unstable_mockModule('../env.js', () => {
   return {
     appEnv: {
-      DATABASE_URL:
-        'postgresql://admin:admin@localhost:5432/binar_final_batch7?schema=public'
+      DATABASE_URL: 'postgresql://user:password@localhost:5432/testdb'
     }
   };
 });
 
 const { PrismaClient } = await import('@prisma/client');
 const { appEnv } = await import('../env.js');
+const { prisma } = await import('../db.js');
 
 describe('Database Utility', () => {
   it('should initialize PrismaClient with the correct datasource URL', () => {
@@ -29,19 +29,10 @@ describe('Database Utility', () => {
   });
 
   it('should connect and disconnect properly', async () => {
-    const mockConnect = jest.fn();
-    const mockDisconnect = jest.fn();
-    PrismaClient.mockImplementation(() => ({
-      $connect: mockConnect,
-      $disconnect: mockDisconnect
-    }));
+    await prisma.$connect();
+    expect(prisma.$connect).toHaveBeenCalled();
 
-    const mockPrisma = new PrismaClient();
-
-    await mockPrisma.$connect();
-    expect(mockConnect).toHaveBeenCalled();
-
-    await mockPrisma.$disconnect();
-    expect(mockDisconnect).toHaveBeenCalled();
+    await prisma.$disconnect();
+    expect(prisma.$disconnect).toHaveBeenCalled();
   });
 });
