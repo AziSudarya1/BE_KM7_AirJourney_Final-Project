@@ -90,7 +90,7 @@ export async function updateTransactionStatus(transactionId, status, method) {
     }
 
     await paymentRepository.updatePaymentStatusAndMethod(
-      orderId,
+      transactionId,
       {
         status: newStatus,
         method
