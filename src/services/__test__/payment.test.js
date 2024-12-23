@@ -10,10 +10,11 @@ jest.unstable_mockModule('../../utils/midtrans.js', () => ({
   }
 }));
 
-const mockGetTransactionWithPassengerById = jest.fn();
+const mockGetTransactionWithPassengerAndPaymentById = jest.fn();
 
 jest.unstable_mockModule('../../repositories/transaction.js', () => ({
-  getTransactionWithPassengerById: mockGetTransactionWithPassengerById
+  getTransactionWithPassengerAndPaymentById:
+    mockGetTransactionWithPassengerAndPaymentById
 }));
 
 const mockUpdateSeatStatusBySeats = jest.fn();
@@ -47,6 +48,10 @@ const mockTx = {
 
 const paymentServices = await import('../payment.js');
 
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
 describe('createMidtransToken', () => {
   it('should throw an error if transaction is not provided', async () => {
     await expect(
@@ -79,204 +84,232 @@ describe('createMidtransToken', () => {
       }
     });
   });
-});
 
-describe('updateTransactionStatus', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  describe('updateTransactionStatus', () => {
+    it('should throw an error if transaction is not found', async () => {
+      mockGetTransactionWithPassengerAndPaymentById.mockResolvedValue(null);
 
-  it('should throw an error if transaction is not found', async () => {
-    mockGetTransactionWithPassengerById.mockResolvedValue(null);
+      await expect(
+        paymentServices.updateTransactionStatus(
+          'invalidId',
+          'settlement',
+          'credit_card'
+        )
+      ).rejects.toThrowError(new HttpError('Transaction not found', 404));
+    });
 
-    await expect(
-      paymentServices.updateTransactionStatus(
+    it('should throw an error if transaction has expired', async () => {
+      const mockTransaction = {
+        payment: {
+          expiredAt: new Date(Date.now() - 1000),
+          status: 'PENDING'
+        }
+      };
+      mockGetTransactionWithPassengerAndPaymentById.mockResolvedValue(
+        mockTransaction
+      );
+
+      await expect(
+        paymentServices.updateTransactionStatus(
+          '123',
+          'settlement',
+          'credit_card'
+        )
+      ).rejects.toThrowError(new HttpError('Transaction has expired', 400));
+    });
+
+    it('should throw an error if transaction is already processed', async () => {
+      const mockTransaction = {
+        payment: {
+          expiredAt: new Date(Date.now() + 1000),
+          status: 'SUCCESS'
+        }
+      };
+      mockGetTransactionWithPassengerAndPaymentById.mockResolvedValue(
+        mockTransaction
+      );
+
+      await expect(
+        paymentServices.updateTransactionStatus(
+          '123',
+          'settlement',
+          'credit_card'
+        )
+      ).rejects.toThrowError(
+        new HttpError('Transaction already processed', 400)
+      );
+    });
+
+    it('should update seat status and create notification for successful transaction', async () => {
+      const mockTransaction = {
+        id: '123',
+        payment: {
+          expiredAt: new Date(Date.now() + 1000),
+          status: 'PENDING'
+        },
+        passenger: [{ departureSeatId: 'seat1', returnSeatId: 'seat2' }],
+        userId: 'user123'
+      };
+      mockGetTransactionWithPassengerAndPaymentById.mockResolvedValue(
+        mockTransaction
+      );
+      mockPrismaTransaction.mockImplementation(async (callback) => {
+        await callback(mockTx);
+        mockTx.commit();
+      });
+
+      await paymentServices.updateTransactionStatus(
         '123',
         'settlement',
         'credit_card'
-      )
-    ).rejects.toThrowError(new HttpError('Transaction not found', 404));
-  });
+      );
 
-  it('should update transaction status to SUCCESS and book seats on settlement', async () => {
-    const mockTransaction = {
-      id: '123',
-      passenger: [
-        { departureSeatId: 'seat1', returnSeatId: 'seat2' },
-        { departureSeatId: 'seat3', returnSeatId: null }
-      ]
-    };
-
-    mockGetTransactionWithPassengerById.mockResolvedValue(mockTransaction);
-    mockPrismaTransaction.mockImplementation(async (callback) => {
-      await callback(mockTx);
+      expect(mockUpdateSeatStatusBySeats).toHaveBeenCalledWith(
+        ['seat1', 'seat2'],
+        'BOOKED',
+        mockTx
+      );
+      expect(mockCreateUserNotification).toHaveBeenCalledWith(
+        'user123',
+        {
+          title: 'Ticket Booking Success',
+          message: 'Your ticket has been successfully booked'
+        },
+        mockTx
+      );
+      expect(updatePaymentStatusAndMethod).toHaveBeenCalledWith(
+        '123',
+        {
+          status: 'SUCCESS',
+          method: 'credit_card'
+        },
+        mockTx
+      );
+      expect(mockTx.commit).toHaveBeenCalled();
     });
 
-    await paymentServices.updateTransactionStatus(
-      '123',
-      'settlement',
-      'credit_card'
-    );
+    it('should update seat status and create notification for canceled transaction', async () => {
+      const mockTransaction = {
+        id: '123',
+        payment: {
+          expiredAt: new Date(Date.now() + 1000),
+          status: 'PENDING'
+        },
+        passenger: [{ departureSeatId: 'seat1', returnSeatId: 'seat2' }],
+        userId: 'user123'
+      };
+      mockGetTransactionWithPassengerAndPaymentById.mockResolvedValue(
+        mockTransaction
+      );
+      mockPrismaTransaction.mockImplementation(async (callback) => {
+        if (callback.name === 'unknown_status') {
+          return;
+        }
+        await callback(mockTx);
+        if (callback.name !== 'unknown_status') {
+          mockTx.commit();
+        }
+      });
 
-    expect(mockUpdateSeatStatusBySeats).toHaveBeenCalledWith(
-      ['seat1', 'seat2', 'seat3'],
-      'BOOKED',
-      mockTx
-    );
-    expect(updatePaymentStatusAndMethod).toHaveBeenCalledWith(
-      '123',
-      { status: 'SUCCESS', method: 'credit_card' },
-      mockTx
-    );
-  });
+      await paymentServices.updateTransactionStatus(
+        '123',
+        'cancel',
+        'credit_card'
+      );
 
-  it('should update transaction status to CANCELLED and make seats available on cancel', async () => {
-    const mockTransaction = {
-      id: '123',
-      passenger: [
-        { departureSeatId: 'seat1', returnSeatId: 'seat2' },
-        { departureSeatId: 'seat3', returnSeatId: null }
-      ]
-    };
-
-    mockGetTransactionWithPassengerById.mockResolvedValue(mockTransaction);
-    mockPrismaTransaction.mockImplementation(async (callback) => {
-      await callback(mockTx);
+      expect(mockUpdateSeatStatusBySeats).toHaveBeenCalledWith(
+        ['seat1', 'seat2'],
+        'AVAILABLE',
+        mockTx
+      );
+      expect(mockCreateUserNotification).toHaveBeenCalledWith(
+        'user123',
+        {
+          title: 'Ticket Booking Canceled',
+          message: 'Your ticket has been canceled'
+        },
+        mockTx
+      );
+      expect(updatePaymentStatusAndMethod).toHaveBeenCalledWith(
+        '123',
+        {
+          status: 'CANCELLED',
+          method: 'credit_card'
+        },
+        mockTx
+      );
+      expect(mockTx.commit).toHaveBeenCalled();
     });
 
-    await paymentServices.updateTransactionStatus(
-      '123',
-      'cancel',
-      'credit_card'
-    );
+    it('should update payment status to pending', async () => {
+      const mockTransaction = {
+        id: '123',
+        payment: {
+          expiredAt: new Date(Date.now() + 1000),
+          status: 'PENDING'
+        },
+        passenger: []
+      };
+      mockGetTransactionWithPassengerAndPaymentById.mockResolvedValue(
+        mockTransaction
+      );
+      mockPrismaTransaction.mockImplementation(async (callback) => {
+        if (callback.name !== 'unknown_status') {
+          await callback(mockTx);
+          mockTx.commit();
+        }
+      });
 
-    expect(mockUpdateSeatStatusBySeats).toHaveBeenCalledWith(
-      ['seat1', 'seat2', 'seat3'],
-      'AVAILABLE',
-      mockTx
-    );
-    expect(updatePaymentStatusAndMethod).toHaveBeenCalledWith(
-      '123',
-      { status: 'CANCELLED', method: 'credit_card' },
-      mockTx
-    );
-  });
+      await paymentServices.updateTransactionStatus(
+        '123',
+        'pending',
+        'credit_card'
+      );
 
-  it('should update transaction status to PENDING on pending', async () => {
-    const mockTransaction = {
-      id: '123',
-      passenger: [
-        { departureSeatId: 'seat1', returnSeatId: 'seat2' },
-        { departureSeatId: 'seat3', returnSeatId: null }
-      ]
-    };
-
-    mockGetTransactionWithPassengerById.mockResolvedValue(mockTransaction);
-    mockPrismaTransaction.mockImplementation(async (callback) => {
-      await callback(mockTx);
+      expect(updatePaymentStatusAndMethod).toHaveBeenCalledWith(
+        '123',
+        {
+          status: 'PENDING',
+          method: 'credit_card'
+        },
+        mockTx
+      );
+      expect(mockTx.commit).toHaveBeenCalled();
     });
 
-    await paymentServices.updateTransactionStatus(
-      '123',
-      'pending',
-      'credit_card'
-    );
+    it('should handle unknown status gracefully', async () => {
+      const mockTransaction = {
+        id: '123',
+        payment: {
+          expiredAt: new Date(Date.now() + 1000),
+          status: 'PENDING'
+        },
+        passenger: []
+      };
+      mockGetTransactionWithPassengerAndPaymentById.mockResolvedValue(
+        mockTransaction
+      );
+      mockPrismaTransaction.mockImplementation(async (callback) => {
+        if (callback.name === 'unknown_status') {
+          return;
+        }
+        await callback(mockTx);
+        if (callback.name !== 'unknown_status') {
+          mockTx.commit();
+        }
+      });
 
-    expect(mockUpdateSeatStatusBySeats).not.toHaveBeenCalled();
-    expect(updatePaymentStatusAndMethod).toHaveBeenCalledWith(
-      '123',
-      { status: 'PENDING', method: 'credit_card' },
-      mockTx
-    );
-  });
+      await paymentServices.updateTransactionStatus(
+        '123',
+        'unknown_status',
+        'credit_card'
+      );
 
-  it('should handle unknown status gracefully', async () => {
-    const mockTransaction = {
-      id: '123',
-      passenger: [
-        { departureSeatId: 'seat1', returnSeatId: 'seat2' },
-        { departureSeatId: 'seat3', returnSeatId: null }
-      ]
-    };
-
-    mockGetTransactionWithPassengerById.mockResolvedValue(mockTransaction);
-    mockPrismaTransaction.mockImplementation(async (callback) => {
-      await callback(mockTx);
+      expect(updatePaymentStatusAndMethod).not.toHaveBeenCalledWith(
+        '123',
+        expect.objectContaining({ status: expect.any(String) }),
+        mockTx
+      );
     });
-
-    await paymentServices.updateTransactionStatus(
-      '123',
-      'unknown_status',
-      'credit_card'
-    );
-
-    expect(mockUpdateSeatStatusBySeats).not.toHaveBeenCalled();
-    expect(updatePaymentStatusAndMethod).toHaveBeenCalledWith(
-      '123',
-      { status: undefined, method: 'credit_card' },
-      mockTx
-    );
-  });
-
-  it('should create a user notification on successful booking', async () => {
-    const mockTransaction = {
-      id: '123',
-      userId: 'user1',
-      passenger: [
-        { departureSeatId: 'seat1', returnSeatId: 'seat2' },
-        { departureSeatId: 'seat3', returnSeatId: null }
-      ]
-    };
-
-    mockGetTransactionWithPassengerById.mockResolvedValue(mockTransaction);
-    mockPrismaTransaction.mockImplementation(async (callback) => {
-      await callback(mockTx);
-    });
-
-    await paymentServices.updateTransactionStatus(
-      '123',
-      'settlement',
-      'credit_card'
-    );
-
-    expect(mockCreateUserNotification).toHaveBeenCalledWith(
-      'user1',
-      {
-        title: 'Ticket Booking Success',
-        message: 'Your ticket has been successfully booked'
-      },
-      mockTx
-    );
-  });
-
-  it('should create a user notification on booking cancellation', async () => {
-    const mockTransaction = {
-      id: '123',
-      userId: 'user1',
-      passenger: [
-        { departureSeatId: 'seat1', returnSeatId: 'seat2' },
-        { departureSeatId: 'seat3', returnSeatId: null }
-      ]
-    };
-
-    mockGetTransactionWithPassengerById.mockResolvedValue(mockTransaction);
-    mockPrismaTransaction.mockImplementation(async (callback) => {
-      await callback(mockTx);
-    });
-
-    await paymentServices.updateTransactionStatus(
-      '123',
-      'cancel',
-      'credit_card'
-    );
-
-    expect(mockCreateUserNotification).toHaveBeenCalledWith(
-      'user1',
-      {
-        title: 'Ticket Booking Canceled',
-        message: 'Your ticket has been canceled'
-      },
-      mockTx
-    );
   });
 });

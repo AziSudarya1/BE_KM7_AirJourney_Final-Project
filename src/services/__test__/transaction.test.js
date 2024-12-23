@@ -40,8 +40,13 @@ jest.unstable_mockModule('../../services/payment.js', () => ({
 }));
 
 const mockCreatePayment = jest.fn();
+const mockGetExpiredPaymentWithFlightAndPassenger = jest.fn();
+const mockCancelAllPaymentByIds = jest.fn();
 jest.unstable_mockModule('../../repositories/payment.js', () => ({
-  createPayment: mockCreatePayment
+  createPayment: mockCreatePayment,
+  getExpiredPaymentWithFlightAndPassenger:
+    mockGetExpiredPaymentWithFlightAndPassenger,
+  cancelAllPaymentByIds: mockCancelAllPaymentByIds
 }));
 
 const mockGetActiveTransaction = jest.fn();
@@ -67,6 +72,9 @@ jest.unstable_mockModule('../../repositories/transaction.js', () => ({
 const transactionServices = await import('../transaction.js');
 
 describe('Transaction Service', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   describe('createTransaction', () => {
     it('should throw an error if user has an active transaction', async () => {
       mockGetActiveTransaction.mockResolvedValueOnce({ id: '1' });
@@ -1064,6 +1072,132 @@ describe('Transaction Service', () => {
       ).rejects.toThrow(
         new HttpError('Return seat ID must be unique for all passengers', 400)
       );
+    });
+  });
+
+  describe('invalidateExpiredTransactions', () => {
+    it('should update seat status and cancel payments for expired transactions', async () => {
+      const payments = [
+        {
+          id: '1',
+          transaction: {
+            passenger: [
+              { departureSeatId: 'D1', returnSeatId: 'R1' },
+              { departureSeatId: 'D2', returnSeatId: 'R2' }
+            ]
+          }
+        },
+        {
+          id: '2',
+          transaction: {
+            passenger: [{ departureSeatId: 'D3', returnSeatId: null }]
+          }
+        }
+      ];
+
+      const mockTransaction = {};
+      mockGetExpiredPaymentWithFlightAndPassenger.mockResolvedValueOnce(
+        payments
+      );
+      mockPrismaTransaction.mockImplementationOnce(async (fn) =>
+        fn(mockTransaction)
+      );
+
+      await transactionServices.invalidateExpiredTransactions();
+
+      expect(mockGetExpiredPaymentWithFlightAndPassenger).toHaveBeenCalled();
+      expect(mockUpdateSeatStatusBySeats).toHaveBeenCalledWith(
+        ['D1', 'R1', 'D2', 'R2', 'D3'],
+        'AVAILABLE',
+        mockTransaction
+      );
+      expect(mockCancelAllPaymentByIds).toHaveBeenCalledWith(
+        ['1', '2'],
+        mockTransaction
+      );
+    });
+
+    it('should collect departureSeatId for each passenger', async () => {
+      const payments = [
+        {
+          id: '1',
+          transaction: {
+            passenger: [
+              { departureSeatId: 'D1', returnSeatId: 'R1' },
+              { departureSeatId: 'D2', returnSeatId: 'R2' }
+            ]
+          }
+        },
+        {
+          id: '2',
+          transaction: {
+            passenger: [{ departureSeatId: 'D3', returnSeatId: null }]
+          }
+        }
+      ];
+
+      const mockTransaction = {};
+      mockGetExpiredPaymentWithFlightAndPassenger.mockResolvedValueOnce(
+        payments
+      );
+      mockPrismaTransaction.mockImplementationOnce(async (fn) =>
+        fn(mockTransaction)
+      );
+
+      await transactionServices.invalidateExpiredTransactions();
+
+      expect(mockGetExpiredPaymentWithFlightAndPassenger).toHaveBeenCalled();
+      expect(mockUpdateSeatStatusBySeats).toHaveBeenCalledWith(
+        ['D1', 'R1', 'D2', 'R2', 'D3'],
+        'AVAILABLE',
+        mockTransaction
+      );
+    });
+
+    it('should not collect departureSeatId if it is null', async () => {
+      const payments = [
+        {
+          id: '1',
+          transaction: {
+            passenger: [
+              { departureSeatId: null, returnSeatId: 'R1' },
+              { departureSeatId: 'D2', returnSeatId: 'R2' }
+            ]
+          }
+        }
+      ];
+
+      const mockTransaction = {};
+      mockGetExpiredPaymentWithFlightAndPassenger.mockResolvedValueOnce(
+        payments
+      );
+      mockPrismaTransaction.mockImplementationOnce(async (fn) =>
+        fn(mockTransaction)
+      );
+
+      await transactionServices.invalidateExpiredTransactions();
+
+      expect(mockGetExpiredPaymentWithFlightAndPassenger).toHaveBeenCalled();
+      expect(mockUpdateSeatStatusBySeats).toHaveBeenCalledWith(
+        ['R1', 'D2', 'R2'],
+        'AVAILABLE',
+        mockTransaction
+      );
+      expect(mockUpdateSeatStatusBySeats).not.toHaveBeenCalledWith(
+        expect.arrayContaining([null]),
+        'AVAILABLE',
+        mockTransaction
+      );
+    });
+
+    it('should not update seat status or cancel payments if no expired transactions', async () => {
+      mockGetExpiredPaymentWithFlightAndPassenger.mockResolvedValueOnce([]);
+
+      await transactionServices.invalidateExpiredTransactions();
+
+      expect(mockGetExpiredPaymentWithFlightAndPassenger).toHaveBeenCalled();
+      expect(mockUpdateSeatStatusBySeats).not.toHaveBeenCalled();
+      expect(mockCancelAllPaymentByIds).not.toHaveBeenCalled();
     });
   });
 });
