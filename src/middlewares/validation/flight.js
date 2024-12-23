@@ -147,11 +147,8 @@ export async function validateFilterSortingAndPageParams(req, res, next) {
 
     next();
   } catch (err) {
-    if (err.isJoi) {
-      const errMessage = generateJoiError(err);
-      return res.status(400).json({ message: errMessage });
-    }
-    next(err);
+    const errMessage = generateJoiError(err);
+    return res.status(400).json({ message: errMessage });
   }
 }
 
@@ -165,10 +162,7 @@ export async function validateReturnFlightId(req, res, next) {
 
     next();
   } catch (err) {
-    if (err.isJoi) {
-      const errMessage = generateJoiError(err);
-      return res.status(400).json({ message: errMessage });
-    }
-    next(err);
+    const errMessage = generateJoiError(err);
+    return res.status(400).json({ message: errMessage });
   }
 }

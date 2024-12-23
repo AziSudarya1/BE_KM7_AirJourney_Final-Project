@@ -12,7 +12,7 @@ const createPassengerSchema = Joi.object({
   type: Joi.string()
     .valid(...ALLOWED_PASSESNGER_TYPES)
     .required(),
-  identityNumber: Joi.string().required(),
+  identityNumber: Joi.string().pattern(/^\d+$/).min(16).required(),
   originCountry: Joi.string().required(),
   expiredAt: Joi.date().required(),
   departureSeatId: Joi.string().uuid().when('type', {
@@ -46,12 +46,8 @@ export async function createTransactionValidation(req, res, next) {
 
     next();
   } catch (error) {
-    if (Joi.isError(error)) {
-      const errorMessages = generateJoiError(error);
-      return res.status(400).json({ message: errorMessages });
-    }
-
-    throw error;
+    const errorMessages = generateJoiError(error);
+    return res.status(400).json({ message: errorMessages });
   }
 }
 
@@ -82,11 +78,7 @@ export async function getTransactionFilterValidation(req, res, next) {
 
     next();
   } catch (error) {
-    if (Joi.isError(error)) {
-      const errorMessages = generateJoiError(error);
-      return res.status(400).json({ message: errorMessages });
-    }
-
-    throw error;
+    const errorMessages = generateJoiError(error);
+    return res.status(400).json({ message: errorMessages });
   }
 }
