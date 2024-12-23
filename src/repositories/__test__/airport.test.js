@@ -1,153 +1,103 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
-const mockCreateAirport = jest.fn();
-const mockGetAllAirports = jest.fn();
-const mockGetAirportById = jest.fn();
-const mockUpdateAirport = jest.fn();
-const mockDeleteAirport = jest.fn();
-const mockGetAirportByName = jest.fn();
-const mockGetAirportByCode = jest.fn();
-
-jest.unstable_mockModule('../../repositories/airport.js', () => ({
-  createAirport: mockCreateAirport,
-  getAirportById: mockGetAirportById,
-  getAirportByName: mockGetAirportByName,
-  getAirportByCode: mockGetAirportByCode,
-  updateAirport: mockUpdateAirport,
-  deleteAirport: mockDeleteAirport,
-  getAllAirports: mockGetAllAirports
+jest.unstable_mockModule('../../utils/db.js', () => ({
+  prisma: {
+    airport: {
+      create: jest.fn(),
+      findUnique: jest.fn(),
+      findMany: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn()
+    }
+  }
 }));
 
-const airportRepository = await import('../../repositories/airport.js');
+const { prisma } = await import('../../utils/db.js');
+const airportRepository = await import('../airport.js');
 
-describe('Airport Repository Tests', () => {
-  describe('createAirport', () => {
-    it('should create a new airport', async () => {
-      const mockAirportData = {
-        name: 'Soekarno-Hatta',
-        code: 'CGK',
-        continent: 'ASIA',
-        city: 'Jakarta',
-        country: 'Indonesia'
-      };
+describe('Airport Repository', () => {
+  const mockAirport = {
+    id: 1,
+    code: 'JFK',
+    name: 'John F. Kennedy International Airport',
+    continent: 'North America',
+    city: 'New York',
+    country: 'USA'
+  };
 
-      mockCreateAirport.mockResolvedValue(mockAirportData);
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-      const result = await airportRepository.createAirport(mockAirportData);
-
-      expect(mockCreateAirport).toHaveBeenCalledWith(mockAirportData);
-      expect(result).toEqual(mockAirportData);
+  it('should create an airport', async () => {
+    prisma.airport.create.mockResolvedValue(mockAirport);
+    const result = await airportRepository.createAirport(mockAirport);
+    expect(result).toEqual(mockAirport);
+    expect(prisma.airport.create).toHaveBeenCalledWith({
+      data: {
+        code: mockAirport.code,
+        name: mockAirport.name,
+        continent: mockAirport.continent,
+        city: mockAirport.city,
+        country: mockAirport.country
+      }
     });
   });
 
-  describe('getAllAirports', () => {
-    it('should return a list of airports', async () => {
-      const mockAirports = [
-        { id: '1', name: 'Soekarno-Hatta', code: 'CGK', city: 'Jakarta' },
-        { id: '2', name: 'Ngurah Rai', code: 'DPS', city: 'Denpasar' }
-      ];
-
-      mockGetAllAirports.mockResolvedValue(mockAirports);
-
-      const result = await airportRepository.getAllAirports();
-
-      expect(mockGetAllAirports).toHaveBeenCalled();
-      expect(result).toEqual(mockAirports);
+  it('should get an airport by id', async () => {
+    prisma.airport.findUnique.mockResolvedValue(mockAirport);
+    const result = await airportRepository.getAirportById(mockAirport.id);
+    expect(result).toEqual(mockAirport);
+    expect(prisma.airport.findUnique).toHaveBeenCalledWith({
+      where: { id: mockAirport.id }
     });
   });
 
-  describe('getAirportById', () => {
-    it('should return an airport by ID', async () => {
-      const mockAirport = {
-        id: '1',
-        name: 'Soekarno-Hatta',
-        code: 'CGK',
-        city: 'Jakarta',
-        continent: 'ASIA',
-        country: 'Indonesia'
-      };
-
-      mockGetAirportById.mockResolvedValue(mockAirport);
-
-      const result = await airportRepository.getAirportById('1');
-
-      expect(mockGetAirportById).toHaveBeenCalledWith('1');
-      expect(result).toEqual(mockAirport);
+  it('should get an airport by name', async () => {
+    prisma.airport.findUnique.mockResolvedValue(mockAirport);
+    const result = await airportRepository.getAirportByName(mockAirport.name);
+    expect(result).toEqual(mockAirport);
+    expect(prisma.airport.findUnique).toHaveBeenCalledWith({
+      where: { name: mockAirport.name }
     });
   });
 
-  describe('updateAirport', () => {
-    it('should update airport data', async () => {
-      const mockUpdatedAirport = {
-        id: '1',
-        name: 'Updated Airport',
-        code: 'CGK',
-        city: 'Jakarta'
-      };
-
-      mockUpdateAirport.mockResolvedValue(mockUpdatedAirport);
-
-      const result = await airportRepository.updateAirport('1', {
-        name: 'Updated Airport'
-      });
-
-      expect(mockUpdateAirport).toHaveBeenCalledWith('1', {
-        name: 'Updated Airport'
-      });
-      expect(result).toEqual(mockUpdatedAirport);
+  it('should get an airport by code', async () => {
+    prisma.airport.findUnique.mockResolvedValue(mockAirport);
+    const result = await airportRepository.getAirportByCode(mockAirport.code);
+    expect(result).toEqual(mockAirport);
+    expect(prisma.airport.findUnique).toHaveBeenCalledWith({
+      where: { code: mockAirport.code }
     });
   });
 
-  describe('deleteAirport', () => {
-    it('should delete an airport by ID', async () => {
-      const mockResponse = { message: 'Airport deleted successfully' };
-
-      mockDeleteAirport.mockResolvedValue(mockResponse);
-
-      const result = await airportRepository.deleteAirport('1');
-
-      expect(mockDeleteAirport).toHaveBeenCalledWith('1');
-      expect(result).toEqual(mockResponse);
+  it('should update an airport', async () => {
+    const updatedAirport = { ...mockAirport, name: 'Updated Airport' };
+    prisma.airport.update.mockResolvedValue(updatedAirport);
+    const result = await airportRepository.updateAirport(mockAirport.id, {
+      name: 'Updated Airport'
+    });
+    expect(result).toEqual(updatedAirport);
+    expect(prisma.airport.update).toHaveBeenCalledWith({
+      where: { id: mockAirport.id },
+      data: { name: 'Updated Airport' }
     });
   });
 
-  describe('getAirportByName', () => {
-    it('should return an airport by name', async () => {
-      const mockAirport = {
-        id: '1',
-        name: 'Soekarno-Hatta',
-        code: 'CGK',
-        city: 'Jakarta',
-        continent: 'ASIA',
-        country: 'Indonesia'
-      };
-
-      mockGetAirportByName.mockResolvedValue(mockAirport);
-
-      const result = await airportRepository.getAirportByName('Soekarno-Hatta');
-
-      expect(mockGetAirportByName).toHaveBeenCalledWith('Soekarno-Hatta');
-      expect(result).toEqual(mockAirport);
+  it('should delete an airport', async () => {
+    prisma.airport.delete.mockResolvedValue(mockAirport);
+    const result = await airportRepository.deleteAirport(mockAirport.id);
+    expect(result).toEqual(mockAirport);
+    expect(prisma.airport.delete).toHaveBeenCalledWith({
+      where: { id: mockAirport.id }
     });
   });
 
-  describe('getAirportByCode', () => {
-    it('should return an airport by code', async () => {
-      const mockAirport = {
-        id: '1',
-        name: 'Soekarno-Hatta',
-        code: 'CGK',
-        city: 'Jakarta',
-        continent: 'ASIA',
-        country: 'Indonesia'
-      };
-
-      mockGetAirportByCode.mockResolvedValue(mockAirport);
-
-      const result = await airportRepository.getAirportByCode('CGK');
-
-      expect(mockGetAirportByCode).toHaveBeenCalledWith('CGK');
-      expect(result).toEqual(mockAirport);
-    });
+  it('should get all airports', async () => {
+    const airports = [mockAirport];
+    prisma.airport.findMany.mockResolvedValue(airports);
+    const result = await airportRepository.getAllAirports();
+    expect(result).toEqual(airports);
+    expect(prisma.airport.findMany).toHaveBeenCalled();
   });
 });

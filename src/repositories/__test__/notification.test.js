@@ -1,161 +1,125 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
-const mockCreateNotification = jest.fn();
-const mockCheckNotificationId = jest.fn();
-const mockCheckUserId = jest.fn();
-const mockGetNotification = jest.fn();
-const mockGetAllNotification = jest.fn();
-const mockUpdateNotification = jest.fn();
-const mockUpdateAllNotification = jest.fn();
-const mockDeleteNotification = jest.fn();
-
-jest.unstable_mockModule('../../repositories/notification.js', () => ({
-  createNotification: mockCreateNotification,
-  checkNotificationId: mockCheckNotificationId,
-  checkUserId: mockCheckUserId,
-  getNotification: mockGetNotification,
-  getAllNotification: mockGetAllNotification,
-  updateNotification: mockUpdateNotification,
-  updateAllNotification: mockUpdateAllNotification,
-  deleteNotification: mockDeleteNotification
+jest.unstable_mockModule('../../utils/db.js', () => ({
+  prisma: {
+    notification: {
+      create: jest.fn(),
+      findUnique: jest.fn(),
+      findFirst: jest.fn(),
+      findMany: jest.fn(),
+      updateMany: jest.fn(),
+      delete: jest.fn()
+    }
+  }
 }));
 
+const { prisma } = await import('../../utils/db.js');
 const notificationRepository = await import('../notification.js');
 
 describe('Notification Repository', () => {
-  describe('createNotification', () => {
-    it('should create a new notification', async () => {
-      const mockNotification = {
-        title: 'New Notification',
-        message: 'This is a test notification.',
+  const payload = {
+    title: 'Test Notification',
+    message: 'This is a test notification',
+    userId: 1
+  };
+
+  const notification = {
+    id: 1,
+    ...payload,
+    isRead: false
+  };
+
+  it('should create a notification', async () => {
+    prisma.notification.create.mockResolvedValue(notification);
+    const result = await notificationRepository.createNotification(payload);
+    expect(result).toEqual(notification);
+    expect(prisma.notification.create).toHaveBeenCalledWith({
+      data: {
+        title: payload.title,
+        message: payload.message,
         isRead: false,
-        userId: 'user-id-123'
-      };
-
-      mockCreateNotification.mockResolvedValue(mockNotification);
-
-      const result =
-        await notificationRepository.createNotification(mockNotification);
-
-      expect(mockCreateNotification).toHaveBeenCalledWith(mockNotification);
-      expect(result).toEqual(mockNotification);
+        userId: payload.userId
+      }
     });
   });
 
-  describe('checkNotificationId', () => {
-    it('should check and return a notification by ID', async () => {
-      const mockNotification = {
-        id: 'notification-id-123',
-        title: 'Test Notification',
-        isRead: false,
-        userId: 'user-id-123'
-      };
-
-      mockCheckNotificationId.mockResolvedValue(mockNotification);
-
-      const result = await notificationRepository.checkNotificationId(
-        'notification-id-123'
-      );
-
-      expect(mockCheckNotificationId).toHaveBeenCalledWith(
-        'notification-id-123'
-      );
-      expect(result).toEqual(mockNotification);
+  it('should check notification by id', async () => {
+    prisma.notification.findUnique.mockResolvedValue(notification);
+    const result = await notificationRepository.checkNotificationId(1);
+    expect(result).toEqual(notification);
+    expect(prisma.notification.findUnique).toHaveBeenCalledWith({
+      where: { id: 1 }
     });
   });
 
-  describe('checkUserId', () => {
-    it('should check and return notifications for a user by ID', async () => {
-      const mockUserNotifications = [{ id: '1', title: 'Notification 1' }];
-
-      mockCheckUserId.mockResolvedValue(mockUserNotifications);
-
-      const result = await notificationRepository.checkUserId('user-id-123');
-
-      expect(mockCheckUserId).toHaveBeenCalledWith('user-id-123');
-      expect(result).toEqual(mockUserNotifications);
+  it('should check notification by user id', async () => {
+    prisma.notification.findFirst.mockResolvedValue(notification);
+    const result = await notificationRepository.checkUserId(1);
+    expect(result).toEqual(notification);
+    expect(prisma.notification.findFirst).toHaveBeenCalledWith({
+      where: { userId: 1 }
     });
   });
 
-  describe('getNotification', () => {
-    it('should return the first unread notification for a user', async () => {
-      const mockNotification = {
-        id: 'notification-id-123',
-        title: 'Unread Notification',
-        isRead: false,
-        userId: 'user-id-123'
-      };
-
-      mockGetNotification.mockResolvedValue(mockNotification);
-
-      const result =
-        await notificationRepository.getNotification('user-id-123');
-
-      expect(mockGetNotification).toHaveBeenCalledWith('user-id-123');
-      expect(result).toEqual(mockNotification);
+  it('should get a notification by user id', async () => {
+    prisma.notification.findFirst.mockResolvedValue(notification);
+    const result = await notificationRepository.getNotification(1);
+    expect(result).toEqual(notification);
+    expect(prisma.notification.findFirst).toHaveBeenCalledWith({
+      where: { userId: 1, isRead: false }
     });
   });
 
-  describe('getAllNotification', () => {
-    it('should return all notifications for a user', async () => {
-      const mockNotifications = [
-        { id: '1', title: 'Notification 1', isRead: false },
-        { id: '2', title: 'Notification 2', isRead: true }
-      ];
-
-      mockGetAllNotification.mockResolvedValue(mockNotifications);
-
-      const result =
-        await notificationRepository.getAllNotification('user-id-123');
-
-      expect(mockGetAllNotification).toHaveBeenCalledWith('user-id-123');
-      expect(result).toEqual(mockNotifications);
+  it('should get all notifications by user id', async () => {
+    prisma.notification.findMany.mockResolvedValue([notification]);
+    const result = await notificationRepository.getAllNotification(1);
+    expect(result).toEqual([notification]);
+    expect(prisma.notification.findMany).toHaveBeenCalledWith({
+      where: { userId: 1 }
     });
   });
 
-  describe('updateNotification', () => {
-    it('should update a notification to mark it as read', async () => {
-      const mockUpdatedNotification = { id: '1', isRead: true };
-
-      mockUpdateNotification.mockResolvedValue(mockUpdatedNotification);
-
-      const result = await notificationRepository.updateNotification(
-        '1',
-        'user-id-123'
-      );
-
-      expect(mockUpdateNotification).toHaveBeenCalledWith('1', 'user-id-123');
-      expect(result).toEqual(mockUpdatedNotification);
+  it('should update a notification by id and user id', async () => {
+    prisma.notification.updateMany.mockResolvedValue({ count: 1 });
+    const result = await notificationRepository.updateNotification(1, 1);
+    expect(result).toEqual({ count: 1 });
+    expect(prisma.notification.updateMany).toHaveBeenCalledWith({
+      where: { id: 1, userId: 1 },
+      data: { isRead: true }
     });
   });
 
-  describe('updateAllNotification', () => {
-    it('should mark all notifications as read for a user', async () => {
-      const mockResponse = { count: 3 };
-
-      mockUpdateAllNotification.mockResolvedValue(mockResponse);
-
-      const result =
-        await notificationRepository.updateAllNotification('user-id-123');
-
-      expect(mockUpdateAllNotification).toHaveBeenCalledWith('user-id-123');
-      expect(result).toEqual(mockResponse);
+  it('should update all notifications by user id', async () => {
+    prisma.notification.updateMany.mockResolvedValue({ count: 1 });
+    const result = await notificationRepository.updateAllNotification(1);
+    expect(result).toEqual({ count: 1 });
+    expect(prisma.notification.updateMany).toHaveBeenCalledWith({
+      where: { userId: 1, isRead: false },
+      data: { isRead: true }
     });
   });
 
-  describe('deleteNotification', () => {
-    it('should delete a notification by ID for a user', async () => {
-      const mockResponse = { message: 'Notification deleted successfully' };
+  it('should delete a notification by id and user id', async () => {
+    prisma.notification.delete.mockResolvedValue(notification);
+    const result = await notificationRepository.deleteNotification(1, 1);
+    expect(result).toEqual(notification);
+    expect(prisma.notification.delete).toHaveBeenCalledWith({
+      where: { id: 1, userId: 1 }
+    });
+  });
 
-      mockDeleteNotification.mockResolvedValue(mockResponse);
-
-      const result = await notificationRepository.deleteNotification(
-        '1',
-        'user-id-123'
-      );
-
-      expect(mockDeleteNotification).toHaveBeenCalledWith('1', 'user-id-123');
-      expect(result).toEqual(mockResponse);
+  it('should create a user notification within a transaction', async () => {
+    const tx = {
+      notification: { create: jest.fn().mockResolvedValue(notification) }
+    };
+    const result = await notificationRepository.createUserNotification(
+      1,
+      payload,
+      tx
+    );
+    expect(result).toEqual(notification);
+    expect(tx.notification.create).toHaveBeenCalledWith({
+      data: { ...payload, userId: 1 }
     });
   });
 });

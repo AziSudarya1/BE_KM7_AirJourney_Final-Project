@@ -1,142 +1,260 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
-const mockCreateTransactionAndPassenger = jest.fn();
-const mockGetActiveTransaction = jest.fn();
-const mockGetTransactionWithUserById = jest.fn();
-const mockGetDetailTransactionById = jest.fn();
-const mockGetAllTransactions = jest.fn();
-
-jest.unstable_mockModule('../../repositories/transaction.js', () => ({
-  createTransactionAndPassenger: mockCreateTransactionAndPassenger,
-  getActiveTransaction: mockGetActiveTransaction,
-  getTransactionWithUserById: mockGetTransactionWithUserById,
-  getDetailTransactionById: mockGetDetailTransactionById,
-  getAllTransactions: mockGetAllTransactions
+jest.unstable_mockModule('../../utils/db.js', () => ({
+  prisma: {
+    transaction: {
+      create: jest.fn(),
+      findFirst: jest.fn(),
+      findUnique: jest.fn(),
+      findMany: jest.fn(),
+      count: jest.fn()
+    }
+  }
 }));
 
-const transactionRepository = await import('../../repositories/transaction.js');
+const { prisma } = await import('../../utils/db.js');
+const transactionRepository = await import('../transaction.js');
 
 describe('Transaction Repository', () => {
-  describe('createTransactionAndPassenger', () => {
-    it('should create a new transaction with passengers', async () => {
-      const mockPayload = {
-        amount: 1000000,
-        userId: 'user123',
-        departureFlightId: 'flight123',
-        returnFlightId: 'flight456',
-        proccessedPassengers: [
-          {
-            title: 'Mr',
-            firstName: 'John',
-            familyName: 'Doe',
-            birthday: '1990-01-01',
-            nationality: 'ID',
-            type: 'ADULT',
-            identityNumber: '123456789',
-            originCountry: 'ID',
-            expiredAt: '2030-01-01',
-            departureSeatId: 'seat1',
-            returnSeatId: 'seat2'
+  const mockTransaction = {
+    id: 1,
+    amount: 100,
+    userId: 1,
+    departureFlightId: 1,
+    returnFlightId: 2,
+    passenger: [{ departureSeatId: 1, returnSeatId: 2 }],
+    payment: { status: 'PENDING', expiredAt: new Date(Date.now() + 10000) },
+    user: { id: 1, name: 'John Doe' },
+    departureFlight: {
+      id: 1,
+      airportFrom: {},
+      airportTo: {},
+      airline: {},
+      aeroplane: {}
+    },
+    returnFlight: {
+      id: 2,
+      airportFrom: {},
+      airportTo: {},
+      airline: {},
+      aeroplane: {}
+    }
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should create a transaction and passenger with returnFlightId', async () => {
+    const payload = {
+      amount: 100,
+      userId: 1,
+      departureFlightId: 1,
+      returnFlightId: 2,
+      proccessedPassengers: [{ departureSeatId: 1, returnSeatId: 2 }]
+    };
+    const tx = {
+      transaction: { create: jest.fn().mockResolvedValue(mockTransaction) }
+    };
+
+    const result = await transactionRepository.createTransactionAndPassenger(
+      payload,
+      tx
+    );
+
+    expect(tx.transaction.create).toHaveBeenCalledWith({
+      data: {
+        amount: payload.amount,
+        userId: payload.userId,
+        departureFlightId: payload.departureFlightId,
+        returnFlightId: payload.returnFlightId,
+        passenger: {
+          createMany: {
+            data: payload.proccessedPassengers
           }
-        ]
-      };
-      const mockResult = { id: 'transaction123', ...mockPayload };
-
-      mockCreateTransactionAndPassenger.mockResolvedValue(mockResult);
-
-      const result = await transactionRepository.createTransactionAndPassenger(
-        mockPayload,
-        {}
-      );
-
-      expect(mockCreateTransactionAndPassenger).toHaveBeenCalledWith(
-        mockPayload,
-        {}
-      );
-      expect(result).toEqual(mockResult);
-    });
-  });
-
-  describe('getActiveTransaction', () => {
-    it('should return an active transaction for a user', async () => {
-      const userId = 'user123';
-      const mockResult = {
-        id: 'transaction123',
-        userId,
-        payment: {
-          status: 'PENDING',
-          expiredAt: new Date(Date.now() + 3600000)
         }
-      };
-
-      mockGetActiveTransaction.mockResolvedValue(mockResult);
-
-      const result = await transactionRepository.getActiveTransaction(userId);
-
-      expect(mockGetActiveTransaction).toHaveBeenCalledWith(userId);
-      expect(result).toEqual(mockResult);
+      },
+      include: {
+        user: true
+      }
     });
+    expect(result).toEqual(mockTransaction);
   });
 
-  describe('getTransactionWithUserById', () => {
-    it('should return a transaction with user details by ID', async () => {
-      const transactionId = 'transaction123';
-      const mockResult = {
-        id: transactionId,
-        user: { id: 'user123', name: 'John Doe' }
-      };
+  it('should create a transaction and passenger without returnFlightId', async () => {
+    const payload = {
+      amount: 100,
+      userId: 1,
+      departureFlightId: 1,
+      proccessedPassengers: [{ departureSeatId: 1, returnSeatId: 2 }]
+    };
+    const tx = {
+      transaction: { create: jest.fn().mockResolvedValue(mockTransaction) }
+    };
 
-      mockGetTransactionWithUserById.mockResolvedValue(mockResult);
+    const result = await transactionRepository.createTransactionAndPassenger(
+      payload,
+      tx
+    );
 
-      const result =
-        await transactionRepository.getTransactionWithUserById(transactionId);
-
-      expect(mockGetTransactionWithUserById).toHaveBeenCalledWith(
-        transactionId
-      );
-      expect(result).toEqual(mockResult);
+    expect(tx.transaction.create).toHaveBeenCalledWith({
+      data: {
+        amount: payload.amount,
+        userId: payload.userId,
+        departureFlightId: payload.departureFlightId,
+        returnFlightId: null,
+        passenger: {
+          createMany: {
+            data: payload.proccessedPassengers
+          }
+        }
+      },
+      include: {
+        user: true
+      }
     });
+    expect(result).toEqual(mockTransaction);
   });
 
-  describe('getDetailTransactionById', () => {
-    it('should return detailed transaction data by ID', async () => {
-      const transactionId = 'transaction123';
-      const mockResult = {
-        id: transactionId,
-        amount: 1000000,
-        user: { id: 'user123', name: 'John Doe' },
-        payment: { status: 'SUCCESS' },
-        passenger: []
-      };
+  it('should get active transaction', async () => {
+    prisma.transaction.findFirst.mockResolvedValue(mockTransaction);
 
-      mockGetDetailTransactionById.mockResolvedValue(mockResult);
+    const result = await transactionRepository.getActiveTransaction(1);
 
-      const result =
-        await transactionRepository.getDetailTransactionById(transactionId);
-
-      expect(mockGetDetailTransactionById).toHaveBeenCalledWith(transactionId);
-      expect(result).toEqual(mockResult);
+    expect(prisma.transaction.findFirst).toHaveBeenCalledWith({
+      where: {
+        userId: 1,
+        payment: {
+          status: {
+            notIn: ['CANCELLED', 'SUCCESS']
+          },
+          expiredAt: {
+            gt: expect.any(Date)
+          }
+        }
+      }
     });
+    expect(result).toEqual(mockTransaction);
   });
 
-  describe('getAllTransactions', () => {
-    it('should return all transactions for a user with filters', async () => {
-      const userId = 'user123';
-      const filters = { status: 'PENDING' };
-      const mockResult = [
-        { id: 'transaction123', userId, amount: 1000000 },
-        { id: 'transaction456', userId, amount: 500000 }
-      ];
+  it('should get transaction with user and passenger by id', async () => {
+    prisma.transaction.findUnique.mockResolvedValue(mockTransaction);
 
-      mockGetAllTransactions.mockResolvedValue(mockResult);
+    const result =
+      await transactionRepository.getTransactionWithUserAndPassengerById(1);
 
-      const result = await transactionRepository.getAllTransactions(
-        userId,
-        filters
-      );
-
-      expect(mockGetAllTransactions).toHaveBeenCalledWith(userId, filters);
-      expect(result).toEqual(mockResult);
+    expect(prisma.transaction.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: 1
+      },
+      include: {
+        user: true,
+        passenger: {
+          select: {
+            departureSeatId: true,
+            returnSeatId: true
+          }
+        }
+      }
     });
+    expect(result).toEqual(mockTransaction);
+  });
+
+  it('should get transaction with user and payment by id', async () => {
+    prisma.transaction.findUnique.mockResolvedValue(mockTransaction);
+
+    const result =
+      await transactionRepository.getTransactionWithUserAndPaymentById(1);
+
+    expect(prisma.transaction.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: 1
+      },
+      include: {
+        payment: true,
+        user: true
+      }
+    });
+    expect(result).toEqual(mockTransaction);
+  });
+
+  it('should get transaction with passenger and payment by id', async () => {
+    prisma.transaction.findUnique.mockResolvedValue(mockTransaction);
+
+    const result =
+      await transactionRepository.getTransactionWithPassengerAndPaymentById(1);
+
+    expect(prisma.transaction.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: 1
+      },
+      include: {
+        passenger: {
+          select: {
+            departureSeatId: true,
+            returnSeatId: true
+          }
+        },
+        payment: true
+      }
+    });
+    expect(result).toEqual(mockTransaction);
+  });
+
+  it('should get detail transaction by id', async () => {
+    prisma.transaction.findUnique.mockResolvedValue(mockTransaction);
+
+    const result = await transactionRepository.getDetailTransactionById(1);
+
+    expect(prisma.transaction.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: 1
+      },
+      include: {
+        user: true,
+        passenger: true,
+        payment: true,
+        departureFlight: {
+          include: {
+            airportFrom: true,
+            airportTo: true,
+            airline: true,
+            aeroplane: true
+          }
+        },
+        returnFlight: {
+          include: {
+            airportFrom: true,
+            airportTo: true,
+            airline: true,
+            aeroplane: true
+          }
+        }
+      }
+    });
+    expect(result).toEqual(mockTransaction);
+  });
+
+  it('should get all transactions', async () => {
+    const query = { where: { userId: 1 } };
+    prisma.transaction.findMany.mockResolvedValue([mockTransaction]);
+
+    const result = await transactionRepository.getAllTransactions(query);
+
+    expect(prisma.transaction.findMany).toHaveBeenCalledWith(query);
+    expect(result).toEqual([mockTransaction]);
+  });
+
+  it('should count transaction data with filter', async () => {
+    const filter = { userId: 1 };
+    prisma.transaction.count.mockResolvedValue(1);
+
+    const result =
+      await transactionRepository.countTransactionDataWithFilter(filter);
+
+    expect(prisma.transaction.count).toHaveBeenCalledWith({
+      where: filter
+    });
+    expect(result).toEqual(1);
   });
 });

@@ -1,101 +1,108 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
-const mockCreateOtp = jest.fn();
-const mockFindValidOtp = jest.fn();
-const mockFindActiveOtp = jest.fn();
-
-jest.unstable_mockModule('../../repositories/otp.js', () => ({
-  createOtp: mockCreateOtp,
-  findValidOtp: mockFindValidOtp,
-  findActiveOtp: mockFindActiveOtp
+jest.unstable_mockModule('../../utils/db.js', () => ({
+  prisma: {
+    otp: {
+      create: jest.fn(),
+      findFirst: jest.fn()
+    }
+  }
 }));
 
-const otpRepository = await import('../../repositories/otp.js');
+const { prisma } = await import('../../utils/db.js');
+const otpRepository = await import('../otp.js');
 
-describe('OTP Repository Tests', () => {
+describe('otpRepository', () => {
+  const userId = 'user123';
+  const otp = '123456';
+  const expiredAt = new Date(Date.now() + 1000 * 60 * 10);
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('createOtp', () => {
     it('should create a new OTP', async () => {
-      const mockOtpData = {
-        userId: 'user-id-123',
-        otp: '123456',
-        expiredAt: new Date(Date.now() + 60 * 1000)
-      };
+      const mockOtp = { id: 'otp123', userId, otp, expiredAt };
+      prisma.otp.create.mockResolvedValue(mockOtp);
 
-      mockCreateOtp.mockResolvedValue(mockOtpData);
+      const result = await otpRepository.createOtp(userId, otp, expiredAt);
 
-      const result = await otpRepository.createOtp(
-        mockOtpData.userId,
-        mockOtpData.otp,
-        mockOtpData.expiredAt
-      );
-
-      expect(mockCreateOtp).toHaveBeenCalledWith(
-        mockOtpData.userId,
-        mockOtpData.otp,
-        mockOtpData.expiredAt
-      );
-      expect(result).toEqual(mockOtpData);
+      expect(prisma.otp.create).toHaveBeenCalledWith({
+        data: {
+          userId,
+          otp,
+          expiredAt
+        }
+      });
+      expect(result).toEqual(mockOtp);
     });
   });
 
   describe('findValidOtp', () => {
     it('should find a valid OTP', async () => {
-      const mockValidOtp = {
-        id: 'otp-id-123',
-        userId: 'user-id-123',
-        otp: '123456',
-        used: false,
-        expiredAt: new Date(Date.now() + 60 * 1000)
-      };
+      const mockOtp = { id: 'otp123', userId, otp, expiredAt, used: false };
+      prisma.otp.findFirst.mockResolvedValue(mockOtp);
 
-      mockFindValidOtp.mockResolvedValue(mockValidOtp);
+      const result = await otpRepository.findValidOtp(userId, otp);
 
-      const result = await otpRepository.findValidOtp(
-        mockValidOtp.userId,
-        mockValidOtp.otp
-      );
-
-      expect(mockFindValidOtp).toHaveBeenCalledWith(
-        mockValidOtp.userId,
-        mockValidOtp.otp
-      );
-      expect(result).toEqual(mockValidOtp);
+      expect(prisma.otp.findFirst).toHaveBeenCalledWith({
+        where: {
+          userId,
+          otp,
+          used: false,
+          expiredAt: { gt: expect.any(Date) }
+        }
+      });
+      expect(result).toEqual(mockOtp);
     });
 
-    it('should return null for an invalid OTP', async () => {
-      mockFindValidOtp.mockResolvedValue(null);
+    it('should return null if no valid OTP is found', async () => {
+      prisma.otp.findFirst.mockResolvedValue(null);
 
-      const result = await otpRepository.findValidOtp('user-id-123', '000000');
+      const result = await otpRepository.findValidOtp(userId, otp);
 
-      expect(mockFindValidOtp).toHaveBeenCalledWith('user-id-123', '000000');
+      expect(prisma.otp.findFirst).toHaveBeenCalledWith({
+        where: {
+          userId,
+          otp,
+          used: false,
+          expiredAt: { gt: expect.any(Date) }
+        }
+      });
       expect(result).toBeNull();
     });
   });
 
   describe('findActiveOtp', () => {
-    it('should find an active OTP for a user', async () => {
-      const mockActiveOtp = {
-        id: 'otp-id-123',
-        userId: 'user-id-123',
-        otp: '123456',
-        used: false,
-        expiredAt: new Date(Date.now() + 60 * 1000)
-      };
+    it('should find an active OTP', async () => {
+      const mockOtp = { id: 'otp123', userId, otp, expiredAt, used: false };
+      prisma.otp.findFirst.mockResolvedValue(mockOtp);
 
-      mockFindActiveOtp.mockResolvedValue(mockActiveOtp);
+      const result = await otpRepository.findActiveOtp(userId);
 
-      const result = await otpRepository.findActiveOtp(mockActiveOtp.userId);
-
-      expect(mockFindActiveOtp).toHaveBeenCalledWith(mockActiveOtp.userId);
-      expect(result).toEqual(mockActiveOtp);
+      expect(prisma.otp.findFirst).toHaveBeenCalledWith({
+        where: {
+          userId,
+          used: false,
+          expiredAt: { gt: expect.any(Date) }
+        }
+      });
+      expect(result).toEqual(mockOtp);
     });
 
-    it('should return null if no active OTP exists', async () => {
-      mockFindActiveOtp.mockResolvedValue(null);
+    it('should return null if no active OTP is found', async () => {
+      prisma.otp.findFirst.mockResolvedValue(null);
 
-      const result = await otpRepository.findActiveOtp('user-id-123');
+      const result = await otpRepository.findActiveOtp(userId);
 
-      expect(mockFindActiveOtp).toHaveBeenCalledWith('user-id-123');
+      expect(prisma.otp.findFirst).toHaveBeenCalledWith({
+        where: {
+          userId,
+          used: false,
+          expiredAt: { gt: expect.any(Date) }
+        }
+      });
       expect(result).toBeNull();
     });
   });

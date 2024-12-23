@@ -1,132 +1,99 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
-const mockCreateAirline = jest.fn();
-const mockGetAllAirlines = jest.fn();
-const mockUpdateAirline = jest.fn();
-const mockGetAirlineById = jest.fn();
-const mockGetAirlineByName = jest.fn();
-const mockGetAirlineByCode = jest.fn();
-const mockDeleteAirline = jest.fn();
-
-jest.unstable_mockModule('../../repositories/airline.js', () => ({
-  createAirline: mockCreateAirline,
-  getAllAirlines: mockGetAllAirlines,
-  updateAirline: mockUpdateAirline,
-  getAirlineById: mockGetAirlineById,
-  getAirlineByName: mockGetAirlineByName,
-  getAirlineByCode: mockGetAirlineByCode,
-  deleteAirline: mockDeleteAirline
+jest.unstable_mockModule('../../utils/db.js', () => ({
+  prisma: {
+    airline: {
+      create: jest.fn(),
+      findUnique: jest.fn(),
+      findFirst: jest.fn(),
+      findMany: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn()
+    }
+  }
 }));
 
-const airlineRepository = await import('../../repositories/airline.js');
+const { prisma } = await import('../../utils/db.js');
+const airlineRepository = await import('../airline.js');
 
 describe('Airline Repository', () => {
-  describe('createAirline', () => {
-    it('should create a new airline', async () => {
-      const mockPayload = {
-        code: 'A123',
-        name: 'Airline 123',
-        image: 'http://example.com/airline.jpg'
-      };
+  const mockAirline = {
+    id: 1,
+    code: 'AA',
+    name: 'American Airlines',
+    image: 'image_url'
+  };
 
-      mockCreateAirline.mockResolvedValue(mockPayload);
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-      const result = await airlineRepository.createAirline(mockPayload);
-
-      expect(mockCreateAirline).toHaveBeenCalledWith(mockPayload);
-      expect(result).toEqual(mockPayload);
+  it('should create an airline', async () => {
+    prisma.airline.create.mockResolvedValue(mockAirline);
+    const result = await airlineRepository.createAirline(mockAirline);
+    expect(result).toEqual(mockAirline);
+    expect(prisma.airline.create).toHaveBeenCalledWith({
+      data: {
+        code: mockAirline.code,
+        name: mockAirline.name,
+        image: mockAirline.image
+      }
     });
   });
 
-  describe('getAllAirlines', () => {
-    it('should return a list of airlines', async () => {
-      const mockAirlines = [
-        { id: '1', code: 'A123', name: 'Airline 123' },
-        { id: '2', code: 'B456', name: 'Airline 456' }
-      ];
+  it('should get all airlines', async () => {
+    prisma.airline.findMany.mockResolvedValue([mockAirline]);
+    const result = await airlineRepository.getAllAirlines();
+    expect(result).toEqual([mockAirline]);
+    expect(prisma.airline.findMany).toHaveBeenCalled();
+  });
 
-      mockGetAllAirlines.mockResolvedValue(mockAirlines);
-
-      const result = await airlineRepository.getAllAirlines();
-
-      expect(mockGetAllAirlines).toHaveBeenCalled();
-      expect(result).toEqual(mockAirlines);
+  it('should update an airline', async () => {
+    const updatedAirline = { ...mockAirline, name: 'Updated Airline' };
+    prisma.airline.update.mockResolvedValue(updatedAirline);
+    const result = await airlineRepository.updateAirline(mockAirline.id, {
+      name: 'Updated Airline'
+    });
+    expect(result).toEqual(updatedAirline);
+    expect(prisma.airline.update).toHaveBeenCalledWith({
+      where: { id: mockAirline.id },
+      data: { name: 'Updated Airline' }
     });
   });
 
-  describe('getAirlineById', () => {
-    it('should return airline details by ID', async () => {
-      const mockId = '1';
-      const mockAirline = { id: '1', code: 'A123', name: 'Airline 123' };
-
-      mockGetAirlineById.mockResolvedValue(mockAirline);
-
-      const result = await airlineRepository.getAirlineById(mockId);
-
-      expect(mockGetAirlineById).toHaveBeenCalledWith(mockId);
-      expect(result).toEqual(mockAirline);
+  it('should get an airline by id', async () => {
+    prisma.airline.findUnique.mockResolvedValue(mockAirline);
+    const result = await airlineRepository.getAirlineById(mockAirline.id);
+    expect(result).toEqual(mockAirline);
+    expect(prisma.airline.findUnique).toHaveBeenCalledWith({
+      where: { id: mockAirline.id }
     });
   });
 
-  describe('getAirlineByName', () => {
-    it('should return airline by name', async () => {
-      const mockName = 'Airline 123';
-      const mockAirline = { id: '1', code: 'A123', name: 'Airline 123' };
-
-      mockGetAirlineByName.mockResolvedValue(mockAirline);
-
-      const result = await airlineRepository.getAirlineByName(mockName);
-
-      expect(mockGetAirlineByName).toHaveBeenCalledWith(mockName);
-      expect(result).toEqual(mockAirline);
+  it('should get an airline by name', async () => {
+    prisma.airline.findFirst.mockResolvedValue(mockAirline);
+    const result = await airlineRepository.getAirlineByName(mockAirline.name);
+    expect(result).toEqual(mockAirline);
+    expect(prisma.airline.findFirst).toHaveBeenCalledWith({
+      where: { name: mockAirline.name }
     });
   });
 
-  describe('getAirlineByCode', () => {
-    it('should return airline by code', async () => {
-      const mockCode = 'A123';
-      const mockAirline = { id: '1', code: 'A123', name: 'Airline 123' };
-
-      mockGetAirlineByCode.mockResolvedValue(mockAirline);
-
-      const result = await airlineRepository.getAirlineByCode(mockCode);
-
-      expect(mockGetAirlineByCode).toHaveBeenCalledWith(mockCode);
-      expect(result).toEqual(mockAirline);
+  it('should get an airline by code', async () => {
+    prisma.airline.findUnique.mockResolvedValue(mockAirline);
+    const result = await airlineRepository.getAirlineByCode(mockAirline.code);
+    expect(result).toEqual(mockAirline);
+    expect(prisma.airline.findUnique).toHaveBeenCalledWith({
+      where: { code: mockAirline.code }
     });
   });
 
-  describe('updateAirline', () => {
-    it('should update airline details', async () => {
-      const mockId = '1';
-      const mockPayload = { name: 'Updated Airline' };
-      const mockUpdatedAirline = {
-        id: '1',
-        code: 'A123',
-        name: 'Updated Airline'
-      };
-
-      mockUpdateAirline.mockResolvedValue(mockUpdatedAirline);
-
-      const result = await airlineRepository.updateAirline(mockId, mockPayload);
-
-      expect(mockUpdateAirline).toHaveBeenCalledWith(mockId, mockPayload);
-      expect(result).toEqual(mockUpdatedAirline);
-    });
-  });
-
-  describe('deleteAirline', () => {
-    it('should delete an airline by ID', async () => {
-      const mockId = '1';
-
-      mockDeleteAirline.mockResolvedValue({
-        message: 'Airline deleted successfully'
-      });
-
-      const result = await airlineRepository.deleteAirline(mockId);
-
-      expect(mockDeleteAirline).toHaveBeenCalledWith(mockId);
-      expect(result).toEqual({ message: 'Airline deleted successfully' });
+  it('should delete an airline', async () => {
+    prisma.airline.delete.mockResolvedValue(mockAirline);
+    const result = await airlineRepository.deleteAirline(mockAirline.id);
+    expect(result).toEqual(mockAirline);
+    expect(prisma.airline.delete).toHaveBeenCalledWith({
+      where: { id: mockAirline.id }
     });
   });
 });

@@ -1,105 +1,131 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
-const mockUpdatePaymentStatusAndMethod = jest.fn();
-const mockCreatePayment = jest.fn();
-
-jest.unstable_mockModule('../../repositories/payment.js', () => ({
-  updatePaymentStatusAndMethod: mockUpdatePaymentStatusAndMethod,
-  createPayment: mockCreatePayment
+jest.unstable_mockModule('../../utils/db.js', () => ({
+  prisma: {
+    payment: {
+      update: jest.fn(),
+      updateMany: jest.fn(),
+      create: jest.fn(),
+      findMany: jest.fn()
+    }
+  }
 }));
 
+const { prisma } = await import('../../utils/db.js');
+const paymentRepository = await import('../payment.js');
+
 describe('Payment Repository', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('updatePaymentStatusAndMethod', () => {
-    it('should update payment status to SUCCESS', async () => {
-      const orderId = 'transaction123';
-      const status = 'SUCCESS';
-      const method = 'credit_card';
+    it('should update payment status and method using default prisma', async () => {
+      const transactionId = '123';
+      const payload = { status: 'SUCCESS', method: 'credit_card' };
 
-      mockUpdatePaymentStatusAndMethod.mockResolvedValue(true);
-
-      const result = await mockUpdatePaymentStatusAndMethod(
-        orderId,
-        status,
-        method
+      await paymentRepository.updatePaymentStatusAndMethod(
+        transactionId,
+        payload
       );
 
-      expect(mockUpdatePaymentStatusAndMethod).toHaveBeenCalledWith(
-        orderId,
-        status,
-        method
-      );
-      expect(result).toBe(true);
+      expect(prisma.payment.update).toHaveBeenCalledWith({
+        where: { transactionId },
+        data: { ...payload }
+      });
     });
 
-    it('should update payment status to FAILED', async () => {
-      const orderId = 'transaction123';
-      const status = 'FAILED';
-      const method = 'credit_card';
+    it('should update payment status and method using a provided transaction instance', async () => {
+      const transactionId = '456';
+      const payload = { status: 'PENDING', method: 'paypal' };
+      const mockTx = {
+        payment: {
+          update: jest.fn()
+        }
+      };
 
-      mockUpdatePaymentStatusAndMethod.mockResolvedValue(true);
-
-      const result = await mockUpdatePaymentStatusAndMethod(
-        orderId,
-        status,
-        method
+      await paymentRepository.updatePaymentStatusAndMethod(
+        transactionId,
+        payload,
+        mockTx
       );
 
-      expect(mockUpdatePaymentStatusAndMethod).toHaveBeenCalledWith(
-        orderId,
-        status,
-        method
-      );
-      expect(result).toBe(true);
+      expect(mockTx.payment.update).toHaveBeenCalledWith({
+        where: { transactionId },
+        data: { ...payload }
+      });
+    });
+  });
+
+  describe('cancelAllPaymentByIds', () => {
+    it('should cancel all payments by ids using default prisma', async () => {
+      const ids = ['123', '456'];
+
+      await paymentRepository.cancelAllPaymentByIds(ids);
+
+      expect(prisma.payment.updateMany).toHaveBeenCalledWith({
+        where: { transactionId: { in: ids } },
+        data: { status: 'CANCELLED' }
+      });
     });
 
-    it('should throw an error if payment update fails', async () => {
-      const orderId = 'transaction123';
-      const status = 'FAILED';
-      const method = 'credit_card';
+    it('should cancel all payments by ids using a provided transaction instance', async () => {
+      const ids = ['789', '101'];
+      const mockTx = {
+        payment: {
+          updateMany: jest.fn()
+        }
+      };
 
-      mockUpdatePaymentStatusAndMethod.mockRejectedValue(
-        new Error('Failed to update payment status')
-      );
+      await paymentRepository.cancelAllPaymentByIds(ids, mockTx);
 
-      await expect(
-        mockUpdatePaymentStatusAndMethod(orderId, status, method)
-      ).rejects.toThrow('Failed to update payment status');
+      expect(mockTx.payment.updateMany).toHaveBeenCalledWith({
+        where: { transactionId: { in: ids } },
+        data: { status: 'CANCELLED' }
+      });
     });
   });
 
   describe('createPayment', () => {
-    it('should create a payment successfully', async () => {
-      const paymentDetails = {
-        orderId: 'transaction123',
-        amount: 100000,
-        method: 'credit_card'
-      };
+    it('should create a new payment', async () => {
+      const payload = { transactionId: '123', snapToken: 'token' };
+      const transaction = { payment: { create: jest.fn() } };
 
-      mockCreatePayment.mockResolvedValue({
-        success: true,
-        paymentId: 'payment123'
+      await paymentRepository.createPayment(payload, transaction);
+
+      expect(transaction.payment.create).toHaveBeenCalledWith({
+        data: {
+          transactionId: payload.transactionId,
+          status: 'PENDING',
+          snapToken: payload.snapToken,
+          expiredAt: expect.any(Date)
+        }
       });
-
-      const result = await mockCreatePayment(paymentDetails);
-
-      expect(mockCreatePayment).toHaveBeenCalledWith(paymentDetails);
-      expect(result).toEqual({ success: true, paymentId: 'payment123' });
     });
+  });
 
-    it('should throw an error if payment creation fails', async () => {
-      const paymentDetails = {
-        orderId: 'transaction123',
-        amount: 100000,
-        method: 'credit_card'
-      };
+  describe('getExpiredPaymentWithFlightAndPassenger', () => {
+    it('should get expired payments with flight and passenger details', async () => {
+      await paymentRepository.getExpiredPaymentWithFlightAndPassenger();
 
-      mockCreatePayment.mockRejectedValue(
-        new Error('Failed to create payment')
-      );
-
-      await expect(mockCreatePayment(paymentDetails)).rejects.toThrow(
-        'Failed to create payment'
-      );
+      expect(prisma.payment.findMany).toHaveBeenCalledWith({
+        where: {
+          status: 'PENDING',
+          expiredAt: { lte: expect.any(Date) }
+        },
+        include: {
+          transaction: {
+            include: {
+              passenger: {
+                select: {
+                  departureSeatId: true,
+                  returnSeatId: true
+                }
+              }
+            }
+          }
+        }
+      });
     });
   });
 });

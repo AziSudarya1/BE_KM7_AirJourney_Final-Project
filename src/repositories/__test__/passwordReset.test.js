@@ -1,106 +1,128 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
-const mockGetActiveTokenWithUser = jest.fn();
-const mockCreatePasswordResetTokenByUserId = jest.fn();
-const mockGetActiveTokenByUserId = jest.fn();
-
-jest.unstable_mockModule('../../repositories/passwordReset.js', () => ({
-  getActiveTokenWithUser: mockGetActiveTokenWithUser,
-  createPasswordResetTokenByUserId: mockCreatePasswordResetTokenByUserId,
-  getActiveTokenByUserId: mockGetActiveTokenByUserId
+jest.unstable_mockModule('../../utils/db.js', () => ({
+  prisma: {
+    passwordReset: {
+      create: jest.fn(),
+      findFirst: jest.fn()
+    }
+  }
 }));
 
-const passwordResetRepository = await import(
-  '../../repositories/passwordReset.js'
-);
+const { prisma } = await import('../../utils/db.js');
+const passwordResetRepository = await import('../passwordReset.js');
 
-describe('Password Reset Repository Tests', () => {
+describe('passwordResetRepository', () => {
   describe('getActiveTokenWithUser', () => {
-    it('should retrieve an active token with user information', async () => {
-      const mockTokenData = {
-        id: 'token-id-123',
-        token: 'reset-token',
-        used: false,
-        expiredAt: new Date(Date.now() + 3600 * 1000),
-        user: {
-          id: 'user-id-123',
-          email: 'test@example.com'
-        }
-      };
-
-      mockGetActiveTokenWithUser.mockResolvedValue(mockTokenData);
+    it('should return the active token with user details', async () => {
+      const token = 'test-token';
+      const mockTokenWithUser = { token, user: { id: 1, name: 'John Doe' } };
+      prisma.passwordReset.findFirst.mockResolvedValue(mockTokenWithUser);
 
       const result =
-        await passwordResetRepository.getActiveTokenWithUser('reset-token');
+        await passwordResetRepository.getActiveTokenWithUser(token);
 
-      expect(mockGetActiveTokenWithUser).toHaveBeenCalledWith('reset-token');
-      expect(result).toEqual(mockTokenData);
+      expect(prisma.passwordReset.findFirst).toHaveBeenCalledWith({
+        where: {
+          token,
+          used: false,
+          expiredAt: {
+            gt: expect.any(Date)
+          }
+        },
+        include: {
+          user: true
+        }
+      });
+      expect(result).toEqual(mockTokenWithUser);
     });
 
-    it('should return null if no active token exists', async () => {
-      mockGetActiveTokenWithUser.mockResolvedValue(null);
+    it('should return null if no active token is found', async () => {
+      const token = 'invalid-token';
+      prisma.passwordReset.findFirst.mockResolvedValue(null);
 
       const result =
-        await passwordResetRepository.getActiveTokenWithUser('invalid-token');
+        await passwordResetRepository.getActiveTokenWithUser(token);
 
-      expect(mockGetActiveTokenWithUser).toHaveBeenCalledWith('invalid-token');
+      expect(prisma.passwordReset.findFirst).toHaveBeenCalledWith({
+        where: {
+          token,
+          used: false,
+          expiredAt: {
+            gt: expect.any(Date)
+          }
+        },
+        include: {
+          user: true
+        }
+      });
       expect(result).toBeNull();
     });
   });
 
   describe('createPasswordResetTokenByUserId', () => {
-    it('should create a password reset token for a user', async () => {
-      const mockTokenData = {
-        id: 'token-id-123',
-        token: 'reset-token',
-        userId: 'user-id-123',
-        expiredAt: new Date(Date.now() + 3600 * 1000)
-      };
-
-      mockCreatePasswordResetTokenByUserId.mockResolvedValue(mockTokenData);
+    it('should create a new password reset token', async () => {
+      const userId = 1;
+      const token = 'new-token';
+      const expiration = new Date(Date.now() + 3600000); // 1 hour from now
+      const mockCreatedToken = { id: 1, token, userId, expiredAt: expiration };
+      prisma.passwordReset.create.mockResolvedValue(mockCreatedToken);
 
       const result =
         await passwordResetRepository.createPasswordResetTokenByUserId(
-          'user-id-123',
-          'reset-token',
-          mockTokenData.expiredAt
+          userId,
+          token,
+          expiration
         );
 
-      expect(mockCreatePasswordResetTokenByUserId).toHaveBeenCalledWith(
-        'user-id-123',
-        'reset-token',
-        mockTokenData.expiredAt
-      );
-      expect(result).toEqual(mockTokenData);
+      expect(prisma.passwordReset.create).toHaveBeenCalledWith({
+        data: {
+          token,
+          userId,
+          expiredAt: expiration
+        }
+      });
+      expect(result).toEqual(mockCreatedToken);
     });
   });
 
   describe('getActiveTokenByUserId', () => {
-    it('should retrieve an active token for a user', async () => {
-      const mockTokenData = {
-        id: 'token-id-123',
-        token: 'reset-token',
-        userId: 'user-id-123',
-        used: false,
-        expiredAt: new Date(Date.now() + 3600 * 1000)
-      };
-
-      mockGetActiveTokenByUserId.mockResolvedValue(mockTokenData);
+    it('should return the active token for the user', async () => {
+      const userId = 1;
+      const mockToken = { token: 'active-token', userId };
+      prisma.passwordReset.findFirst.mockResolvedValue(mockToken);
 
       const result =
-        await passwordResetRepository.getActiveTokenByUserId('user-id-123');
+        await passwordResetRepository.getActiveTokenByUserId(userId);
 
-      expect(mockGetActiveTokenByUserId).toHaveBeenCalledWith('user-id-123');
-      expect(result).toEqual(mockTokenData);
+      expect(prisma.passwordReset.findFirst).toHaveBeenCalledWith({
+        where: {
+          userId,
+          used: false,
+          expiredAt: {
+            gt: expect.any(Date)
+          }
+        }
+      });
+      expect(result).toEqual(mockToken);
     });
 
-    it('should return null if no active token exists for the user', async () => {
-      mockGetActiveTokenByUserId.mockResolvedValue(null);
+    it('should return null if no active token is found for the user', async () => {
+      const userId = 1;
+      prisma.passwordReset.findFirst.mockResolvedValue(null);
 
       const result =
-        await passwordResetRepository.getActiveTokenByUserId('user-id-456');
+        await passwordResetRepository.getActiveTokenByUserId(userId);
 
-      expect(mockGetActiveTokenByUserId).toHaveBeenCalledWith('user-id-456');
+      expect(prisma.passwordReset.findFirst).toHaveBeenCalledWith({
+        where: {
+          userId,
+          used: false,
+          expiredAt: {
+            gt: expect.any(Date)
+          }
+        }
+      });
       expect(result).toBeNull();
     });
   });

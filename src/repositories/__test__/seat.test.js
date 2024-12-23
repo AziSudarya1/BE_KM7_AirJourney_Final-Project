@@ -1,62 +1,67 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
-const mockUpdateSeatStatusBySeats = jest.fn();
-
-jest.unstable_mockModule('../../repositories/seat.js', () => ({
-  updateSeatStatusBySeats: mockUpdateSeatStatusBySeats
+jest.unstable_mockModule('../../utils/db.js', () => ({
+  prisma: {
+    seat: {
+      updateMany: jest.fn()
+    }
+  }
 }));
 
-const seatRepository = await import('../../repositories/seat.js');
+const { prisma } = await import('../../utils/db.js');
+const seatRepository = await import('../seat.js');
 
 describe('Seat Repository', () => {
-  afterEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
   });
 
   describe('updateSeatStatusBySeats', () => {
-    it('should update the status of multiple seats', async () => {
-      const mockSeatIds = ['seat1', 'seat2', 'seat3'];
-      const mockStatus = 'BOOKED';
-      const mockTransaction = { id: 'mockTransactionId' };
+    it('should update seat status by seats', async () => {
+      const seats = ['1A', '1B', '1C'];
+      const payload = { status: 'BOOKED' };
 
-      const mockUpdatedResponse = { count: 3 };
+      await seatRepository.updateSeatStatusBySeats(seats, payload);
 
-      mockUpdateSeatStatusBySeats.mockResolvedValue(mockUpdatedResponse);
-
-      const result = await seatRepository.updateSeatStatusBySeats(
-        mockSeatIds,
-        mockStatus,
-        mockTransaction
-      );
-
-      expect(mockUpdateSeatStatusBySeats).toHaveBeenCalledTimes(1);
-      expect(mockUpdateSeatStatusBySeats).toHaveBeenCalledWith(
-        mockSeatIds,
-        mockStatus,
-        mockTransaction
-      );
-      expect(result).toEqual(mockUpdatedResponse);
+      expect(prisma.seat.updateMany).toHaveBeenCalledWith({
+        where: {
+          id: {
+            in: seats
+          }
+        },
+        data: {
+          status: {
+            status: payload.status
+          }
+        }
+      });
+      expect(prisma.seat.updateMany).toHaveBeenCalledTimes(1);
     });
 
-    it('should default to prisma if no transaction is provided', async () => {
-      const mockSeatIds = ['seat1', 'seat2', 'seat3'];
-      const mockStatus = 'AVAILABLE';
+    it('should update all seats status by seats', async () => {
+      const seats = ['1A', '1B', '1C'];
+      const payload = { status: 'AVAILABLE' };
+      const mockTx = {
+        seat: {
+          updateMany: jest.fn()
+        }
+      };
 
-      const mockUpdatedResponse = { count: 3 };
+      await seatRepository.updateSeatStatusBySeats(seats, payload, mockTx);
 
-      mockUpdateSeatStatusBySeats.mockResolvedValue(mockUpdatedResponse);
-
-      const result = await seatRepository.updateSeatStatusBySeats(
-        mockSeatIds,
-        mockStatus
-      );
-
-      expect(mockUpdateSeatStatusBySeats).toHaveBeenCalledTimes(1);
-      expect(mockUpdateSeatStatusBySeats.mock.calls[0]).toEqual([
-        mockSeatIds,
-        mockStatus
-      ]);
-      expect(result).toEqual(mockUpdatedResponse);
+      expect(mockTx.seat.updateMany).toHaveBeenCalledWith({
+        where: {
+          id: {
+            in: seats
+          }
+        },
+        data: {
+          status: {
+            status: payload.status
+          }
+        }
+      });
+      expect(mockTx.seat.updateMany).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -1,139 +1,137 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
-const mockCreateFlightAndSeat = jest.fn();
-const mockGetAllFlight = jest.fn();
-const mockGetDetailFlightById = jest.fn();
-const mockGetFlightWithSeatsById = jest.fn();
-const mockGetFlightById = jest.fn();
-
-jest.unstable_mockModule('../../repositories/flight.js', () => ({
-  createFlightAndSeat: mockCreateFlightAndSeat,
-  getAllFlight: mockGetAllFlight,
-  getDetailFlightById: mockGetDetailFlightById,
-  getFlightWithSeatsById: mockGetFlightWithSeatsById,
-  getFlightById: mockGetFlightById
+jest.unstable_mockModule('../../utils/db.js', () => ({
+  prisma: {
+    flight: {
+      create: jest.fn(),
+      findUnique: jest.fn(),
+      findMany: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+      count: jest.fn()
+    }
+  }
 }));
 
-const flightRepository = await import('../../repositories/flight.js');
+const { prisma } = await import('../../utils/db.js');
+const flightRepository = await import('../flight.js');
 
 describe('Flight Repository', () => {
-  describe('createFlightAndSeat', () => {
-    it('should create a new flight with seats', async () => {
-      const mockPayload = {
-        departureDate: '2024-12-25',
-        departureTime: '10:00',
-        arrivalDate: '2024-12-25',
-        arrivalTime: '12:00',
-        duration: 120,
-        price: 500000,
-        class: 'ECONOMY',
-        description: 'Test flight',
-        airlineId: 'airline-123',
-        airportIdFrom: 'airport-1',
-        airportIdTo: 'airport-2',
-        aeroplaneId: 'aeroplane-1',
-        seats: [
-          { row: 1, column: 1, status: 'AVAILABLE' },
-          { row: 1, column: 2, status: 'AVAILABLE' }
-        ]
-      };
+  const mockFlight = {
+    id: 1,
+    departureDate: '2024-12-23T15:05:40.569Z',
+    departureTime: '10:00',
+    arrivalDate: '2024-12-23T15:05:40.569Z',
+    arrivalTime: '12:00',
+    duration: 120,
+    price: 100,
+    class: 'Economy',
+    description: 'Test flight',
+    airlineId: 1,
+    airportIdFrom: 1,
+    airportIdTo: 2,
+    aeroplaneId: 1,
+    seat: [{ id: 1, status: 'AVAILABLE' }]
+  };
 
-      mockCreateFlightAndSeat.mockResolvedValue(mockPayload);
+  const mockQuery = { where: { id: 1 } };
 
-      const result = await flightRepository.createFlightAndSeat(mockPayload);
-
-      expect(mockCreateFlightAndSeat).toHaveBeenCalledWith(mockPayload);
-      expect(result).toEqual(mockPayload);
-    });
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  describe('getAllFlight', () => {
-    it('should return a list of flights', async () => {
-      const mockFlights = [
-        {
-          id: 'flight-1',
-          departureDate: '2024-12-25',
-          departureTime: '10:00',
-          arrivalDate: '2024-12-25',
-          arrivalTime: '12:00',
-          duration: 120,
-          price: 500000
-        },
-        {
-          id: 'flight-2',
-          departureDate: '2024-12-26',
-          departureTime: '14:00',
-          arrivalDate: '2024-12-26',
-          arrivalTime: '16:00',
-          duration: 120,
-          price: 600000
+  it('should create a flight and seats', async () => {
+    prisma.flight.create.mockResolvedValue(mockFlight);
+
+    const result = await flightRepository.createFlightAndSeat(mockFlight);
+
+    expect(prisma.flight.create).toHaveBeenCalledWith({
+      data: {
+        departureDate: new Date(mockFlight.departureDate),
+        departureTime: mockFlight.departureTime,
+        arrivalDate: new Date(mockFlight.arrivalDate),
+        arrivalTime: mockFlight.arrivalTime,
+        duration: mockFlight.duration,
+        price: mockFlight.price,
+        class: mockFlight.class,
+        description: mockFlight.description,
+        airlineId: mockFlight.airlineId,
+        airportIdFrom: mockFlight.airportIdFrom,
+        airportIdTo: mockFlight.airportIdTo,
+        aeroplaneId: mockFlight.aeroplaneId,
+        seat: {
+          createMany: {
+            data: undefined
+          }
         }
-      ];
-
-      mockGetAllFlight.mockResolvedValue(mockFlights);
-
-      const result = await flightRepository.getAllFlight(null, {});
-
-      expect(mockGetAllFlight).toHaveBeenCalledWith(null, {});
-      expect(result).toEqual(mockFlights);
+      }
     });
+    expect(result).toEqual(mockFlight);
   });
 
-  describe('getDetailFlightById', () => {
-    it('should return flight details by id', async () => {
-      const mockId = 'flight-1';
-      const mockFlightDetails = {
-        id: 'flight-1',
-        departureDate: '2024-12-25',
-        departureTime: '10:00',
-        arrivalDate: '2024-12-25',
-        arrivalTime: '12:00',
-        duration: 120,
-        price: 500000,
-        seats: [{ row: 1, column: 1, status: 'AVAILABLE' }]
-      };
+  it('should count flight data with filter', async () => {
+    prisma.flight.count.mockResolvedValue(1);
 
-      mockGetDetailFlightById.mockResolvedValue(mockFlightDetails);
+    const result = await flightRepository.countFlightDataWithFilter(mockQuery);
 
-      const result = await flightRepository.getDetailFlightById(mockId);
-
-      expect(mockGetDetailFlightById).toHaveBeenCalledWith(mockId);
-      expect(result).toEqual(mockFlightDetails);
-    });
+    expect(prisma.flight.count).toHaveBeenCalledWith(mockQuery);
+    expect(result).toBe(1);
   });
 
-  describe('getFlightWithSeatsById', () => {
-    it('should return flight with seats by id', async () => {
-      const mockId = 'flight-1';
-      const mockFlightWithSeats = {
-        id: 'flight-1',
-        seats: [{ row: 1, column: 1, status: 'AVAILABLE' }]
-      };
+  it('should get all flights', async () => {
+    prisma.flight.findMany.mockResolvedValue([mockFlight]);
 
-      mockGetFlightWithSeatsById.mockResolvedValue(mockFlightWithSeats);
+    const result = await flightRepository.getAllFlight(mockQuery);
 
-      const result = await flightRepository.getFlightWithSeatsById(mockId);
-
-      expect(mockGetFlightWithSeatsById).toHaveBeenCalledWith(mockId);
-      expect(result).toEqual(mockFlightWithSeats);
-    });
+    expect(prisma.flight.findMany).toHaveBeenCalledWith(mockQuery);
+    expect(result).toEqual([mockFlight]);
   });
 
-  describe('getFlightById', () => {
-    it('should return flight by id', async () => {
-      const mockId = 'flight-1';
-      const mockFlight = {
-        id: 'flight-1',
-        departureDate: '2024-12-25',
-        departureTime: '10:00'
-      };
+  it('should get flight details by id', async () => {
+    prisma.flight.findUnique.mockResolvedValue(mockFlight);
 
-      mockGetFlightById.mockResolvedValue(mockFlight);
+    const result = await flightRepository.getDetailFlightById(1);
 
-      const result = await flightRepository.getFlightById(mockId);
-
-      expect(mockGetFlightById).toHaveBeenCalledWith(mockId);
-      expect(result).toEqual(mockFlight);
+    expect(prisma.flight.findUnique).toHaveBeenCalledWith({
+      where: { id: 1 },
+      include: {
+        _count: {
+          select: {
+            seat: {
+              where: {
+                status: 'AVAILABLE'
+              }
+            }
+          }
+        },
+        seat: true,
+        airportFrom: true,
+        airportTo: true,
+        airline: true,
+        aeroplane: true
+      }
     });
+    expect(result).toEqual(mockFlight);
+  });
+
+  it('should get flight with seats by id', async () => {
+    prisma.flight.findUnique.mockResolvedValue(mockFlight);
+
+    const result = await flightRepository.getFlightWithSeatsById(1);
+
+    expect(prisma.flight.findUnique).toHaveBeenCalledWith({
+      where: { id: 1 },
+      include: { seat: true }
+    });
+    expect(result).toEqual(mockFlight);
+  });
+
+  it('should get flight by id', async () => {
+    prisma.flight.findUnique.mockResolvedValue(mockFlight);
+
+    const result = await flightRepository.getFlightById(1);
+
+    expect(prisma.flight.findUnique).toHaveBeenCalledWith({ where: { id: 1 } });
+    expect(result).toEqual(mockFlight);
   });
 });
