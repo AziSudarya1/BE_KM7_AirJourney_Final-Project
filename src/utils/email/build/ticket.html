@@ -576,6 +576,7 @@
       <!--[if mso | IE]></td></tr></table><![endif]-->
       <!-- Return Flight (Conditional Rendering) -->
       <!--[if mso | IE]><table align="center" border="0" cellpadding="0" cellspacing="0" class="" role="presentation" style="width:600px;" width="600" bgcolor="#ffffff" ><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+      {{#if ticket.returnFlight}}
       <div
         style="
           background: #ffffff;
@@ -600,11 +601,12 @@
                   font-size: 0px;
                   padding: 20px 0;
                   padding-left: 20px;
+                  padding-right: 20px;
                   padding-top: 0;
                   text-align: center;
                 "
               >
-                <!--[if mso | IE]><table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td class="" style="vertical-align:top;width:580px;" ><![endif]-->
+                <!--[if mso | IE]><table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td class="" style="vertical-align:top;width:560px;" ><![endif]-->
                 <div
                   class="mj-column-per-100 mj-outlook-group-fix"
                   style="
@@ -676,7 +678,7 @@
                     </tbody>
                   </table>
                 </div>
-                <!--[if mso | IE]></td><td class="" style="vertical-align:top;width:406px;" ><![endif]-->
+                <!--[if mso | IE]></td><td class="" style="vertical-align:top;width:392px;" ><![endif]-->
                 <div
                   class="mj-column-per-70 mj-outlook-group-fix"
                   style="
@@ -784,7 +786,7 @@
                     </tbody>
                   </table>
                 </div>
-                <!--[if mso | IE]></td><td class="" style="vertical-align:top;width:174px;" ><![endif]-->
+                <!--[if mso | IE]></td><td class="" style="vertical-align:top;width:168px;" ><![endif]-->
                 <div
                   class="mj-column-per-30 mj-outlook-group-fix"
                   style="
@@ -812,7 +814,7 @@
                           style="
                             white-space: nowrap;
                             font-size: 0px;
-                            padding: 10px 25px;
+                            padding: 20px;
                             word-break: break-word;
                           "
                         >
@@ -833,7 +835,7 @@
                     </tbody>
                   </table>
                 </div>
-                <!--[if mso | IE]></td><td class="" style="vertical-align:top;width:580px;" ><![endif]-->
+                <!--[if mso | IE]></td><td class="" style="vertical-align:top;width:560px;" ><![endif]-->
                 <div
                   class="mj-column-per-100 mj-outlook-group-fix"
                   style="
@@ -883,10 +885,10 @@
                                 border-top: solid 1px #cccccc;
                                 font-size: 1px;
                                 margin: 0px auto;
-                                width: 580px;
+                                width: 560px;
                               "
                               role="presentation"
-                              width="580px"
+                              width="560px"
                             >
                               <tr>
                                 <td style="height: 0; line-height: 0">
@@ -906,6 +908,7 @@
           </tbody>
         </table>
       </div>
+      {{/if}}
       <!--[if mso | IE]></td></tr></table><![endif]-->
       <!-- Passenger Information -->
       <!--[if mso | IE]><table align="center" border="0" cellpadding="0" cellspacing="0" class="" role="presentation" style="width:600px;" width="600" bgcolor="#ffffff" ><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
