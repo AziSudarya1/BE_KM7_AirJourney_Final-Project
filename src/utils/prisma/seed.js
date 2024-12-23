@@ -193,17 +193,19 @@ async function seedFlights() {
   for (let i = 0; i < 50; i++) {
     const randomAirlinesId =
       airlines[Math.floor(Math.random() * airlines.length)].id;
+
     const randomAeroplanesId =
       aeroplanes[Math.floor(Math.random() * aeroplanes.length)].id;
-    let randomAirportsId =
-      airports[Math.floor(Math.random() * airports.length)].id;
+
+    const airportFrom = airports[0];
+    let airportTo = airports[Math.floor(Math.random() * airports.length)];
+
+    while (airportTo.id === airportFrom.id) {
+      airportTo = airports[Math.floor(Math.random() * airports.length)];
+    }
+
     const randomClass =
       ALLOWED_CLASS[Math.floor(Math.random() * ALLOWED_CLASS.length)];
-
-    while (randomAirportsId === airports[0].id) {
-      randomAirportsId =
-        airports[Math.floor(Math.random() * airports.length)].id;
-    }
 
     flights.push({
       departureDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * (i + 9)),
@@ -213,10 +215,10 @@ async function seedFlights() {
       duration: 120,
       price: 500 + i * 50,
       class: randomClass,
-      description: `Flight from Jakarta to Destination ${i + 1}`,
+      description: `Flight from ${airportFrom.city} to ${airportTo.city}`,
       airlineId: randomAirlinesId,
-      airportIdFrom: airports[0].id,
-      airportIdTo: randomAirportsId,
+      airportIdFrom: airportFrom.id,
+      airportIdTo: airportTo.id,
       aeroplaneId: randomAeroplanesId
     });
 
@@ -228,10 +230,10 @@ async function seedFlights() {
       duration: 120,
       price: 500 + i * 50,
       class: randomClass,
-      description: `Return flight from Destination ${i + 1} to Jakarta`,
+      description: `Return flight from ${airportTo.city} to ${airportFrom.city}`,
       airlineId: randomAirlinesId,
-      airportIdFrom: randomAirportsId,
-      airportIdTo: airports[0].id,
+      airportIdFrom: airportTo.id,
+      airportIdTo: airportFrom.id,
       aeroplaneId: randomAeroplanesId
     });
   }
