@@ -5,13 +5,16 @@ const mockGetDetailTransactionById = jest.fn();
 const mockGetAllTransactions = jest.fn();
 const mockCancelTransaction = jest.fn();
 const mockGetTransactionWithFlightAndPassenger = jest.fn();
+const mockInvalidateExpiredTransactions = jest.fn();
 
 jest.unstable_mockModule('../../services/transaction.js', () => ({
   createTransaction: mockCreateTransaction,
   getDetailTransactionById: mockGetDetailTransactionById,
   getAllTransactions: mockGetAllTransactions,
   cancelTransaction: mockCancelTransaction,
-  getTransactionWithFlightAndPassenger: mockGetTransactionWithFlightAndPassenger
+  getTransactionWithFlightAndPassenger:
+    mockGetTransactionWithFlightAndPassenger,
+  invalidateExpiredTransactions: mockInvalidateExpiredTransactions
 }));
 
 const transactionController = await import('../transaction.js');
@@ -174,6 +177,27 @@ describe('Transaction Controller', () => {
       expect(mockResponse.status).toHaveBeenCalledWith(200);
       expect(mockResponse.json).toHaveBeenCalledWith({
         message: 'Ticket send successfully'
+      });
+    });
+  });
+
+  describe('invalidateExpiredTransactiona', () => {
+    it('should call invalidateExpiredTransactions service', async () => {
+      const mockRequest = {};
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn()
+      };
+
+      await transactionController.invalidateExpiredTransactions(
+        mockRequest,
+        mockResponse
+      );
+
+      expect(mockInvalidateExpiredTransactions).toHaveBeenCalled();
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: 'Expired transactions invalidated successfully'
       });
     });
   });

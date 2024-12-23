@@ -67,7 +67,7 @@ export async function deleteNotification(id, userId) {
 
 export async function createUserNotification(userId, payload, tx) {
   if (!payload.title || !payload.message) {
-    throw new Error('Payload must include both title and message');
+    throw new HttpError('Payload must include both title and message', 400);
   }
 
   const notification = await notificationRepository.createUserNotification(

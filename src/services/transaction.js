@@ -325,7 +325,7 @@ export async function countTransactionDataWithFilterAndCreateMeta(
   };
 }
 
-async function validatePassengers(
+export async function validatePassengers(
   passengers,
   returnFlight,
   departureSeats,
