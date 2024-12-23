@@ -26,6 +26,7 @@ describe('User Repository', () => {
 
   const userId = 'user-id';
   const otpId = 'otp-id';
+  const passwordId = 'password-id';
   const token = 'reset-token';
   const expiration = new Date();
 
@@ -136,10 +137,18 @@ describe('User Repository', () => {
   });
 
   it('should update user password', async () => {
-    await userRepository.updateUserPassword(userId, 'new-password');
+    await userRepository.updateUserPassword(userId, passwordId, 'new-password');
     expect(prisma.user.update).toHaveBeenCalledWith({
       where: { id: userId },
-      data: { password: 'new-password' }
+      data: {
+        password: 'new-password',
+        passwordReset: {
+          update: {
+            where: { id: passwordId },
+            data: { used: true }
+          }
+        }
+      }
     });
   });
 
