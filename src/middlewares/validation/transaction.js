@@ -12,7 +12,7 @@ const createPassengerSchema = Joi.object({
   type: Joi.string()
     .valid(...ALLOWED_PASSESNGER_TYPES)
     .required(),
-  identityNumber: Joi.string().required(),
+  identityNumber: Joi.string().pattern(/^\d+$/).min(16).required(),
   originCountry: Joi.string().required(),
   expiredAt: Joi.date().required(),
   departureSeatId: Joi.string().uuid().when('type', {
@@ -51,7 +51,7 @@ export async function createTransactionValidation(req, res, next) {
       return res.status(400).json({ message: errorMessages });
     }
 
-    throw error;
+    next(error);
   }
 }
 
@@ -87,6 +87,6 @@ export async function getTransactionFilterValidation(req, res, next) {
       return res.status(400).json({ message: errorMessages });
     }
 
-    throw error;
+    next(error);
   }
 }
