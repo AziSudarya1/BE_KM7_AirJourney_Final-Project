@@ -52,7 +52,7 @@ describe('Transaction Validation', () => {
       expect(next).toHaveBeenCalled();
     });
 
-    it('should return 400 and error message if Joi validation fails', async () => {
+    it('should return 400 and error message if validation fails', async () => {
       const req = {
         body: {
           departureFlightId: '',
@@ -61,16 +61,13 @@ describe('Transaction Validation', () => {
         }
       };
 
-      const joiError = new Error('Validation error');
-      joiError.isJoi = true;
-      generateJoiError.mockReturnValue('Validation error details');
+      const error = new Error('Validation error');
+      generateJoiError.mockReturnValue(error);
 
       await transactionValidation.createTransactionValidation(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({
-        message: 'Validation error details'
-      });
+      expect(res.json).toHaveBeenCalledWith({ message: error });
     });
   });
 
@@ -109,9 +106,8 @@ describe('Transaction Validation', () => {
         }
       };
 
-      const joiError = new Error('Validation error');
-      joiError.isJoi = true;
-      generateJoiError.mockReturnValue('Validation error details');
+      const error = new Error('Validation error');
+      generateJoiError.mockReturnValue(error);
 
       await transactionValidation.getTransactionFilterValidation(
         req,
@@ -120,9 +116,7 @@ describe('Transaction Validation', () => {
       );
 
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({
-        message: 'Validation error details'
-      });
+      expect(res.json).toHaveBeenCalledWith({ message: error });
     });
 
     it('should set default page to 1 if page query is not provided', async () => {

@@ -243,6 +243,38 @@ describe('Flight Validation', () => {
       expect(res.locals.favourite).toBe(false);
       expect(next).toHaveBeenCalled();
     });
+
+    it('should populate filter with continent and departureDate if favourite is true', async () => {
+      const req = {
+        query: {
+          favourite: 'true',
+          continent: 'ASIA',
+          departureDate: '2024-12-29',
+          class: 'FIRST_CLASS'
+        }
+      };
+
+      const res = {
+        locals: {},
+        status: jest.fn(() => res),
+        json: jest.fn()
+      };
+
+      const next = jest.fn();
+
+      await flightValidation.validateFilterSortingAndPageParams(req, res, next);
+
+      expect(res.locals.filter).toEqual({
+        class: 'FIRST_CLASS',
+        departureDate: {
+          gte: expect.any(Date),
+          lte: expect.any(Date)
+        },
+        airportTo: { continent: 'ASIA' }
+      });
+      expect(res.locals.favourite).toBe(true);
+      expect(next).toHaveBeenCalled();
+    });
   });
 
   describe('validateReturnFlightId', () => {

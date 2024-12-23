@@ -46,12 +46,8 @@ export async function createTransactionValidation(req, res, next) {
 
     next();
   } catch (error) {
-    if (Joi.isError(error)) {
-      const errorMessages = generateJoiError(error);
-      return res.status(400).json({ message: errorMessages });
-    }
-
-    next(error);
+    const errorMessages = generateJoiError(error);
+    return res.status(400).json({ message: errorMessages });
   }
 }
 
@@ -82,11 +78,7 @@ export async function getTransactionFilterValidation(req, res, next) {
 
     next();
   } catch (error) {
-    if (Joi.isError(error)) {
-      const errorMessages = generateJoiError(error);
-      return res.status(400).json({ message: errorMessages });
-    }
-
-    next(error);
+    const errorMessages = generateJoiError(error);
+    return res.status(400).json({ message: errorMessages });
   }
 }
