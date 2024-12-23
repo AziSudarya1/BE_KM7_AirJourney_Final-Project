@@ -137,7 +137,6 @@ export async function countFlightDataWithFilterAndCreateMeta(
 
   if (!favourite) {
     const query = {
-      take: limit,
       where: {
         departureDate: {
           gte: new Date()

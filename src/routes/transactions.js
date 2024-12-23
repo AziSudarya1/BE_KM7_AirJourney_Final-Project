@@ -10,11 +10,12 @@ export default (app) => {
 
   app.use('/transactions', router);
 
-  router.post(
+  router.get(
     '/',
     authMiddleware.isAuthorized,
-    transactionValidationMiddleware.createTransactionValidation,
-    transactionController.createTransaction
+    transactionValidationMiddleware.getTransactionFilterValidation,
+    transactionMiddleware.getMaxTransactionDataAndCreateMeta,
+    transactionController.getAllTransactions
   );
 
   router.get(
@@ -25,18 +26,23 @@ export default (app) => {
   );
 
   router.post(
+    '/invalidate-expired',
+    authMiddleware.getCloudSchedulerToken,
+    transactionController.invalidateExpiredTransactions
+  );
+
+  router.post(
+    '/',
+    authMiddleware.isAuthorized,
+    transactionValidationMiddleware.createTransactionValidation,
+    transactionController.createTransaction
+  );
+
+  router.post(
     '/:id/cancel',
     authMiddleware.isAuthorized,
     commonValidationMiddleware.validateIdParams,
     transactionController.cancelTransaction
-  );
-
-  router.get(
-    '/',
-    authMiddleware.isAuthorized,
-    transactionValidationMiddleware.getTransactionFilterValidation,
-    transactionMiddleware.getMaxTransactionDataAndCreateMeta,
-    transactionController.getAllTransactions
   );
 
   router.post(
