@@ -105,11 +105,21 @@ export async function findUserByResetToken(token) {
   });
 }
 
-export async function updateUserPassword(userId, password) {
+export async function updateUserPassword(userId, passwordId, password) {
   return await prisma.user.update({
     where: { id: userId },
     data: {
-      password
+      password,
+      passwordReset: {
+        update: {
+          where: {
+            id: passwordId
+          },
+          data: {
+            used: true
+          }
+        }
+      }
     }
   });
 }
