@@ -2,19 +2,19 @@
 CREATE TYPE "Role" AS ENUM ('ADMIN', 'USER');
 
 -- CreateEnum
-CREATE TYPE "TransactionStatus" AS ENUM ('UNPAID', 'COMPLETED', 'CANCELLED');
-
--- CreateEnum
-CREATE TYPE "PaymentMethod" AS ENUM ('BANK_TRANSFER', 'CREDIT_CARD', 'DEBIT_CARD', 'GOPAY', 'OVO', 'DANA', 'LINK_AJA', 'SHOPEE_PAY', 'QRIS', 'CASH');
-
--- CreateEnum
-CREATE TYPE "PaymentStatus" AS ENUM ('UNPAID', 'PENDING', 'SUCCESS', 'CANCELLED');
+CREATE TYPE "PaymentStatus" AS ENUM ('PENDING', 'SUCCESS', 'CANCELLED');
 
 -- CreateEnum
 CREATE TYPE "Class" AS ENUM ('ECONOMY', 'PREMIUM_ECONOMY', 'BUSINESS', 'FIRST_CLASS');
 
 -- CreateEnum
 CREATE TYPE "SeatStatus" AS ENUM ('AVAILABLE', 'BOOKED', 'PENDING');
+
+-- CreateEnum
+CREATE TYPE "Continent" AS ENUM ('ASIA', 'EUROPE', 'AFRICA', 'NORTH_AMERICA', 'SOUTH_AMERICA', 'AUSTRALIA', 'ANTARCTICA');
+
+-- CreateEnum
+CREATE TYPE "TypePassenger" AS ENUM ('INFANT', 'ADULT', 'CHILD');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -24,8 +24,8 @@ CREATE TABLE "users" (
     "email" TEXT NOT NULL,
     "role" "Role" NOT NULL,
     "verified" BOOLEAN NOT NULL DEFAULT false,
-    "password" TEXT NOT NULL,
-    "phone_number" TEXT NOT NULL,
+    "password" TEXT,
+    "phone_number" TEXT,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ NOT NULL,
 
@@ -74,13 +74,10 @@ CREATE TABLE "password_reset" (
 -- CreateTable
 CREATE TABLE "transaction" (
     "id" UUID NOT NULL,
-    "transaction_code" TEXT NOT NULL,
     "amount" INTEGER NOT NULL,
-    "status" "TransactionStatus" NOT NULL,
     "user_id" UUID NOT NULL,
     "departure_flight_id" UUID NOT NULL,
     "return_flight_id" UUID,
-    "passenger_id" UUID,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ NOT NULL,
 
@@ -93,13 +90,14 @@ CREATE TABLE "passenger" (
     "transaction_id" UUID NOT NULL,
     "title" TEXT NOT NULL,
     "first_name" TEXT NOT NULL,
-    "family_name" TEXT NOT NULL,
-    "birthday" TEXT NOT NULL,
+    "family_name" TEXT,
+    "birthday" TIMESTAMP(3) NOT NULL,
     "nationality" TEXT NOT NULL,
-    "nik_paspor" TEXT NOT NULL,
-    "nik_ktp" TEXT NOT NULL,
+    "type" "TypePassenger" NOT NULL,
+    "identity_number" TEXT NOT NULL,
+    "origin_country" TEXT NOT NULL,
     "expired_at" TIMESTAMP(3) NOT NULL,
-    "departure_seat_id" UUID NOT NULL,
+    "departure_seat_id" UUID,
     "return_seat_id" UUID,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ NOT NULL,
@@ -111,10 +109,10 @@ CREATE TABLE "passenger" (
 CREATE TABLE "flight" (
     "id" UUID NOT NULL,
     "departure_date" TIMESTAMP(3) NOT NULL,
-    "departure_time" TIMESTAMP(3) NOT NULL,
+    "departure_time" TEXT NOT NULL,
     "arrival_date" TIMESTAMP(3) NOT NULL,
-    "arrival_time" TIMESTAMP(3) NOT NULL,
-    "duration" TEXT NOT NULL,
+    "arrival_time" TEXT NOT NULL,
+    "duration" INTEGER NOT NULL,
     "price" INTEGER NOT NULL,
     "class" "Class" NOT NULL,
     "description" TEXT,
@@ -145,7 +143,9 @@ CREATE TABLE "airport" (
     "id" UUID NOT NULL,
     "code" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "location" TEXT NOT NULL,
+    "continent" "Continent" NOT NULL,
+    "city" TEXT NOT NULL,
+    "country" TEXT NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ NOT NULL,
 
@@ -156,10 +156,9 @@ CREATE TABLE "airport" (
 CREATE TABLE "payment" (
     "id" UUID NOT NULL,
     "status" "PaymentStatus" NOT NULL,
-    "method" "PaymentMethod" NOT NULL,
+    "method" TEXT,
     "snap_token" TEXT NOT NULL,
-    "snap_redirect_url" TEXT NOT NULL,
-    "payment_method" TEXT NOT NULL,
+    "expired_at" TIMESTAMP(3) NOT NULL,
     "transaction_id" UUID NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ NOT NULL,
@@ -171,6 +170,7 @@ CREATE TABLE "payment" (
 CREATE TABLE "aeroplane" (
     "id" UUID NOT NULL,
     "code" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "max_row" INTEGER NOT NULL,
     "max_column" INTEGER NOT NULL,
@@ -184,7 +184,7 @@ CREATE TABLE "aeroplane" (
 CREATE TABLE "seat" (
     "id" UUID NOT NULL,
     "status" "SeatStatus" NOT NULL,
-    "number" INTEGER NOT NULL,
+    "column" INTEGER NOT NULL,
     "row" INTEGER NOT NULL,
     "aeroplane_id" UUID NOT NULL,
     "flight_id" UUID NOT NULL,
@@ -201,13 +201,25 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 CREATE UNIQUE INDEX "users_phone_number_key" ON "users"("phone_number");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "passenger_departure_seat_id_key" ON "passenger"("departure_seat_id");
+CREATE UNIQUE INDEX "airline_code_key" ON "airline"("code");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "passenger_return_seat_id_key" ON "passenger"("return_seat_id");
+CREATE UNIQUE INDEX "airline_name_key" ON "airline"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "airport_code_key" ON "airport"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "airport_name_key" ON "airport"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "payment_transaction_id_key" ON "payment"("transaction_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "aeroplane_code_key" ON "aeroplane"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "aeroplane_name_key" ON "aeroplane"("name");
 
 -- AddForeignKey
 ALTER TABLE "notification" ADD CONSTRAINT "notification_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -231,7 +243,7 @@ ALTER TABLE "transaction" ADD CONSTRAINT "transaction_return_flight_id_fkey" FOR
 ALTER TABLE "passenger" ADD CONSTRAINT "passenger_transaction_id_fkey" FOREIGN KEY ("transaction_id") REFERENCES "transaction"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "passenger" ADD CONSTRAINT "passenger_departure_seat_id_fkey" FOREIGN KEY ("departure_seat_id") REFERENCES "seat"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "passenger" ADD CONSTRAINT "passenger_departure_seat_id_fkey" FOREIGN KEY ("departure_seat_id") REFERENCES "seat"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "passenger" ADD CONSTRAINT "passenger_return_seat_id_fkey" FOREIGN KEY ("return_seat_id") REFERENCES "seat"("id") ON DELETE SET NULL ON UPDATE CASCADE;
