@@ -229,11 +229,29 @@ export async function getTransactionWithFlightAndPassenger(id, userId, email) {
     });
   });
 
+  const departureDateTimeFormatted = new Date(
+    departureFlight.departureDate
+  ).toLocaleString('id-ID', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+
+  const returnDateTimeFormatted = returnFlight
+    ? new Date(returnFlight.departureDate).toLocaleString('id-ID', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      })
+    : null;
+
   const ticket = {
     departureAirline: `${departureFlight.airline.name} (${departureFlight.airline.code})`,
     departureAeroplane: departureFlight.aeroplane.name,
     departureClass: departureFlight.class,
-    departureDate: departureFlight.departureDate.toDateString(),
+    departureDate: departureDateTimeFormatted,
     departureTime: departureFlight.departureTime,
     arrivalTime: departureFlight.arrivalTime,
     duration: departureFlight.duration,
@@ -249,7 +267,7 @@ export async function getTransactionWithFlightAndPassenger(id, userId, email) {
           returnAirline: `${returnFlight.airline.name} (${returnFlight.airline.code})`,
           returnAeroplane: returnFlight.aeroplane.name,
           returnClass: returnFlight.class,
-          returnDate: returnFlight.departureDate.toDateString(),
+          returnDate: returnDateTimeFormatted,
           returnDepartureTime: returnFlight.departureTime,
           returnArrivalTime: returnFlight.arrivalTime,
           returnDuration: returnFlight.duration,
