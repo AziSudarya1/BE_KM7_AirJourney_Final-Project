@@ -202,6 +202,89 @@ export async function getAllTransactions(userId, filter, meta) {
   return data;
 }
 
+function formatDateTime(dateString, locale = 'id-ID') {
+  return new Date(dateString).toLocaleString(locale, {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+}
+
+function mapPassengers(passengers) {
+  const titleMapping = {
+    Mr: 'Tuan.',
+    Ms: 'Nona.',
+    Mrs: 'Nyonya.'
+  };
+
+  const typeMapping = {
+    INFANT: 'Bayi',
+    ADULT: 'Dewasa',
+    CHILD: 'Anak'
+  };
+
+  return passengers.map((p) => {
+    let title = titleMapping[p.title] || p.title;
+
+    if (p.type === 'CHILD' || p.type === 'INFANT') {
+      title = '';
+    }
+
+    return {
+      title,
+      firstName: p.firstName,
+      familyName: p.familyName || '',
+      type: typeMapping[p.type] || p.type
+    };
+  });
+}
+
+function createTicket(departureFlight, returnFlight, passengers) {
+  const departureDateTimeFormatted = formatDateTime(
+    departureFlight.departureDate
+  );
+  const returnDateTimeFormatted = returnFlight
+    ? formatDateTime(returnFlight.departureDate)
+    : null;
+
+  return {
+    departureAirline: `${departureFlight.airline.name} (${departureFlight.airline.code})`,
+    departureAeroplane: departureFlight.aeroplane.name,
+    departureClass: departureFlight.class,
+    departureDate: departureDateTimeFormatted,
+    departureTime: departureFlight.departureTime,
+    arrivalTime: departureFlight.arrivalTime,
+    duration: departureFlight.duration,
+    departureAirportFromCity: departureFlight.airportFrom.city,
+    arrivalAirportToCity: departureFlight.airportTo.city,
+    departureAirportFromCode: departureFlight.airportFrom.code,
+    arrivalAirportToCode: departureFlight.airportTo.code,
+    departureAirportFromName: departureFlight.airportFrom.name,
+    arrivalAirportToName: departureFlight.airportTo.name,
+
+    returnFlight: returnFlight
+      ? {
+          returnAirline: `${returnFlight.airline.name} (${returnFlight.airline.code})`,
+          returnAeroplane: returnFlight.aeroplane.name,
+          returnClass: returnFlight.class,
+          returnDate: returnDateTimeFormatted,
+          returnDepartureTime: returnFlight.departureTime,
+          returnArrivalTime: returnFlight.arrivalTime,
+          returnDuration: returnFlight.duration,
+          returnairportFromCity: returnFlight.airportFrom.city,
+          returnairportToCity: returnFlight.airportTo.city,
+          returnairportFromCode: returnFlight.airportFrom.code,
+          returnairportToCode: returnFlight.airportTo.code,
+          returnairportFromName: returnFlight.airportFrom.name,
+          returnairportToName: returnFlight.airportTo.name
+        }
+      : null,
+
+    passengers: passengers
+  };
+}
+
 export async function getTransactionWithFlightAndPassenger(id, userId, email) {
   const transaction = await transactionRepository.getDetailTransactionById(id);
 
@@ -219,53 +302,10 @@ export async function getTransactionWithFlightAndPassenger(id, userId, email) {
 
   const { departureFlight, returnFlight } = transaction;
 
-  const passengers = [];
-  transaction.passenger.forEach((p) => {
-    passengers.push({
-      title: p.title,
-      firstName: p.firstName,
-      familyName: p.familyName || '',
-      type: p.type
-    });
-  });
+  const passengers = mapPassengers(transaction.passenger);
+  const ticket = createTicket(departureFlight, returnFlight, passengers);
 
-  const ticket = {
-    departureAirline: `${departureFlight.airline.name} (${departureFlight.airline.code})`,
-    departureAeroplane: departureFlight.aeroplane.name,
-    departureClass: departureFlight.class,
-    departureDate: departureFlight.departureDate.toDateString(),
-    departureTime: departureFlight.departureTime,
-    arrivalTime: departureFlight.arrivalTime,
-    duration: departureFlight.duration,
-    departureAirportFromCity: departureFlight.airportFrom.city,
-    arrivalAirportToCity: departureFlight.airportTo.city,
-    departureAirportFromCode: departureFlight.airportFrom.code,
-    arrivalAirportToCode: departureFlight.airportTo.code,
-    departureAirportFromName: departureFlight.airportFrom.name,
-    arrivalAirportToName: departureFlight.airportTo.name,
-
-    returnFlight: returnFlight
-      ? {
-          returnAirline: `${returnFlight.airline.name} (${returnFlight.airline.code})`,
-          returnAeroplane: returnFlight.aeroplane.name,
-          returnClass: returnFlight.class,
-          returnDate: returnFlight.departureDate.toDateString(),
-          returnDepartureTime: returnFlight.departureTime,
-          returnArrivalTime: returnFlight.arrivalTime,
-          returnDuration: returnFlight.duration,
-          returnairportFromCity: returnFlight.airportFrom.city,
-          returnairportToCity: returnFlight.airportTo.city,
-          returnairportFromCode: returnFlight.airportFrom.code,
-          returnairportToCode: returnFlight.airportTo.code,
-          returnairportFromName: returnFlight.airportFrom.name,
-          returnairportToName: returnFlight.airportTo.name
-        }
-      : null,
-
-    passengers: passengers
-  };
-
-  await sendEmail(email, 'Your E-Ticket', 'ticket', {
+  await sendEmail(email, 'Tiket Pesawat Kamu', 'ticket', {
     ticket
   });
 

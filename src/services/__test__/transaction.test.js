@@ -500,8 +500,13 @@ describe('Transaction Service', () => {
           airportTo: { city: 'CityA', code: 'CTA', name: 'AirportA' }
         },
         passenger: [
-          { title: 'Mr', firstName: 'John', familyName: 'Doe', type: 'ADULT' },
-          { title: 'Ms', firstName: 'Jane', familyName: '', type: 'CHILD' }
+          {
+            title: 'Tuan.',
+            firstName: 'John',
+            familyName: 'Doe',
+            type: 'Dewasa'
+          },
+          { title: 'Nona.', firstName: 'Jane', familyName: '', type: 'Anak' }
         ]
       };
 
@@ -521,7 +526,7 @@ describe('Transaction Service', () => {
         departureAirline: 'Airline (AL)',
         departureAeroplane: 'Plane',
         departureClass: 'Economy',
-        departureDate: 'Wed Dec 25 2024',
+        departureDate: 'Rabu, 25 Desember 2024',
         departureTime: '10:00',
         arrivalTime: '12:00',
         duration: '2h',
@@ -535,7 +540,7 @@ describe('Transaction Service', () => {
           returnAirline: 'Airline (AL)',
           returnAeroplane: 'Plane',
           returnClass: 'Economy',
-          returnDate: 'Fri Dec 27 2024',
+          returnDate: 'Jumat, 27 Desember 2024',
           returnDepartureTime: '14:00',
           returnArrivalTime: '16:00',
           returnDuration: '2h',
@@ -547,14 +552,19 @@ describe('Transaction Service', () => {
           returnairportToName: 'AirportA'
         },
         passengers: [
-          { title: 'Mr', firstName: 'John', familyName: 'Doe', type: 'ADULT' },
-          { title: 'Ms', firstName: 'Jane', familyName: '', type: 'CHILD' }
+          {
+            title: 'Tuan.',
+            firstName: 'John',
+            familyName: 'Doe',
+            type: 'Dewasa'
+          },
+          { title: 'Nona.', firstName: 'Jane', familyName: '', type: 'Anak' }
         ]
       };
 
       expect(mockSendEmail).toHaveBeenCalledWith(
         email,
-        'Your E-Ticket',
+        'Tiket Pesawat Kamu',
         'ticket',
         { ticket: expectedTicket }
       );
@@ -578,8 +588,13 @@ describe('Transaction Service', () => {
         },
         returnFlight: null,
         passenger: [
-          { title: 'Mr', firstName: 'John', familyName: 'Doe', type: 'ADULT' },
-          { title: 'Ms', firstName: 'Jane', familyName: '', type: 'CHILD' }
+          {
+            title: 'Tuan.',
+            firstName: 'John',
+            familyName: 'Doe',
+            type: 'Dewasa'
+          },
+          { title: 'Nona.', firstName: 'Jane', familyName: '', type: 'Anak' }
         ]
       };
 
@@ -599,7 +614,7 @@ describe('Transaction Service', () => {
         departureAirline: 'Airline (AL)',
         departureAeroplane: 'Plane',
         departureClass: 'Economy',
-        departureDate: 'Wed Dec 25 2024',
+        departureDate: 'Rabu, 25 Desember 2024',
         departureTime: '10:00',
         arrivalTime: '12:00',
         duration: '2h',
@@ -611,17 +626,71 @@ describe('Transaction Service', () => {
         arrivalAirportToName: 'AirportB',
         returnFlight: null,
         passengers: [
-          { title: 'Mr', firstName: 'John', familyName: 'Doe', type: 'ADULT' },
-          { title: 'Ms', firstName: 'Jane', familyName: '', type: 'CHILD' }
+          {
+            title: 'Tuan.',
+            firstName: 'John',
+            familyName: 'Doe',
+            type: 'Dewasa'
+          },
+          { title: 'Nona.', firstName: 'Jane', familyName: '', type: 'Anak' }
         ]
       };
 
       expect(mockSendEmail).toHaveBeenCalledWith(
         email,
-        'Your E-Ticket',
+        'Tiket Pesawat Kamu',
         'ticket',
         { ticket: expectedTicket }
       );
+      expect(result).toEqual(transactionData);
+    });
+
+    it('should set title to empty string for passengers with type CHILD or INFANT', async () => {
+      const transactionData = {
+        userId: '1',
+        payment: { status: 'SUCCESS' },
+        departureFlight: {
+          airline: { name: 'Airline', code: 'AL' },
+          aeroplane: { name: 'Plane' },
+          class: 'Economy',
+          departureDate: new Date('2024-12-25'),
+          departureTime: '10:00',
+          arrivalTime: '12:00',
+          duration: '2h',
+          airportFrom: { city: 'CityA', code: 'CTA', name: 'AirportA' },
+          airportTo: { city: 'CityB', code: 'CTB', name: 'AirportB' }
+        },
+        returnFlight: null,
+        passenger: [
+          {
+            title: 'Tuan.',
+            firstName: 'John',
+            familyName: 'Doe',
+            type: 'Dewasa'
+          },
+          { title: 'Nona.', firstName: 'Jane', familyName: '', type: 'CHILD' },
+          {
+            title: 'Tuan.',
+            firstName: 'Baby',
+            familyName: 'Doe',
+            type: 'INFANT'
+          }
+        ]
+      };
+
+      mockGetDetailTransactionById.mockResolvedValueOnce(transactionData);
+
+      const id = '1';
+      const userId = '1';
+      const email = 'test@example.com';
+      const result =
+        await transactionServices.getTransactionWithFlightAndPassenger(
+          id,
+          userId,
+          email
+        );
+
+      expect(result).toEqual(transactionData);
       expect(result).toEqual(transactionData);
     });
   });

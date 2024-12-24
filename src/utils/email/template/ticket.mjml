@@ -2,46 +2,32 @@
   <mj-head>
     <mj-preview>Your E-Ticket</mj-preview>
     <mj-style inline="inline">
-      .vertical-line { border-left: 3px solid #f97316; margin: 0; } .nowrap-text
+      .vertical-line { border-left: 3px solid #B574F2; margin: 0; } .nowrap-text
       { white-space: nowrap; }
     </mj-style>
   </mj-head>
-  <mj-body background-color="#ffffff">
+  <mj-body background-color="#f8f8f8">
     <!-- Header Section -->
-    <mj-section background-color="#a600ff" padding="10px 0">
-      <mj-column width="33%">
+    <mj-section background-color="#ffffff">
+      <mj-column width="100%">
         <mj-image
-          src="https://ik.imagekit.io/jfne1iwnd/05182fbe-5995-418b-a4a0-5fcb5bf4d393_jfz6m9s05.png"
-          alt="Terbangin Logo"
-          width="100px"
-          padding="10px 0"
+          src="https://ik.imagekit.io/jfne1iwnd/b3332414-4e84-4c5b-8dea-4ceac9d4ebd1_ZAXfB_0d2.png"
+          alt="Logo"
+          width="600px"
         ></mj-image>
-      </mj-column>
-      <mj-column width="66%">
-        <mj-text
-          align="left"
-          color="#22177A"
-          font-size="30px"
-          font-weight="bold"
-          font-family="Lato, Helvetica, Arial, sans-serif"
-          padding="18px 0"
-          padding-left="60px"
-        >
-          E-Ticket
-        </mj-text>
       </mj-column>
     </mj-section>
 
     <!-- Departure Flight -->
-    <mj-section padding="20px">
+    <mj-section padding="20px" background-color="#ffffff">
       <mj-column width="100%">
         <mj-text
           font-size="18px"
           font-weight="bold"
-          color="#22177A"
+          color="#B574F2"
           padding="0"
         >
-          Departure Flight
+          Penerbangan Keberangkatan
         </mj-text>
         <mj-text
           font-size="14px"
@@ -58,7 +44,7 @@
       <mj-column width="70%">
         <mj-text
           font-size="16px"
-          color="#f97316"
+          color="#B574F2"
           font-weight="bold"
           padding="0"
           padding-top="20px"
@@ -73,7 +59,7 @@
           padding-bottom="20px"
         >
           {{ticket.departureTime}} - {{ticket.arrivalTime}} ({{ticket.duration}}
-          Minutes)
+          Menit)
         </mj-text>
 
         <!-- Garis Vertikal -->
@@ -115,15 +101,20 @@
 
     <!-- Return Flight (Conditional Rendering) -->
     {{#if ticket.returnFlight}}
-    <mj-section padding-top="0" padding-left="20px">
+    <mj-section
+      padding-top="0"
+      padding-left="20px"
+      padding-right="20px"
+      background-color="#ffffff"
+    >
       <mj-column width="100%">
         <mj-text
           font-size="18px"
           font-weight="bold"
-          color="#22177A"
+          color="#B574F2"
           padding="0"
         >
-          Return Flight
+          Penerbangan Kembali
         </mj-text>
         <mj-text
           font-size="14px"
@@ -140,7 +131,7 @@
       <mj-column width="70%">
         <mj-text
           font-size="16px"
-          color="#f97316"
+          color="#B574F2"
           font-weight="bold"
           padding="0"
           padding-top="20px"
@@ -156,7 +147,7 @@
         >
           {{ticket.returnFlight.returnDepartureTime}} -
           {{ticket.returnFlight.returnArrivalTime}}
-          ({{ticket.returnFlight.returnDuration}} Minutes)
+          ({{ticket.returnFlight.returnDuration}} Menit)
         </mj-text>
 
         <!-- Garis Vertikal -->
@@ -183,6 +174,7 @@
           font-size="14px"
           color="#333333"
           css-class="nowrap-text"
+          padding="20px"
         >
           {{ticket.returnFlight.returnairportFromCity}} -
           {{ticket.returnFlight.returnairportToCity}}
@@ -201,15 +193,15 @@
     {{/if}}
 
     <!-- Passenger Information -->
-    <mj-section padding-top="0" padding-left="20px">
+    <mj-section padding-top="0" padding-left="20px" background-color="#ffffff">
       <mj-column>
         <mj-text
           font-size="18px"
           font-weight="bold"
-          color="#22177A"
+          color="#B574F2"
           padding="0"
         >
-          Passenger Information
+          Informasi Penumpang
         </mj-text>
         <mj-text
           align="left"
@@ -221,7 +213,7 @@
         >
           {{#each ticket.passengers}}
           <mj-text align="left" color="#333333" font-size="14px">
-            - {{this.title}}. {{this.firstName}} {{this.familyName}}
+            - {{this.title}} {{this.firstName}} {{this.familyName}}
             ({{this.type}}) <br />
           </mj-text>
           {{/each}}
@@ -230,7 +222,7 @@
     </mj-section>
 
     <!-- Footer Section -->
-    <mj-section background-color="#a600ff" padding="10px">
+    <mj-section background-color="#B574F2" padding="10px">
       <mj-column width="100%">
         <mj-text
           align="center"
@@ -239,7 +231,7 @@
           font-family="Lato, Helvetica, Arial, sans-serif"
           padding="10px 25px"
         >
-          Best Regards,<br /><br />The Terbangin Team
+          Hormat Kami,<br /><br />Tim Terbangin
         </mj-text>
       </mj-column>
     </mj-section>
