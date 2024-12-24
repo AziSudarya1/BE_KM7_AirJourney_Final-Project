@@ -213,7 +213,7 @@
         >
           {{#each ticket.passengers}}
           <mj-text align="left" color="#333333" font-size="14px">
-            - {{this.title}}. {{this.firstName}} {{this.familyName}}
+            - {{this.title}} {{this.firstName}} {{this.familyName}}
             ({{this.type}}) <br />
           </mj-text>
           {{/each}}

@@ -219,13 +219,31 @@ export async function getTransactionWithFlightAndPassenger(id, userId, email) {
 
   const { departureFlight, returnFlight } = transaction;
 
+  const titleMapping = {
+    Mr: 'Tuan.',
+    Ms: 'Nona.',
+    Mrs: 'Nyonya.'
+  };
+
+  const typeMapping = {
+    INFANT: 'Bayi',
+    ADULT: 'Dewasa',
+    CHILD: 'Anak'
+  };
+
   const passengers = [];
   transaction.passenger.forEach((p) => {
+    let title = titleMapping[p.title] || p.title;
+
+    if (p.type === 'CHILD' || p.type === 'INFANT') {
+      title = '';
+    }
+
     passengers.push({
-      title: p.title,
+      title,
       firstName: p.firstName,
       familyName: p.familyName || '',
-      type: p.type
+      type: typeMapping[p.type] || p.type
     });
   });
 
@@ -283,7 +301,7 @@ export async function getTransactionWithFlightAndPassenger(id, userId, email) {
     passengers: passengers
   };
 
-  await sendEmail(email, 'Your E-Ticket', 'ticket', {
+  await sendEmail(email, 'Tiket Pesawat Kamu', 'ticket', {
     ticket
   });
 
