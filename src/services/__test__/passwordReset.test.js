@@ -155,7 +155,12 @@ describe('passwordResetServices', () => {
 
   describe('resetPassword', () => {
     it('should hash the password and update user password if token is valid', async () => {
-      const mockData = { user: { id: '1' } };
+      const mockData = {
+        user: {
+          id: '1'
+        },
+        id: '1'
+      };
       const newPassword = 'new-password';
 
       mockGetActiveTokenWithUser.mockResolvedValue(mockData);
@@ -170,6 +175,7 @@ describe('passwordResetServices', () => {
 
       expect(mockUpdateUserPassword).toHaveBeenCalledWith(
         mockData.user.id,
+        mockData.id,
         expect.stringMatching(/^\$2b\$10\$.{53}$/)
       );
     });
