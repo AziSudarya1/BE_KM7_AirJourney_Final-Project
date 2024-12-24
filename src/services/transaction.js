@@ -202,23 +202,16 @@ export async function getAllTransactions(userId, filter, meta) {
   return data;
 }
 
-export async function getTransactionWithFlightAndPassenger(id, userId, email) {
-  const transaction = await transactionRepository.getDetailTransactionById(id);
+function formatDateTime(dateString, locale = 'id-ID') {
+  return new Date(dateString).toLocaleString(locale, {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+}
 
-  if (!transaction) {
-    throw new HttpError('Transaction not found', 404);
-  }
-
-  if (transaction.userId !== userId) {
-    throw new HttpError('Unauthorized', 403);
-  }
-
-  if (transaction.payment.status !== 'SUCCESS') {
-    throw new HttpError('Transaction incomplete cannot send e-ticket', 400);
-  }
-
-  const { departureFlight, returnFlight } = transaction;
-
+function mapPassengers(passengers) {
   const titleMapping = {
     Mr: 'Tuan.',
     Ms: 'Nona.',
@@ -231,41 +224,31 @@ export async function getTransactionWithFlightAndPassenger(id, userId, email) {
     CHILD: 'Anak'
   };
 
-  const passengers = [];
-  transaction.passenger.forEach((p) => {
+  return passengers.map((p) => {
     let title = titleMapping[p.title] || p.title;
 
     if (p.type === 'CHILD' || p.type === 'INFANT') {
       title = '';
     }
 
-    passengers.push({
+    return {
       title,
       firstName: p.firstName,
       familyName: p.familyName || '',
       type: typeMapping[p.type] || p.type
-    });
+    };
   });
+}
 
-  const departureDateTimeFormatted = new Date(
+function createTicket(departureFlight, returnFlight, passengers) {
+  const departureDateTimeFormatted = formatDateTime(
     departureFlight.departureDate
-  ).toLocaleString('id-ID', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  });
-
+  );
   const returnDateTimeFormatted = returnFlight
-    ? new Date(returnFlight.departureDate).toLocaleString('id-ID', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      })
+    ? formatDateTime(returnFlight.departureDate)
     : null;
 
-  const ticket = {
+  return {
     departureAirline: `${departureFlight.airline.name} (${departureFlight.airline.code})`,
     departureAeroplane: departureFlight.aeroplane.name,
     departureClass: departureFlight.class,
@@ -300,6 +283,27 @@ export async function getTransactionWithFlightAndPassenger(id, userId, email) {
 
     passengers: passengers
   };
+}
+
+export async function getTransactionWithFlightAndPassenger(id, userId, email) {
+  const transaction = await transactionRepository.getDetailTransactionById(id);
+
+  if (!transaction) {
+    throw new HttpError('Transaction not found', 404);
+  }
+
+  if (transaction.userId !== userId) {
+    throw new HttpError('Unauthorized', 403);
+  }
+
+  if (transaction.payment.status !== 'SUCCESS') {
+    throw new HttpError('Transaction incomplete cannot send e-ticket', 400);
+  }
+
+  const { departureFlight, returnFlight } = transaction;
+
+  const passengers = mapPassengers(transaction.passenger);
+  const ticket = createTicket(departureFlight, returnFlight, passengers);
 
   await sendEmail(email, 'Tiket Pesawat Kamu', 'ticket', {
     ticket
