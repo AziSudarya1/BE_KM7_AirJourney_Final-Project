@@ -51,5 +51,9 @@ export async function resetPassword(token, newPassword) {
 
   const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-  await userRepository.updateUserPassword(data.user.id, hashedPassword);
+  await userRepository.updateUserPassword(
+    data.user.id,
+    data.id,
+    hashedPassword
+  );
 }
