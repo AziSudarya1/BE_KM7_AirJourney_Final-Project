@@ -211,7 +211,7 @@ function formatDateTime(dateString, locale = 'id-ID') {
   });
 }
 
-function mapPassengers(passengers) {
+export function mapPassengers(passengers) {
   const titleMapping = {
     Mr: 'Tuan.',
     Ms: 'Nona.',
