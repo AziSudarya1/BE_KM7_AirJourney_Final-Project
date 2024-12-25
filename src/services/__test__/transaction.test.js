@@ -168,15 +168,15 @@ describe('Transaction Service', () => {
       mockGetFlightWithSeatsById
         .mockResolvedValueOnce({
           id: '101',
-          departureDate: '2024-12-25',
-          arrivalDate: '2024-12-26',
+          departureDate: '2025-12-25',
+          arrivalDate: '2025-12-26',
           airportIdFrom: '1',
           airportIdTo: '2'
         })
         .mockResolvedValueOnce({
           id: '202',
-          departureDate: '2024-12-24',
-          arrivalDate: '2024-12-25',
+          departureDate: '2025-12-24',
+          arrivalDate: '2025-12-25',
           airportIdFrom: '2',
           airportIdTo: '1'
         });
@@ -199,8 +199,8 @@ describe('Transaction Service', () => {
     it('should set returnPrice to 0 when returnFlight is not provided', async () => {
       const validDepartureFlight = {
         id: '101',
-        departureDate: '2024-12-25',
-        arrivalDate: '2024-12-26',
+        departureDate: '2025-12-25',
+        arrivalDate: '2025-12-26',
         airportIdFrom: '1',
         airportIdTo: '2',
         price: 100000,
@@ -224,8 +224,8 @@ describe('Transaction Service', () => {
     it('should create transaction successfully with valid payload', async () => {
       const validDepartureFlight = {
         id: '101',
-        departureDate: '2024-12-25',
-        arrivalDate: '2024-12-26',
+        departureDate: '2025-12-25',
+        arrivalDate: '2025-12-26',
         airportIdFrom: '1',
         airportIdTo: '2',
         price: 100000,
@@ -234,8 +234,8 @@ describe('Transaction Service', () => {
 
       const validReturnFlight = {
         id: '202',
-        departureDate: '2024-12-27',
-        arrivalDate: '2024-12-28',
+        departureDate: '2025-12-27',
+        arrivalDate: '2025-12-28',
         airportIdFrom: '2',
         airportIdTo: '1',
         price: 80000,
@@ -248,11 +248,19 @@ describe('Transaction Service', () => {
         .mockResolvedValueOnce(validReturnFlight);
 
       mockCalculateAmount.mockReturnValueOnce(200000);
-      mockPrismaTransaction.mockImplementationOnce(async (fn) => fn());
+      mockPrismaTransaction.mockImplementationOnce(async (fn) => {
+        const transaction = {};
+        const data = await fn(transaction);
+        return data;
+      });
 
       mockCreateTransactionAndPassenger.mockResolvedValueOnce({ id: '1' });
       mockCreateMidtransToken.mockResolvedValueOnce({ token: 'abc123' });
-      mockCreatePayment.mockResolvedValueOnce({ id: '10' });
+      mockCreatePayment.mockResolvedValueOnce({
+        id: '10',
+        transactionId: '1',
+        payment: { id: '10' }
+      });
 
       const payload = {
         userId: '1',
@@ -266,7 +274,13 @@ describe('Transaction Service', () => {
       const result = await transactionServices.createTransaction(payload);
       expect(result).toEqual({
         id: '1',
-        payment: { id: '10' }
+        payment: {
+          id: '10',
+          payment: {
+            id: '10'
+          },
+          transactionId: '1'
+        }
       });
     });
   });
@@ -366,12 +380,28 @@ describe('Transaction Service', () => {
   });
 
   describe('getAllTransactions', () => {
-    it('should return transactions with complex filter', async () => {
-      const transactions = [{ id: '1' }, { id: '2' }];
+    it('should return all transactions for a user with no filters', async () => {
+      const transactions = [
+        {
+          id: '1',
+          userId: '1',
+          payment: {},
+          departureFlight: {},
+          returnFlight: {}
+        },
+        {
+          id: '2',
+          userId: '1',
+          payment: {},
+          departureFlight: {},
+          returnFlight: {}
+        }
+      ];
+
       mockGetAllTransactions.mockResolvedValueOnce(transactions);
 
       const userId = '1';
-      const filter = { status: ['PAID', 'CANCELLED'] };
+      const filter = {};
       const meta = { skip: 0, limit: 10 };
 
       const result = await transactionServices.getAllTransactions(
@@ -379,25 +409,77 @@ describe('Transaction Service', () => {
         filter,
         meta
       );
+
+      expect(mockGetAllTransactions).toHaveBeenCalledWith({
+        skip: meta.skip,
+        take: meta.limit,
+        where: { userId },
+        include: {
+          payment: true,
+          departureFlight: {
+            include: {
+              airportFrom: true,
+              airportTo: true
+            }
+          },
+          returnFlight: {
+            include: {
+              airportFrom: true,
+              airportTo: true
+            }
+          }
+        }
+      });
       expect(result).toEqual(transactions);
     });
 
-    it('should handle meta not provided', async () => {
-      const transactions = [{ id: '1' }];
+    it('should return filtered transactions for a user', async () => {
+      const transactions = [
+        {
+          id: '1',
+          userId: '1',
+          payment: {},
+          departureFlight: {},
+          returnFlight: {}
+        }
+      ];
+
       mockGetAllTransactions.mockResolvedValueOnce(transactions);
 
       const userId = '1';
-      const filter = { status: 'PENDING' };
+      const filter = { status: 'COMPLETED' };
+      const meta = { skip: 0, limit: 10 };
 
       const result = await transactionServices.getAllTransactions(
         userId,
         filter,
-        {}
+        meta
       );
+
+      expect(mockGetAllTransactions).toHaveBeenCalledWith({
+        skip: meta.skip,
+        take: meta.limit,
+        where: { userId, ...filter },
+        include: {
+          payment: true,
+          departureFlight: {
+            include: {
+              airportFrom: true,
+              airportTo: true
+            }
+          },
+          returnFlight: {
+            include: {
+              airportFrom: true,
+              airportTo: true
+            }
+          }
+        }
+      });
       expect(result).toEqual(transactions);
     });
 
-    it('should return empty array when no transactions found', async () => {
+    it('should handle empty transactions result', async () => {
       mockGetAllTransactions.mockResolvedValueOnce([]);
 
       const userId = '1';
@@ -409,7 +491,118 @@ describe('Transaction Service', () => {
         filter,
         meta
       );
+
+      expect(mockGetAllTransactions).toHaveBeenCalledWith({
+        skip: meta.skip,
+        take: meta.limit,
+        where: { userId },
+        include: {
+          payment: true,
+          departureFlight: {
+            include: {
+              airportFrom: true,
+              airportTo: true
+            }
+          },
+          returnFlight: {
+            include: {
+              airportFrom: true,
+              airportTo: true
+            }
+          }
+        }
+      });
       expect(result).toEqual([]);
+    });
+
+    it('should handle transactions with pagination', async () => {
+      const transactions = [
+        {
+          id: '1',
+          userId: '1',
+          payment: {},
+          departureFlight: {},
+          returnFlight: {}
+        },
+        {
+          id: '2',
+          userId: '1',
+          payment: {},
+          departureFlight: {},
+          returnFlight: {}
+        }
+      ];
+
+      mockGetAllTransactions.mockResolvedValueOnce(transactions);
+
+      const userId = '1';
+      const filter = {};
+      const meta = { skip: 10, limit: 10 };
+
+      const result = await transactionServices.getAllTransactions(
+        userId,
+        filter,
+        meta
+      );
+
+      expect(mockGetAllTransactions).toHaveBeenCalledWith({
+        skip: meta.skip,
+        take: meta.limit,
+        where: { userId },
+        include: {
+          payment: true,
+          departureFlight: {
+            include: {
+              airportFrom: true,
+              airportTo: true
+            }
+          },
+          returnFlight: {
+            include: {
+              airportFrom: true,
+              airportTo: true
+            }
+          }
+        }
+      });
+      expect(result).toEqual(transactions);
+    });
+
+    it('should map passengers correctly, setting empty title for CHILD and INFANT types', () => {
+      const passengers = [
+        { title: 'Mr', firstName: 'John', familyName: 'Doe', type: 'ADULT' },
+        { title: 'Ms', firstName: 'Jane', familyName: 'Doe', type: 'CHILD' },
+        {
+          title: 'Mrs',
+          firstName: 'Emily',
+          familyName: 'Smith',
+          type: 'INFANT'
+        }
+      ];
+
+      const expectedMappedPassengers = [
+        {
+          title: 'Tuan.',
+          firstName: 'John',
+          familyName: 'Doe',
+          type: 'Dewasa'
+        },
+        {
+          title: '',
+          firstName: 'Jane',
+          familyName: 'Doe',
+          type: 'Anak'
+        },
+        {
+          title: '',
+          firstName: 'Emily',
+          familyName: 'Smith',
+          type: 'Bayi'
+        }
+      ];
+
+      const result = transactionServices.mapPassengers(passengers);
+      expect(result).toEqual(expectedMappedPassengers);
     });
   });
 
@@ -500,8 +693,13 @@ describe('Transaction Service', () => {
           airportTo: { city: 'CityA', code: 'CTA', name: 'AirportA' }
         },
         passenger: [
-          { title: 'Mr', firstName: 'John', familyName: 'Doe', type: 'ADULT' },
-          { title: 'Ms', firstName: 'Jane', familyName: '', type: 'CHILD' }
+          {
+            title: 'Tuan',
+            firstName: 'John',
+            familyName: 'Doe',
+            type: 'Dewasa'
+          },
+          { title: '', firstName: 'Jane', familyName: '', type: 'Anak' }
         ]
       };
 
@@ -521,7 +719,7 @@ describe('Transaction Service', () => {
         departureAirline: 'Airline (AL)',
         departureAeroplane: 'Plane',
         departureClass: 'Economy',
-        departureDate: 'Wed Dec 25 2024',
+        departureDate: 'Rabu, 25 Desember 2024',
         departureTime: '10:00',
         arrivalTime: '12:00',
         duration: '2h',
@@ -535,7 +733,7 @@ describe('Transaction Service', () => {
           returnAirline: 'Airline (AL)',
           returnAeroplane: 'Plane',
           returnClass: 'Economy',
-          returnDate: 'Fri Dec 27 2024',
+          returnDate: 'Jumat, 27 Desember 2024',
           returnDepartureTime: '14:00',
           returnArrivalTime: '16:00',
           returnDuration: '2h',
@@ -547,14 +745,19 @@ describe('Transaction Service', () => {
           returnairportToName: 'AirportA'
         },
         passengers: [
-          { title: 'Mr', firstName: 'John', familyName: 'Doe', type: 'ADULT' },
-          { title: 'Ms', firstName: 'Jane', familyName: '', type: 'CHILD' }
+          {
+            title: 'Tuan',
+            firstName: 'John',
+            familyName: 'Doe',
+            type: 'Dewasa'
+          },
+          { title: '', firstName: 'Jane', familyName: '', type: 'Anak' }
         ]
       };
 
       expect(mockSendEmail).toHaveBeenCalledWith(
         email,
-        'Your E-Ticket',
+        'Tiket Pesawat Kamu',
         'ticket',
         { ticket: expectedTicket }
       );
@@ -578,8 +781,13 @@ describe('Transaction Service', () => {
         },
         returnFlight: null,
         passenger: [
-          { title: 'Mr', firstName: 'John', familyName: 'Doe', type: 'ADULT' },
-          { title: 'Ms', firstName: 'Jane', familyName: '', type: 'CHILD' }
+          {
+            title: 'Tuan',
+            firstName: 'John',
+            familyName: 'Doe',
+            type: 'Dewasa'
+          },
+          { title: '', firstName: 'Jane', familyName: '', type: 'Anak' }
         ]
       };
 
@@ -599,7 +807,7 @@ describe('Transaction Service', () => {
         departureAirline: 'Airline (AL)',
         departureAeroplane: 'Plane',
         departureClass: 'Economy',
-        departureDate: 'Wed Dec 25 2024',
+        departureDate: 'Rabu, 25 Desember 2024',
         departureTime: '10:00',
         arrivalTime: '12:00',
         duration: '2h',
@@ -611,14 +819,19 @@ describe('Transaction Service', () => {
         arrivalAirportToName: 'AirportB',
         returnFlight: null,
         passengers: [
-          { title: 'Mr', firstName: 'John', familyName: 'Doe', type: 'ADULT' },
-          { title: 'Ms', firstName: 'Jane', familyName: '', type: 'CHILD' }
+          {
+            title: 'Tuan',
+            firstName: 'John',
+            familyName: 'Doe',
+            type: 'Dewasa'
+          },
+          { title: '', firstName: 'Jane', familyName: '', type: 'Anak' }
         ]
       };
 
       expect(mockSendEmail).toHaveBeenCalledWith(
         email,
-        'Your E-Ticket',
+        'Tiket Pesawat Kamu',
         'ticket',
         { ticket: expectedTicket }
       );
@@ -1099,9 +1312,10 @@ describe('Transaction Service', () => {
       mockGetExpiredPaymentWithFlightAndPassenger.mockResolvedValueOnce(
         payments
       );
-      mockPrismaTransaction.mockImplementationOnce(async (fn) =>
-        fn(mockTransaction)
-      );
+      mockPrismaTransaction.mockImplementationOnce(async (fn) => {
+        await fn(mockTransaction);
+        return mockTransaction;
+      });
 
       await transactionServices.invalidateExpiredTransactions();
 

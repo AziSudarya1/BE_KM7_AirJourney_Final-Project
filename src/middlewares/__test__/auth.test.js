@@ -85,4 +85,46 @@ describe('Authorization Middleware', () => {
       expect(mockNext).toHaveBeenCalled();
     });
   });
+
+  describe('getCloudSchedulerToken', () => {
+    const mockRequest = {
+      get: jest.fn()
+    };
+
+    it('should throw an error if the authorization header is missing', async () => {
+      mockRequest.get.mockReturnValue(undefined);
+
+      await expect(
+        authMiddleware.getCloudSchedulerToken(mockRequest, {}, mockNext)
+      ).rejects.toThrowError(
+        new HttpError('Missing authorization header', 401)
+      );
+    });
+
+    it('should throw an error if the authorization type is not Bearer', async () => {
+      mockRequest.get.mockReturnValue('Basic sometoken');
+
+      await expect(
+        authMiddleware.getCloudSchedulerToken(mockRequest, {}, mockNext)
+      ).rejects.toThrowError(new HttpError('Invalid authorization token', 401));
+    });
+
+    it('should throw an error if the token does not match CLOUD_SCHEDULER_TOKEN', async () => {
+      process.env.CLOUD_SCHEDULER_TOKEN = 'correcttoken';
+      mockRequest.get.mockReturnValue('Bearer wrongtoken');
+
+      await expect(
+        authMiddleware.getCloudSchedulerToken(mockRequest, {}, mockNext)
+      ).rejects.toThrowError(new HttpError('Unauthorized', 403));
+    });
+
+    it('should call next if the token matches CLOUD_SCHEDULER_TOKEN', async () => {
+      process.env.CLOUD_SCHEDULER_TOKEN = 'correcttoken';
+      mockRequest.get.mockReturnValue('Bearer correcttoken');
+
+      await authMiddleware.getCloudSchedulerToken(mockRequest, {}, mockNext);
+
+      expect(mockNext).toHaveBeenCalled();
+    });
+  });
 });
