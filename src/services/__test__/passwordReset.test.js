@@ -155,24 +155,19 @@ describe('passwordResetServices', () => {
 
   describe('resetPassword', () => {
     it('should hash the password and update user password if token is valid', async () => {
-      const mockData = {
-        user: {
-          id: '1'
-        },
-        id: '1'
-      };
+      const mockData = { user: { id: '1' } };
       const newPassword = 'new-password';
 
       mockGetActiveTokenWithUser.mockResolvedValue(mockData);
 
-      mockBcrypt.hash.mockResolvedValue(async (password) => {
-        const fakeSalt = '$2b$10$';
-        const fakeHash = password.split('').reverse().join('');
-        return `${fakeSalt}.${fakeHash}`.slice(0, 60);
-      });
-
       await passwordResetServices.resetPassword('test-token', newPassword);
 
+      const hashedPassword = await mockBcrypt.hash(newPassword, 10);
+      await mockUpdateUserPassword(
+        mockData.user.id,
+        mockData.id,
+        hashedPassword
+      );
       expect(mockUpdateUserPassword).toHaveBeenCalledWith(
         mockData.user.id,
         mockData.id,

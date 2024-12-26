@@ -168,15 +168,15 @@ describe('Transaction Service', () => {
       mockGetFlightWithSeatsById
         .mockResolvedValueOnce({
           id: '101',
-          departureDate: '2024-12-25',
-          arrivalDate: '2024-12-26',
+          departureDate: '2025-12-25',
+          arrivalDate: '2025-12-26',
           airportIdFrom: '1',
           airportIdTo: '2'
         })
         .mockResolvedValueOnce({
           id: '202',
-          departureDate: '2024-12-24',
-          arrivalDate: '2024-12-25',
+          departureDate: '2025-12-24',
+          arrivalDate: '2025-12-25',
           airportIdFrom: '2',
           airportIdTo: '1'
         });
@@ -199,8 +199,8 @@ describe('Transaction Service', () => {
     it('should set returnPrice to 0 when returnFlight is not provided', async () => {
       const validDepartureFlight = {
         id: '101',
-        departureDate: '2024-12-25',
-        arrivalDate: '2024-12-26',
+        departureDate: '2025-12-25',
+        arrivalDate: '2025-12-26',
         airportIdFrom: '1',
         airportIdTo: '2',
         price: 100000,
@@ -224,8 +224,8 @@ describe('Transaction Service', () => {
     it('should create transaction successfully with valid payload', async () => {
       const validDepartureFlight = {
         id: '101',
-        departureDate: '2024-12-25',
-        arrivalDate: '2024-12-26',
+        departureDate: '2025-12-25',
+        arrivalDate: '2025-12-26',
         airportIdFrom: '1',
         airportIdTo: '2',
         price: 100000,
@@ -234,8 +234,8 @@ describe('Transaction Service', () => {
 
       const validReturnFlight = {
         id: '202',
-        departureDate: '2024-12-27',
-        arrivalDate: '2024-12-28',
+        departureDate: '2025-12-27',
+        arrivalDate: '2025-12-28',
         airportIdFrom: '2',
         airportIdTo: '1',
         price: 80000,
@@ -248,11 +248,19 @@ describe('Transaction Service', () => {
         .mockResolvedValueOnce(validReturnFlight);
 
       mockCalculateAmount.mockReturnValueOnce(200000);
-      mockPrismaTransaction.mockImplementationOnce(async (fn) => fn());
+      mockPrismaTransaction.mockImplementationOnce(async (fn) => {
+        const transaction = {};
+        const data = await fn(transaction);
+        return data;
+      });
 
       mockCreateTransactionAndPassenger.mockResolvedValueOnce({ id: '1' });
       mockCreateMidtransToken.mockResolvedValueOnce({ token: 'abc123' });
-      mockCreatePayment.mockResolvedValueOnce({ id: '10' });
+      mockCreatePayment.mockResolvedValueOnce({
+        id: '10',
+        transactionId: '1',
+        payment: { id: '10' }
+      });
 
       const payload = {
         userId: '1',
@@ -266,7 +274,13 @@ describe('Transaction Service', () => {
       const result = await transactionServices.createTransaction(payload);
       expect(result).toEqual({
         id: '1',
-        payment: { id: '10' }
+        payment: {
+          id: '10',
+          payment: {
+            id: '10'
+          },
+          transactionId: '1'
+        }
       });
     });
   });
