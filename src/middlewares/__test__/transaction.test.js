@@ -13,12 +13,12 @@ describe('Transaction Middleware', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-
   describe('getMaxTransactionDataAndCreateMeta', () => {
     const mockResponse = {
       locals: {
         filter: { status: 'completed' },
-        page: 2
+        page: 2,
+        user: { id: 1 }
       }
     };
 
@@ -43,7 +43,7 @@ describe('Transaction Middleware', () => {
 
       expect(
         mockCountTransactionDataWithFilterAndCreateMeta
-      ).toHaveBeenCalledWith({ status: 'completed' }, 2);
+      ).toHaveBeenCalledWith({ status: 'completed' }, 2, 1);
       expect(mockResponse.locals.meta).toEqual(mockMeta);
       expect(mockNext).toHaveBeenCalled();
     });
@@ -62,7 +62,7 @@ describe('Transaction Middleware', () => {
 
       expect(
         mockCountTransactionDataWithFilterAndCreateMeta
-      ).toHaveBeenCalledWith({ status: 'completed' }, 2);
+      ).toHaveBeenCalledWith({ status: 'completed' }, 2, 1);
       expect(mockNext).not.toHaveBeenCalled();
     });
   });

@@ -336,13 +336,20 @@ export async function cancelTransaction(id, userId) {
 
 export async function countTransactionDataWithFilterAndCreateMeta(
   filter,
-  page
+  page,
+  userId
 ) {
+  const filterWithUserId = {
+    ...filter,
+    userId
+  };
+
   const totalData =
-    await transactionRepository.countTransactionDataWithFilter(filter);
+    await transactionRepository.countTransactionDataWithFilter(
+      filterWithUserId
+    );
 
   const limit = 10;
-
   let totalPage = 1;
   let skip = 0;
 
