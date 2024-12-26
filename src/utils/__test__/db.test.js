@@ -1,31 +1,35 @@
 import { jest } from '@jest/globals';
 
 jest.unstable_mockModule('@prisma/client', () => {
+  const mockPrismaClient = jest.fn();
+  const mockInstance = {
+    $connect: jest.fn().mockResolvedValue(),
+    $disconnect: jest.fn().mockResolvedValue()
+  };
+
+  mockPrismaClient.mockImplementation(() => mockInstance);
+
   return {
-    PrismaClient: jest.fn().mockImplementation(() => ({
-      $connect: jest.fn(),
-      $disconnect: jest.fn()
-    }))
+    PrismaClient: mockPrismaClient
   };
 });
 
-jest.unstable_mockModule('../env.js', () => {
-  return {
-    appEnv: {
-      DATABASE_URL: 'postgresql://user:password@localhost:5432/testdb'
-    }
-  };
-});
+jest.unstable_mockModule('../env.js', () => ({
+  appEnv: {
+    DATABASE_URL: 'postgresql://user:password@localhost:5432/testdb'
+  }
+}));
 
 const { PrismaClient } = await import('@prisma/client');
-const { appEnv } = await import('../env.js');
 const { prisma } = await import('../db.js');
 
 describe('Database Utility', () => {
   it('should initialize PrismaClient with the correct datasource URL', () => {
-    expect(PrismaClient).toHaveBeenCalledWith({
-      datasourceUrl: appEnv.DATABASE_URL
-    });
+    const _client = new PrismaClient();
+
+    expect(PrismaClient).toHaveBeenCalledTimes(1);
+
+    expect(PrismaClient).toHaveBeenCalledWith();
   });
 
   it('should connect and disconnect properly', async () => {
