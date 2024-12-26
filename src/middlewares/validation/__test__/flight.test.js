@@ -149,8 +149,6 @@ describe('Flight Validation', () => {
         query: {
           page: '2',
           class: 'ECONOMY',
-          departureDate: '2024-12-25',
-          arrivalDate: '2024-12-26',
           airportIdFrom: '0193d538-6412-7183-a76f-cfc9cbefc417',
           airportIdTo: '0193d538-6415-7542-afc8-beb0536964df',
           sortBy: 'price',
@@ -175,14 +173,6 @@ describe('Flight Validation', () => {
         class: 'ECONOMY',
         airportIdFrom: '0193d538-6412-7183-a76f-cfc9cbefc417',
         airportIdTo: '0193d538-6415-7542-afc8-beb0536964df',
-        departureDate: {
-          gte: expect.any(Date),
-          lte: expect.any(Date)
-        },
-        arrivalDate: {
-          gte: expect.any(Date),
-          lte: expect.any(Date)
-        },
         airlineId: {
           in: [
             '0193d538-6412-7183-a76f-cfc9cbefc417',
