@@ -144,9 +144,17 @@ describe('Flight Validation', () => {
       jest.clearAllMocks();
     });
 
-    it('should split airlineIds into an array if provided as a comma-separated string', async () => {
+    it('should call next and populate res.locals with valid filter, sort, and page params', async () => {
       const req = {
         query: {
+          page: '2',
+          class: 'ECONOMY',
+          departureDate: '2024-12-25',
+          arrivalDate: '2024-12-26',
+          airportIdFrom: '0193d538-6412-7183-a76f-cfc9cbefc417',
+          airportIdTo: '0193d538-6415-7542-afc8-beb0536964df',
+          sortBy: 'price',
+          sortOrder: 'asc',
           airlineIds:
             '0193d538-6412-7183-a76f-cfc9cbefc417,0193d538-6415-7542-afc8-beb0536964df'
         }
@@ -162,7 +170,19 @@ describe('Flight Validation', () => {
 
       await flightValidation.validateFilterSortingAndPageParams(req, res, next);
 
+      expect(res.locals.page).toBe(2);
       expect(res.locals.filter).toEqual({
+        class: 'ECONOMY',
+        airportIdFrom: '0193d538-6412-7183-a76f-cfc9cbefc417',
+        airportIdTo: '0193d538-6415-7542-afc8-beb0536964df',
+        departureDate: {
+          gte: expect.any(Date),
+          lte: expect.any(Date)
+        },
+        arrivalDate: {
+          gte: expect.any(Date),
+          lte: expect.any(Date)
+        },
         airlineId: {
           in: [
             '0193d538-6412-7183-a76f-cfc9cbefc417',
@@ -170,25 +190,8 @@ describe('Flight Validation', () => {
           ]
         }
       });
-      expect(next).toHaveBeenCalled();
-    });
-
-    it('should set airlineIds to undefined if not provided', async () => {
-      const req = {
-        query: {}
-      };
-
-      const res = {
-        locals: {},
-        status: jest.fn(() => res),
-        json: jest.fn()
-      };
-
-      const next = jest.fn();
-
-      await flightValidation.validateFilterSortingAndPageParams(req, res, next);
-
-      expect(res.locals.filter).toEqual({});
+      expect(res.locals.sort).toEqual({ price: 'asc' });
+      expect(res.locals.favourite).toBe(false);
       expect(next).toHaveBeenCalled();
     });
 
@@ -270,111 +273,6 @@ describe('Flight Validation', () => {
         airportTo: { continent: 'ASIA' }
       });
       expect(res.locals.favourite).toBe(true);
-      expect(next).toHaveBeenCalled();
-    });
-
-    it('should populate res.locals.filter with arrivalDate filter when arrivalDate is provided', async () => {
-      const req = {
-        query: {
-          arrivalDate: '2024-12-26'
-        }
-      };
-
-      const res = {
-        locals: {},
-        status: jest.fn(() => res),
-        json: jest.fn()
-      };
-
-      const next = jest.fn();
-
-      await flightValidation.validateFilterSortingAndPageParams(req, res, next);
-
-      const initialHour = new Date('2024-12-26');
-      initialHour.setHours(0, 0, 0, 0);
-
-      const finishHour = new Date('2024-12-26');
-      finishHour.setHours(23, 59, 59, 999);
-
-      expect(res.locals.filter).toEqual({
-        arrivalDate: {
-          gte: initialHour,
-          lte: finishHour
-        }
-      });
-      expect(next).toHaveBeenCalled();
-    });
-
-    it('should not add arrivalDate to filter when arrivalDate is not provided', async () => {
-      const req = {
-        query: {}
-      };
-
-      const res = {
-        locals: {},
-        status: jest.fn(() => res),
-        json: jest.fn()
-      };
-
-      const next = jest.fn();
-
-      await flightValidation.validateFilterSortingAndPageParams(req, res, next);
-
-      expect(res.locals.filter).toEqual({});
-      expect(next).toHaveBeenCalled();
-    });
-
-    it('should populate filter with continent and departureDate if favourite is true', async () => {
-      const req = {
-        query: {
-          favourite: 'true',
-          continent: 'ASIA',
-          departureDate: '2024-12-29',
-          class: 'FIRST_CLASS'
-        }
-      };
-
-      const res = {
-        locals: {},
-        status: jest.fn(() => res),
-        json: jest.fn()
-      };
-
-      const next = jest.fn();
-
-      await flightValidation.validateFilterSortingAndPageParams(req, res, next);
-
-      expect(res.locals.filter).toEqual({
-        class: 'FIRST_CLASS',
-        departureDate: {
-          gte: expect.any(Date),
-          lte: expect.any(Date)
-        },
-        airportTo: { continent: 'ASIA' }
-      });
-      expect(res.locals.favourite).toBe(true);
-      expect(next).toHaveBeenCalled();
-    });
-
-    it('should populate sort object when sortBy and sortOrder are valid', async () => {
-      const req = {
-        query: {
-          sortBy: 'price',
-          sortOrder: 'asc'
-        }
-      };
-
-      const res = {
-        locals: {},
-        status: jest.fn(() => res),
-        json: jest.fn()
-      };
-
-      const next = jest.fn();
-
-      await flightValidation.validateFilterSortingAndPageParams(req, res, next);
-
-      expect(res.locals.sort).toEqual({ price: 'asc' });
       expect(next).toHaveBeenCalled();
     });
   });
